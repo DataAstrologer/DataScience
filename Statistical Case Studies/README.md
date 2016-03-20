@@ -6,7 +6,7 @@ The folder contains a total of 6 case studies covering different statistical con
 
 2. Lorex Pharmaceutical - This is a case out of a textbook from the University of Virginia. It is based on a real-world situation from the past. Lorex decides the fill-target-level for the new medicine Litanol in order to comply with the requirements and increase profits. **Concepts Covered: Normal Distribution & Z-Score.**
 
-3. Amore Frozen Foods - **Concepts Covered: **
+3. Amore Frozen Foods - **Concepts Covered: Sampling**
 
 4. City Center Hospital - **Concepts Covered: Hypothesis Testing(Two-Population)**
 
