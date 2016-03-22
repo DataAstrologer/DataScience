@@ -6,11 +6,11 @@ The folder contains a total of 6 case studies covering different statistical con
 
 2. Lorex Pharmaceutical - This is a case out of a textbook from the University of Virginia. Lorex Pharmaceutical decides the fill-target-level for the new medicine Litanol in order to comply with the requirements of the Food and Drug Administration (FDA) and increase profits. **Concepts Covered: Normal Distribution & Z-Score.**
 
-3. Amore Frozen Foods - The quality manager at Amore Frozen Foods has to decide if Amore should switch back the fill-target to 8.22 oz. or leave it at 8.44 oz. for its Mac and Cheese Product. **Concepts Covered: Sampling Distribution & Z-Score.**
+3. Amore Frozen Foods - The quality manager at Amore Frozen Foods has to decide if Amore should switch back the fill-target to 8.22 oz. or leave it at 8.44 oz. for its Mac and Cheese Pies. Furthermore, an optimal fill-target level was suggested to get maximum profitability. **Concepts Covered: Sampling Distribution & Z-Score.**
 
 4. City Center Hospital - This case is from the University of Western Ontario. The City Center Hospital installed a new IT system for the nurses. The analysis determines if the new system significantly helps the nurses improve thier productivity or not. **Concepts Covered: Hypothesis Testing(Two-Population) & t-Distribution.**
 
-5. Wachovia Bank - A. Mebane Davis, the new manager of the Piedmont Operations Center of Wachovia Bank and Trust of North Carolina, was reviewing the staffing needs for the Proof Department of the bank. In order to ensure continued cost effective employee performance, Mr. Davis had to forecast the demand for the 67th week and shedule workers accordingly. **Concepts Covered: Time Series Forecasting**
+5. Wachovia Bank - A. Mebane Davis, the new manager of the Piedmont Operations Center of Wachovia Bank and Trust of North Carolina, was reviewing the staffing needs for the Proof Department of the bank. In order to ensure continued cost effective employee performance, Mr. Davis had to forecast the demand for the 67th week and shedule workers accordingly. **Concepts Covered: Time Series Forecasting.**
 
 6. Hightower Department Stores - Julia Brown, the toy buyer for the chain of Hightower Department stores, was responsible for
-buying toys from all around the world and selling them at a profit for the company. She had to decide which toy to import based on her test data and predicted the sales of the imported toy. **Concepts Covered: Regression Analysis**
+buying toys from all around the world and selling them at a profit for the company. She had to decide which toy to import based on her test data and predicted the sales of the imported toy. **Concepts Covered: Regression Analysis.**
