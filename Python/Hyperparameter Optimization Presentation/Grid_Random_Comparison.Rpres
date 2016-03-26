@@ -54,12 +54,12 @@ Random Search
 - If the close-to-optimal region of hyperparameters occupies at least 5% of the grid surface, then random search with 60 trials will find that region with high probability.
 - Allows exploration of variation in values for each parameter given the same amount of trials.
 
-![GridandRandom](GridandRandom.png)
+![GridandRandom](./images/GridandRandom.png)
 
 Example Code
 ========================================================
 
-[Code](http://localhost:8888/notebooks/018_ML103/Hyper-parameter%20Optimization.ipynb)
+[Code](http://localhost:8888/notebooks/Hyperparameter_Optimization/Hyper-parameter%20Optimization.ipynb)
 
 
 References:
