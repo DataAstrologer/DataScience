@@ -1,6 +1,6 @@
 #Statistical Case Studies
 
-The folder contains a total of 6 case studies covering different statistical concepts. The Problem Description is attached as a pdf file, and my Analysis Report is included in the folder as well. All the case studies are solved using **Microsoft Excel**. Except for the first case, all the other situations are real life events. Below is a summary of the case study problem descriptions:
+The folder contains a total of 6 case studies covering different statistical concepts. The Problem Description is attached as a pdf file, and my Analysis Report is included in the folder as well. All the case studies are solved using **Microsoft Excel**. Except for the first case, all the other business situations are real life events. Below is a summary of the case study problem descriptions:
 
 1. Household Income - The data collected is of the household income of Los Angeles County residents. Descriptive Statistical methods are used for analyzing the data and useful information is reported to the county manager. **Concepts covered: Quantitative Data Analysis & Measures of Central Tendency.** 
 
