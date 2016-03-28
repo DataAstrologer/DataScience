@@ -11,7 +11,7 @@
 
 ![Basic Clustering Methods](./images/basic_clustering_methods.png)
 
-	**Note**: Some algorithms may combine various methods. 
+	Note: Some algorithms may combine various methods. 
 
 ## Dissimilarity Measures
 
