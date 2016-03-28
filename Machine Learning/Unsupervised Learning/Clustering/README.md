@@ -10,7 +10,6 @@
 * Different clustering methods may generate different clusters (identical) on the same data set. In general, the major fundamental clustering methods can be classified into the following categories.
 
 ![Basic Clustering Methods](./images/basic_clustering_methods.png)
-
 	Note: Some algorithms may combine various methods. 
 
 ## Dissimilarity Measures
