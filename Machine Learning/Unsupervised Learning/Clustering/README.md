@@ -19,26 +19,26 @@
 
 * Three common distance measures that are used for computing the distance of numeric data objects are discussed below. In most cases, data is **normalized** before applying distance calculations.
 
-1. Euclidean Distance - This is the straight line distance (the length of the line segment) between 2 n-dimensional vectors. It is given by the formula:
+1.  **Euclidean Distance** - This is the straight line distance (the length of the line segment) between 2 n-dimensional vectors. It is given by the formula:
 
 ![Euclidean Distance](./images/e_distance.png)
 
-2. Manhattan Distance - This is the sum of the absolute distance between 2 n-dimensional vectors. It is given by the formula:
+2.  **Manhattan Distance** - This is the sum of the absolute distance between 2 n-dimensional vectors. It is given by the formula:
 
 ![Manhattan Distance](./images/m_distance.png)
 
-3. Cosine Similarity - This is a measure that calculates the cosine of the angles between 2 n-dimensional vectors. It is given by the formula:
+3.  **Cosine Similarity** - This is a measure that calculates the cosine of the angles between 2 n-dimensional vectors. It is given by the formula:
 
 ![Cosine Similarity](./images/c_similarity.png)
 
 
 * Two common distance measures that are used for computing the distance of categorical data objects are discussed below:
 
-1. Jaccard Similarity - This is a measure of similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the samples. It is given by the formula:
+1.  **Jaccard Similarity** - This is a measure of similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the samples. It is given by the formula:
 
 ![Jaccard Similarity](./images/j_similarity.png)
 
-2. Hamming Distance - This is the minimum number of substitutions required to change one string into another, for strings of equal length. An example is shown below:
+2.  **Hamming Distance** - This is the minimum number of substitutions required to change one string into another, for strings of equal length. An example is shown below:
 
 ![Hamming Distance](./images/h_distance.png) 
 
