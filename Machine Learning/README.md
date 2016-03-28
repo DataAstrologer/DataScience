@@ -2,7 +2,7 @@
 
 Machine Learning:
 
-![Machine Learning](./images/machine_learning)
+![Machine Learning](./images/machine_learning.png)
 
 
 Supervised Learning:
