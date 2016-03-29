@@ -15,12 +15,12 @@ output: html_document
 ### Implementation in R
 
 The protien.csv dataset is present in the data folder.
-```{r}
+```{r, eval=TRUE}
 food = read.csv('./data/protein.csv', header = T)
 ```
 
 Exploratory data analysis of the variable types
-```{r basicconsole}
+```{r, eval=TRUE}
 str(food)
 ```
 
