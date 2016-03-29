@@ -72,7 +72,7 @@ str(avg_clust)
 7. **method** - The cluster method that has been used.
 8. **data** - Iterations to get the best cluster.
 
-Plot and Dendrogram for average linkage 
+Plot and Dendrogram for **average linkage** 
 ```{r}
 plot(avg_clust, hang = -1)
 ```
@@ -86,7 +86,7 @@ str(single_clust)
 ```
 ![single_linkage](./data/images/sing_linkage.png)
 
-Plot and Dendrogram for single linkage 
+Plot and Dendrogram for **single linkage**
 ```{r}
 plot(single_clust, hang = -1, labels = food$Country)
 ```
@@ -100,7 +100,7 @@ str(complete_clust)
 ```
 ![complete_linkage](./data/images/complete_linkage.png)
 
-Plot and Dendrogram for complete linkage 
+Plot and Dendrogram for **complete linkage** 
 ```{r}
 plot(complete_clust, hang = -1, labels = food$Country)
 rect.hclust(complete_clust, 6)
