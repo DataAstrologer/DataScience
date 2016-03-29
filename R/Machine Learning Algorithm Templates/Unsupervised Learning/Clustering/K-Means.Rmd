@@ -42,10 +42,7 @@ Normalizing the data since the range of all variables is different.
 std_data = scale(food[,-1])
 ```
 
-Running the k-means algorithm on the dataset. The dataset is divided into 7 clusters. 
-nstart is the random starting point. Clustering is done for all the random points and the best cluster is taken.
-For nstart = 10, 10 different starting points are chosen randomly and the k-means algorithm runs 10 times.
-After this, the best k-means solution is chosen among them. 
+Running the k-means algorithm on the dataset. The dataset is divided into 7 clusters. For nstart = 10, the k-means algorithm runs 10 times for 10 random starting points and returns the optimal k-means solution. This parameter is mentioned because k-means can deliver different results if the starting centroid positions get changed. 
 ```{r}
 clusters = kmeans(std_data, nstart = 10, centers = 7)
 ```
