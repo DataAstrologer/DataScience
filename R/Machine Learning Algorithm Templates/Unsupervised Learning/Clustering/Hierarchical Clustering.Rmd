@@ -1,0 +1,110 @@
+---
+title: "Hierarchical Clustering"
+author: "Riddhik Rathod"
+date: "March 30, 2016"
+output: html_document
+---
+
+# Hierarchical Clustering
+
+* The code below demonstrates the use of the Hierarchical Clustering.  
+* Hierarchical Clustering is a part of unsupervised machine learning and thus there is **no training and testing data**.
+* Hierarchical Clustering helps forming clusters of the dataset and getting useful insights.
+
+
+### Implementation in R
+
+The cluster library is used for demonstrating Hierarchical Clustering. 
+```{r}
+library(cluster)
+??cluster
+```
+
+The protien.csv dataset is present in the data folder.
+```{r, eval=TRUE}
+food = read.csv('./data/protein.csv', header = T)
+```
+
+Exploratory data analysis of the variable types
+```{r, eval=TRUE, include=TRUE}
+str(food)
+```
+![str](./data/images/str.png)
+
+Summary of the features of the dataset
+```{r}
+summary(food)
+```
+![summary](./data/images/summary.png)
+
+Plot between each variable to visualize data
+```{r}
+plot(food[,-1])
+```
+![plot_1](./data/images/plot_1.png)
+
+The `dist()` function returns the distance matrix computed by using the specified distance measure to compute the distances between the rows of a data matrix.
+```{r}
+dist_matrix = dist(food[,-1])
+dist_matrix
+```
+![dist_1](./data/images/dist_1.png)
+![dist_2](./data/images/dist_2.png)
+
+Hierarchical Clustering is a part of the cluster library. The `agnes()` function computes agglomerative hierarchical clustering of the dataset. The first parameter is the dataset to be clusterd, the paramter diss = FALSE treats the dataset as a matrix of observations by variables and not dissimilarity matrix, the third parameter below specifies to metric to be used for calculating the dissimilarity between the data objects and the method parameter defines the clustering method to be used - single, complete, average (default), ect.
+
+Using the average linkage hierarchial clustering
+```{r}
+avg_clust = agnes(food, diss =FALSE, metric = "euclidian")
+str(avg_clust)
+```
+![avg_link](./data/images/avg_linkage.png)
+
+
+### Explanation of the model summary:
+
+1. **order** - The final clustering arrangement of the data for each observation.
+2. **height** - This is the clustering height (on the dendrogram). IT corresponds to the distance between two cluster. 
+3. **ac** - This is the **agglomerative coefficient**. It is a measure of the quality of an agglomerative clustering of the data.
+4. **merge** - Negative entries in merge indicate agglomerations of singletons, and positive entries indicate agglomerations of non-singletons.
+5. **diss** - The dissimilarity matrix.
+6. **call** - The call which produced the result.
+7. **method** - The cluster method that has been used.
+8. **data** - Iterations to get the best cluster.
+
+Plot and Dendrogram for average linkage 
+plot(avg_clust, hang = -1)
+rect.hclust(avg_clust)
+![plot](./data/images/Rplot_1.png)
+![dendro1](./data/images/d_avg.png)
+
+Using the single linkage hierarchial clustering
+```{r}
+single_clust = agnes(food, diss = FALSE, metric = "euclidian", method = "single")
+str(single_clust)
+```
+![single_linkage](./data/images/sing_linkage.png)
+
+Plot and Dendrogram for single linkage 
+```{r}
+plot(single_clust, hang = -1, labels = food$Country)
+```
+![plot2](./data/images/Rplot_2.png)
+![dendro2](./data/images/d_single.png)
+
+Using the complete linkage hierarchial clustering
+```{r}
+complete_clust = agnes(food, diss = FALSE, metric = "euclidian", method = "complete")
+str(complete_clust)
+```
+![complete_linkage](./data/images/complete_linkage.png)
+
+Plot and Dendrogram for complete linkage 
+```{r}
+plot(complete_clust, hang = -1, labels = food$Country)
+```
+![plot3](./data/images/Rplot_3.png)
+![dendro3](./data/images/d_comp.png)
+
+
+
