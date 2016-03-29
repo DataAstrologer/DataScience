@@ -43,7 +43,7 @@ plot(food[,-1])
 ```
 ![plot_1](./data/images/plot_1.png)
 
-The `dist()` function returns the distance matrix computed by using the specified distance measure to compute the distances between the rows of a data matrix.
+The `dist()` function returns the distance matrix computed by using the specified distance measure between the rows of a data matrix.
 ```{r}
 dist_matrix = dist(food[,-1])
 dist_matrix
@@ -53,7 +53,7 @@ dist_matrix
 
 Hierarchical Clustering is a part of the cluster library. The `agnes()` function computes agglomerative hierarchical clustering of the dataset. The first parameter is the dataset to be clusterd, the paramter diss = FALSE treats the dataset as a matrix of observations by variables and not dissimilarity matrix, the third parameter below specifies to metric to be used for calculating the dissimilarity between the data objects and the method parameter defines the clustering method to be used - single, complete, average (default), ect.
 
-Using the average linkage hierarchial clustering
+Using the **average linkage** hierarchial clustering
 ```{r}
 avg_clust = agnes(food, diss =FALSE, metric = "euclidian")
 str(avg_clust)
@@ -73,12 +73,13 @@ str(avg_clust)
 8. **data** - Iterations to get the best cluster.
 
 Plot and Dendrogram for average linkage 
+```{r}
 plot(avg_clust, hang = -1)
-rect.hclust(avg_clust)
+```
 ![plot](./data/images/Rplot_1.png)
 ![dendro1](./data/images/d_avg.png)
 
-Using the single linkage hierarchial clustering
+Using the **single linkage** hierarchial clustering
 ```{r}
 single_clust = agnes(food, diss = FALSE, metric = "euclidian", method = "single")
 str(single_clust)
@@ -92,7 +93,7 @@ plot(single_clust, hang = -1, labels = food$Country)
 ![plot2](./data/images/Rplot_2.png)
 ![dendro2](./data/images/d_single.png)
 
-Using the complete linkage hierarchial clustering
+Using the **complete linkage** hierarchial clustering
 ```{r}
 complete_clust = agnes(food, diss = FALSE, metric = "euclidian", method = "complete")
 str(complete_clust)
@@ -102,9 +103,8 @@ str(complete_clust)
 Plot and Dendrogram for complete linkage 
 ```{r}
 plot(complete_clust, hang = -1, labels = food$Country)
+rect.hclust(complete_clust, 6)
+(abline(h=22))
 ```
 ![plot3](./data/images/Rplot_3.png)
 ![dendro3](./data/images/d_comp.png)
-
-
-
