@@ -45,4 +45,3 @@
 ## Algorithms
 
 The **K-Means** and the **Hierarchical Clustering** algorithms use the concepts covered above. Visit the folders to read about the algorithms in detail.
-
