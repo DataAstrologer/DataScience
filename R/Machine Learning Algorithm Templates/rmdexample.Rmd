@@ -20,7 +20,7 @@ food = read.csv('./data/protein.csv', header = T)
 ```
 
 Exploratory data analysis of the variable types
-```{r}
+```{r basicconsole}
 str(food)
 ```
 
