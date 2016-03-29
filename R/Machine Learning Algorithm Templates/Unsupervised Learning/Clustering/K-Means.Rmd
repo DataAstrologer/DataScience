@@ -23,19 +23,19 @@ Exploratory data analysis of the variable types
 ```{r, eval=TRUE, include=TRUE}
 str(food)
 ```
-![str](./data/str.png)
+![str](./data/images/str.png)
 
 Summary of the features of the dataset
 ```{r}
 summary(food)
 ```
-![summary](./data/summary.png)
+![summary](./data/images/summary.png)
 
 Plot between each variable to visualize data
 ```{r}
 plot(food[,-1])
 ```
-![plot_1](./data/plot_1.png)
+![plot_1](./data/images/plot_1.png)
 
 Normalizing the data since the range of all variables is different. 
 ```{r}
@@ -54,7 +54,7 @@ Checking the model details.
 ```{r}
 clusters
 ```
-![clusters](./data/clusters.png)
+![clusters](./data/images/clusters.png)
 
 
 ### Explanation of the model:
@@ -70,7 +70,7 @@ Summary of the model
 ```{r}
 str(clusters)
 ```
-![summary](./data/summary_2.png)
+![summary](./data/images/summary_2.png)
 
 
 ### Explanation of the model summary:
@@ -91,7 +91,7 @@ Details of the elements of cluster 3
 cluster_3 = subset(food, clusters$cluster==3)
 cluster_3
 ```
-![cluster_3](./data/cluster_3.png)
+![cluster_3](./data/images/cluster_3.png)
 
 
 Details of the elements of cluster 5
@@ -99,7 +99,7 @@ Details of the elements of cluster 5
 cluster_5 = subset(food, clusters$cluster==5)
 cluster_5
 ```
-![cluster_5](./data/cluster_5.png)
+![cluster_5](./data/images/cluster_5.png)
 
 Ordering the countries accroding to clusters for better interpretation of protien consumption.
 ```{r}
@@ -107,7 +107,7 @@ order_by_cluster = order(clusters$cluster)
 country = data.frame(food$Country[order_by_cluster],clusters$cluster[order_by_cluster])
 country
 ```
-![country](./data/country.png)
+![country](./data/images/country.png)
 
 * **Interpretation**: Albania, Bulgaria, Romania, Yugoslavia have similar protien consumption for the mentioned products since they fall in the same cluster.
 
@@ -116,6 +116,4 @@ Plotting the ReadMeat vs WhiteMeat protien consumption of the countries accordin
 plot(food$RedMeat, food$WhiteMeat, type = "n", xlim = c(3,19), xlab = "Red Meat",ylab = "White Meat")
 text(x = food$RedMeat, y = food$WhiteMeat, labels = food$Country, col = rainbow(7)[clusters$cluster])
 ```
-![plot_2](./data/plot_2.png)
-
-
+![plot_2](./data/images/plot_2.png)
