@@ -23,6 +23,7 @@ Exploratory data analysis of the variable types
 ```{r, eval=TRUE, include=TRUE}
 str(food)
 ```
+![image](./data/image.png)
 
 Summary of the features of the dataset
 ```{r}
