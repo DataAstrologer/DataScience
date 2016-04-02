@@ -1,6 +1,6 @@
 ---
 title: "Hierarchical Clustering"
-author: "Riddhik Rathod"
+author: "Riddhik Rathod | @DataAstrologer"
 date: "March 30, 2016"
 output: html_document
 ---
