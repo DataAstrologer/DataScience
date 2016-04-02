@@ -12,7 +12,7 @@
 
 ![model_equation](./images/model_eq.png)
 
-	Where f is an unknown function and ε is a random error with mean 0. 
+	f is an unknown function and ε is a random error with mean 0. 
 	Note: The difficulty of estimating f will depend on the standard deviation of the error term. 
 
 
