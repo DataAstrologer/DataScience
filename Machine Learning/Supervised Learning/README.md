@@ -37,11 +37,9 @@
 
 	* **Non-Parametric** - No explicit assumption of the functional form of f is made and the algorithm uses a **flexible number of parameter**. Also, fewer assumptions about the data are made. Example -  **K-nearest neighbour**
 
-
-
-Trade-Off:
-Interpretability - Non-parametric methods are harder to interpret.
-Flexibility - It is harder to fit a more flexible model to the data.
+* Trade-Off between both the methods:
+	* **Interpretability** - Non-parametric methods are harder to interpret.
+	* **Flexibility** - It is harder to fit a more flexible model to the data.
 
 ## Measuring Quality of Fit
 
