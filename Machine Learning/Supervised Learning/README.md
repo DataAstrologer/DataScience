@@ -82,3 +82,8 @@ MSE
 * n general, for the more the flexible method, the lower the MSE will be for the Training Data. However, it might be higher for the Testing Data. 
 
 Cross-Validation
+
+
+# List of Algorithms Covered:
+
+![Supervised Learning Algorithms](./images/supervised_learning_algorithms.png) 
