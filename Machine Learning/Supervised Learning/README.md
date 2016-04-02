@@ -15,8 +15,6 @@
 	f is an unknown function and ε is a random error with mean 0. 
 	Note: The difficulty of estimating f will depend on the standard deviation of the error term. 
 
-* Statistical modelling evaluation techniques are commonly used for assessing machine learning models when solving business problems. A few such techniques are discussed below: 
-
 
 
 ## Prediction vs. Inference
@@ -41,13 +39,13 @@
 	* **Interpretability** - Non-parametric methods are harder to interpret.
 	* **Flexibility** - It is harder to fit a more flexible model to the data.
 
-## Measuring Quality of Fit
 
-One common measure of accuracy is the mean square error, which is an average of the actual vs the predicted value in squared units.
+## Assessing Model Accuracy
 
-The machine learning method should be designed to make MSE small on the Testing Data.
+* Statistical modelling evaluation techniques are commonly used for assessing machine learning models when solving business problems. A few such techniques are discussed below.
 
-In general, for the more the flexible method, the lower the MSE will be for the Training Data. However, it might be higher for the Testing Data. 
+* No one method dominates all others over all possible data sets. On a particular data set, one specific method may work best, but some other method may work better on a similar but different data set. Hence it is an important task to decide for any given set of data which method produces the best results and this is often challenging.
+
 
 ## Bias/Variance Trade-Off
 
@@ -68,3 +66,19 @@ However,'test'errors'will'decline'at'first'(as'reductions'in'bias'dominate)'but'
 
 
 ### Check out the classification and regression folders to see what they look like. 
+
+
+## Measuring Quality of Fit
+
+To evaluate the performance of a model on a dataset, we need to quantify the extent to which the predicted response value for a given observation is close to the true response value for that observation.
+
+
+Confusion matrix
+ROC curve
+Lift curve
+MSE
+* mean square error, which is an average of the actual vs the predicted value in squared units.
+* The machine learning method should be designed to make MSE small on the Testing Data.
+* n general, for the more the flexible method, the lower the MSE will be for the Training Data. However, it might be higher for the Testing Data. 
+
+Cross-Validation
