@@ -4,11 +4,11 @@
 
 * In order to solve a given problem of supervised learning, one has to gather a training set and then evaluate the accuracy of the learned function using the testing set. 
 
-	* **Training set**: set of data used for discovering potentially predictive relationship between the **independent variables (predictor variables or features)** and **dependent variable(response variable)**.
+	* **Training set**: set of data used for discovering potentially predictive relationship between the **independent variables (predictor variables or features)** and **dependent variable (response variable)**.
 
 	* **Testing set**: set of data used for assessing the performance of the supervised learning algorithm. 
 
-* **Statistical modelling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modelling is to learn underlying phenomenon from data. Thus, with the help of statistical modelling, we can model the relationship between the **dependent variable (Y)** and **independent  variable(s) (X)** by representing the systematic information that X provides about Y using the equation:
+* **Statistical modelling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modelling is to learn underlying phenomenon from data. Thus, with the help of statistical modelling, we can model the relationship between the **dependent variable (Y)** and **independent variable(s) (X)** by representing the systematic information that X provides about Y using the equation:
 
 ![model_equation](./images/model_eq.png)
 
