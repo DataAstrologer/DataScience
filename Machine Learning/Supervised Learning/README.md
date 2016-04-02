@@ -15,35 +15,33 @@
 	f is an unknown function and ε is a random error with mean 0. 
 	Note: The difficulty of estimating f will depend on the standard deviation of the error term. 
 
-
 * Statistical modelling evaluation techniques are commonly used for assessing machine learning models when solving business problems. A few such techniques are discussed below: 
+
+
 
 ## Prediction vs. Inference
 
-Thus, when modelling, we wish to fit a model that relates the response variable to the predictor variables, with the aim of accurately predicting the response variable from the future observations (**prediction**) and better understanding the relationship between the response and the predictors (**inference**).
+* There are mainly 2 reasons for estimating the function **f** mentioned above: 
 
-There are 2 reasons for estimating the function f: **Prediction** and **Inference**
+	* **Prediction** - Accurately predicting the response variable for the future observations. In order to achieve this, we need a good estimate for the function f and we also need to make sure that the the variance of the error is not too large.
 
-**Prediction** - If we can produce a good estimate for f and the variance of the error is not too large, we can make accurate predictions for the response Y based on a new value of X
+	* **Inference** - Better understanding of the relationship between the response and the predictors variables. This relationship can be positive or negative, linear or non-linear, significant or not significant, etc. 
 
-**Inference** - The Type of relationship between the Y and X's (positive or negative, linear or non-linear, significant or not significant)
 
 
 ## Parametric vs. Non-Parametric Methods
 
-In order to estimate f, we first split f into training and testing data. 
-Then we can either use parametric or non-parametric methods to estimate f.
+* After splitting the data into training and testing sets, we can either use parametric or non-parametric methods to estimate the function f.
 
-Parametric - reduces the problem of estimating f down to one of estimating a set of parameters. This is done using 2 steps:
-Come up with a model by making some assumption of the functional form on X
-Use training data to fit the model
+	* **Parametric** - Estimating the function f is reduced down to estimating a fixed set of parameters for f. In order to achieve this, a model is made by making the assumptions about the data and may perform badly if the assumptions are wrong. Ex. **Linear Regression**
 
-Non-Parametric - Do not make an explicit assumption of the functional form of X
-However, a very large number of observations is required to obtain an accurate estimate of f
+	* **Non-Parametric** - No explicit assumption of the functional form of f is made and the algorithm uses a flexible number of parameter. Also, fewer assumptions about the data are made. Ex. **K-nearest neighbour**
+
+
 
 Trade-Off:
-Interpretability - Non-parametric methods are harder to interpret
-Flexibility - It is harder to fit a more flexible model to the data
+Interpretability - Non-parametric methods are harder to interpret.
+Flexibility - It is harder to fit a more flexible model to the data.
 
 ## Measuring Quality of Fit
 
