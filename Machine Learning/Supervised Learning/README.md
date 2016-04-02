@@ -33,9 +33,9 @@
 
 * After splitting the data into training and testing sets, we can either use parametric or non-parametric methods to estimate the function f.
 
-	* **Parametric** - Estimating the function f is reduced down to estimating a fixed set of parameters for f. In order to achieve this, a model is made by making the assumptions about the data and may perform badly if the assumptions are wrong. Ex. **Linear Regression**
+	* **Parametric** - Estimating the function f is reduced down to estimating a **fixed set of parameters for f**. In order to achieve this, a model is made by making the assumptions about the data and may perform badly if the assumptions are wrong. Example -  **Linear Regression**
 
-	* **Non-Parametric** - No explicit assumption of the functional form of f is made and the algorithm uses a flexible number of parameter. Also, fewer assumptions about the data are made. Ex. **K-nearest neighbour**
+	* **Non-Parametric** - No explicit assumption of the functional form of f is made and the algorithm uses a **flexible number of parameter**. Also, fewer assumptions about the data are made. Example -  **K-nearest neighbour**
 
 
 
