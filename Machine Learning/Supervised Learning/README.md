@@ -10,9 +10,9 @@
 
 * **Statistical modelling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modelling is to learn underlying phenomenon from data. Thus, with the help of statistical modelling, we can model the relationship between the **dependent variable** (**Y**) and **independent  variable(s)** (**X**) by representing the systematic information that X provides about Y using the equation:
 
-![model_equation](./images/model_eq)
+![model_equation](./images/model_eq.png)
 
-	In the above equation, **f** is an unknown function and **ε** is a random error with mean 0. The difficulty of estimating f will depend on the standard deviation of the error term. 
+In the above equation, **f** is an unknown function and **ε** is a random error with mean 0. The difficulty of estimating f will depend on the standard deviation of the error term. 
 
 
 * Statistical modelling evaluation techniques are commonly used for assessing machine learning models when solving business problems. A few such techniques are discussed below: 
