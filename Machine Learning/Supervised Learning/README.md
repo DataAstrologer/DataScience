@@ -4,16 +4,16 @@
 
 * In order to solve a given problem of supervised learning, one has to gather a training set and then evaluate the accuracy of the learned function using the testing set. 
 
-	* **training set**: set of data used for discovering potentially predictive relationship between the **independent variables** (a.k.a **predictor variables** or **features**) and **dependent variable** (a.k.a **response variable**).
+	* **Training set**: set of data used for discovering potentially predictive relationship between the **independent variables (predictor variables or features)** and **dependent variable(response variable)**.
 
-	* **testing set**: set of data used for assessing the performance of the supervised learning algorithm. 
+	* **Testing set**: set of data used for assessing the performance of the supervised learning algorithm. 
 
-* **Statistical modelling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modelling is to learn underlying phenomenon from data. Thus, with the help of statistical modelling, we can model the relationship between the **dependent variable** (**Y**) and **independent  variable(s)** (**X**) by representing the systematic information that X provides about Y using the equation:
+* **Statistical modelling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modelling is to learn underlying phenomenon from data. Thus, with the help of statistical modelling, we can model the relationship between the **dependent variable (Y)** and **independent  variable(s) (X)** by representing the systematic information that X provides about Y using the equation:
 
 ![model_equation](./images/model_eq.png)
 
-	where f is an unknown function and ε is a random error with mean 0. 
-	The difficulty of estimating f will depend on the standard deviation of the error term. 
+	Where f is an unknown function and ε is a random error with mean 0. 
+	Note: The difficulty of estimating f will depend on the standard deviation of the error term. 
 
 
 * Statistical modelling evaluation techniques are commonly used for assessing machine learning models when solving business problems. A few such techniques are discussed below: 
