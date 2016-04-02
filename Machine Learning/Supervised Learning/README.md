@@ -12,7 +12,8 @@
 
 ![model_equation](./images/model_eq.png)
 
-	where **f** is an unknown function and **ε** is a random error with mean 0. The difficulty of estimating f will depend on the standard deviation of the error term. 
+	where f is an unknown function and ε is a random error with mean 0. 
+	The difficulty of estimating f will depend on the standard deviation of the error term. 
 
 
 * Statistical modelling evaluation techniques are commonly used for assessing machine learning models when solving business problems. A few such techniques are discussed below: 
