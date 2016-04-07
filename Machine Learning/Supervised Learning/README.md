@@ -46,9 +46,6 @@
 
 * No one method dominates all others over all possible data sets. On a particular data set, one specific method may work best, but some other method may work better on a similar but different data set. Hence it is an important task to decide for any given set of data which method produces the best results and this is often challenging.
 
-
-
-
 ### NOTE
 
 In'general'training'errors'will'always'decline.
