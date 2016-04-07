@@ -16,7 +16,7 @@ Different clustering methods may generate different clusters on the same data se
 
 Similarity and Dissimilarity measures are referred to as **measures of proximity**. 
 
-Three common distance measures that are used for computing the distance of numeric data objects are discussed below. In most cases, data is **normalized** before applying distance calculations.
+* Three common distance measures that are used for computing the distance of numeric data objects are discussed below. In most cases, data is **normalized** before applying distance calculations.
 
 1) **Euclidean Distance** - This is the straight line distance (the length of the line segment) between 2 n-dimensional vectors. It is given by the formula:
 
@@ -30,8 +30,7 @@ Three common distance measures that are used for computing the distance of numer
 
 ![Cosine Similarity](./images/c_similarity.png)
 
-
-A common distance measures that is used for computing the distance of categorical data objects is discussed below:
+* A common distance measures that is used for computing the distance of categorical data objects is discussed below:
 
 1) **Jaccard Similarity** - This is a measure of similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the samples. It is given by the formula:
 
