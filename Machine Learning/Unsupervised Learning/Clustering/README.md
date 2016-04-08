@@ -4,6 +4,7 @@
 
 * Clustering is a part of unsupervised learning because the class label information is not present here. Clustering is the form of learning by observation rather than learning by examples. Informally, clustering helps finding the natural grouping among the data objects. It shows the internal structure of the data and helps discover an underlying rules and recurring patterns if they exist.
 
+* Clustering is done on the basis that each cluster contains atleast 1 element and the union of all the clusters is the dataset. 
 
 ## Overview of Basic Clustering Methods
 
@@ -39,3 +40,5 @@ Similarity and Dissimilarity measures are referred to as **measures of proximity
 ## Algorithms
 
 The **K-Means** and the **Hierarchical Clustering** algorithms use the concepts covered above. Visit the folders to read more about the algorithms in detail.
+
+Note: Some algorithms provide **convex clusters**. In a convex cluster, the line segment between any two points is completely contained in the set. However, the shape of the points may not be convex. The set of the clusters is convex. Also, in order to cluster, algorithms usually need to go through an exhaustive search (cover all the data objects in a dataset). 
