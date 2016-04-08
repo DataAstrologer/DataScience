@@ -38,4 +38,4 @@ Similarity and Dissimilarity measures are referred to as **measures of proximity
 
 ## Algorithms
 
-The **K-Means** and the **Hierarchical Clustering** algorithms use the concepts covered above. Visit the folders to read about the algorithms in detail.
+The **K-Means** and the **Hierarchical Clustering** algorithms use the concepts covered above. Visit the folders to read more about the algorithms in detail.
