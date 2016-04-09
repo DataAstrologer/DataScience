@@ -20,7 +20,7 @@ library(cluster)
 ??cluster
 ```
 
-The protien.csv dataset is present in the data folder.
+The protein.csv dataset is present in the data folder.
 ```{r, eval=TRUE}
 food = read.csv('./data/protein.csv', header = T)
 ```
@@ -43,7 +43,7 @@ plot(food[,-1])
 ```
 ![plot_1](./data/images/plot_1.png)
 
-The `dist()` function returns the distance matrix computed by using the specified distance measure between the rows of a data matrix.
+The `dist()` function returns the distance matrix computed by using a distance measure.
 ```{r}
 dist_matrix = dist(food[,-1])
 dist_matrix
@@ -51,9 +51,13 @@ dist_matrix
 ![dist_1](./data/images/dist_1.png)
 ![dist_2](./data/images/dist_2.png)
 
-Hierarchical Clustering is a part of the cluster library. The `agnes()` function computes agglomerative hierarchical clustering of the dataset. The first parameter is the dataset to be clusterd, the paramter diss = FALSE treats the dataset as a matrix of observations by variables and not dissimilarity matrix, the third parameter below specifies to metric to be used for calculating the dissimilarity between the data objects and the method parameter defines the clustering method to be used - single, complete, average (default), ect.
+Hierarchical Clustering is a part of the cluster library. The `agnes()` function computes agglomerative hierarchical clustering of the dataset. 
+* The first parameter is the dataset to be clustered.
+* The parameter diss = FALSE treats the dataset as a matrix of observations by variables and not as a dissimilarity matrix. 
+* The third parameter below specifies to metric to be used for calculating the dissimilarity between the data objects.
+* The method parameter defines the clustering method to be used - single, complete, average (default), etc.
 
-Using the **average linkage** hierarchial clustering
+Using the **average linkage** hierarchical clustering:
 ```{r}
 avg_clust = agnes(food, diss =FALSE, metric = "euclidian")
 str(avg_clust)
@@ -72,35 +76,35 @@ str(avg_clust)
 7. **method** - The cluster method that has been used.
 8. **data** - Iterations to get the best cluster.
 
-Plot and Dendrogram for **average linkage** 
+Plot and Dendrogram for **average linkage**: 
 ```{r}
 plot(avg_clust, hang = -1)
 ```
 ![plot](./data/images/Rplot_1.png)
 ![dendro1](./data/images/d_avg.png)
 
-Using the **single linkage** hierarchial clustering
+Using the **single linkage** hierarchial clustering:
 ```{r}
 single_clust = agnes(food, diss = FALSE, metric = "euclidian", method = "single")
 str(single_clust)
 ```
 ![single_linkage](./data/images/sing_linkage.png)
 
-Plot and Dendrogram for **single linkage**
+Plot and Dendrogram for **single linkage**:
 ```{r}
 plot(single_clust, hang = -1, labels = food$Country)
 ```
 ![plot2](./data/images/Rplot_2.png)
 ![dendro2](./data/images/d_single.png)
 
-Using the **complete linkage** hierarchial clustering
+Using the **complete linkage** hierarchial clustering:
 ```{r}
 complete_clust = agnes(food, diss = FALSE, metric = "euclidian", method = "complete")
 str(complete_clust)
 ```
 ![complete_linkage](./data/images/complete_linkage.png)
 
-Plot and Dendrogram for **complete linkage** 
+Plot and Dendrogram for **complete linkage**:
 ```{r}
 plot(complete_clust, hang = -1, labels = food$Country)
 rect.hclust(complete_clust, 6)
