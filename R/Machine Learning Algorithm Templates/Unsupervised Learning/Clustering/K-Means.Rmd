@@ -14,24 +14,24 @@ output: html_document
 
 ### Implementation in R
 
-The protien.csv dataset is present in the data folder.
+The protein.csv dataset is present in the data folder.
 ```{r, eval=TRUE}
 food = read.csv('./data/protein.csv', header = T)
 ```
 
-Exploratory data analysis of the variable types
+Exploratory data analysis of the variable types.
 ```{r, eval=TRUE, include=TRUE}
 str(food)
 ```
 ![str](./data/images/str.png)
 
-Summary of the features of the dataset
+Summary of the features of the dataset.
 ```{r}
 summary(food)
 ```
 ![summary](./data/images/summary.png)
 
-Plot between each variable to visualize data
+Scatter plot matrix to visualize data.
 ```{r}
 plot(food[,-1])
 ```
@@ -56,12 +56,12 @@ clusters
 
 ### Explanation of the model:
 
-The clustering happens on the basis of the protien consumption for each product. Similar protein consumption for different products will be a part of the same cluster. Thus, cumulatively, the protien consumption of meat, eggs, milk, etc. is similar to each other within a cluster. 
+The clustering happens on the basis of the protein consumption for each product. Similar protein consumption for different products will be a part of the same cluster. Thus, cumulatively, the protein consumption of meat, eggs, milk, etc. is similar to each other within a cluster. 
 
-1. A total of 7 clusters of size - 4, 2, 4, 4, 2, 5, 4 are formed.
-2. **Cluster means** - The centres of the clusters.
-3. **Clustering vector** - The final clustering arrangement of the data for each observation. For example, the 1st  observation falls in the 1st cluster.  
-4. **Within cluster sum of squares by cluster:** - This is a measure of distortion within the cluster. When the clustering is better, these values (or the sum of these values) is **low**.
+1. A total of **7 clusters** of size - 4, 2, 4, 4, 2, 5, 4 are formed.
+2. **Cluster means** - The centers of the clusters.
+3. **Clustering vector** - The final clustering arrangement of the data for each observation. For example, the 1st observation falls in the 1st cluster.  
+4. **Within cluster sum of squares by cluster:** - This is a measure of distortion within the cluster. When the clustering is better, these values (or the sum of these values) are **low**.
 
 Summary of the model
 ```{r}
@@ -73,7 +73,7 @@ str(clusters)
 ### Explanation of the model summary:
 
 1. **cluster** - The final clustering arrangement of the data for each observation.
-2. **centers** - A matrix of cluster centres.
+2. **centers** - A matrix of cluster centers.
 3. **totss** - This is the sum of **tot.withinss** and **betweenss**.
 4. **withinss** - This is a measure of distortion within the cluster. When the clustering is better, these values are **low**.
 5. **tot.withinss** - The sum of the withinss values. The **lower the tot.withinss** the **lesser the distortion** within the cluster.
@@ -83,7 +83,7 @@ str(clusters)
 9. **ifault** - indicator of a possible algorithm problem -- for experts.
 
 
-Details of the elements of cluster 3
+Details of the elements of cluster 3:
 ```{r}
 cluster_3 = subset(food, clusters$cluster==3)
 cluster_3
@@ -91,14 +91,14 @@ cluster_3
 ![cluster_3](./data/images/cluster_3.png)
 
 
-Details of the elements of cluster 5
+Details of the elements of cluster 5:
 ```{r}
 cluster_5 = subset(food, clusters$cluster==5)
 cluster_5
 ```
 ![cluster_5](./data/images/cluster_5.png)
 
-Ordering the countries accroding to clusters for better interpretation of protien consumption.
+Ordering the countries according to clusters for better interpretation of protein consumption.
 ```{r}
 order_by_cluster = order(clusters$cluster)
 country = data.frame(food$Country[order_by_cluster],clusters$cluster[order_by_cluster])
@@ -106,9 +106,9 @@ country
 ```
 ![country](./data/images/country.png)
 
-* **Interpretation**: Albania, Bulgaria, Romania, Yugoslavia have similar protien consumption for the mentioned products since they fall in the same cluster.
+* **Interpretation**: Albania, Bulgaria, Romania, Yugoslavia have similar protein consumption for the mentioned products since they fall in the same cluster.
 
-Plotting the ReadMeat vs WhiteMeat protien consumption of the countries according to thier cluster. 
+Plotting the ReadMeat vs WhiteMeat protein consumption of the countries according to thier cluster. 
 ```{r}
 plot(food$RedMeat, food$WhiteMeat, type = "n", xlim = c(3,19), xlab = "Red Meat",ylab = "White Meat")
 text(x = food$RedMeat, y = food$WhiteMeat, labels = food$Country, col = rainbow(7)[clusters$cluster])
