@@ -2,16 +2,17 @@
 
 * Clustering is the process of grouping a set of data objects into multiple groups or clusters such that there is a **high intra-cluster similarity** (similarity within the cluster) and a **low inter-cluster similarity** (similarity between the cluster). To achieve clustering, a similarity/dissimilarity measure is defined which reflects the degree of closeness or separation between the data objects. 
 
-* Clustering is a part of unsupervised learning because the class label information is not present here. Clustering is the form of learning by observation rather than learning by examples. Informally, clustering helps finding the natural grouping among the data objects. It shows the internal structure of the data and helps discover an underlying rules and recurring patterns if they exist.
+* Clustering is a part of unsupervised learning because the class label information is not present here. Clustering is the form of learning by observation rather than learning by examples. Informally, clustering helps find the natural grouping among data objects. It shows the internal structure of the data and helps discover any underlying rules and recurring patterns if they exist.
 
-* Clustering is done on the basis that each cluster contains atleast 1 element and the union of all the clusters is the dataset. 
+* Each cluster contains atleast one element and the union of all the clusters is the dataset itself. 
 
 ## Overview of Basic Clustering Methods
 
-Different clustering methods may generate different clusters on the same data set. In general, the major fundamental clustering methods can be classified into the following categories:
+Different clustering methods may generate non-identical clusters on the same dataset. In general, the major fundamental clustering methods can be classified into the following categories:
 
 ![Basic Clustering Methods](./images/basic_clustering_methods.png)
-	Note: Some algorithms may combine various methods. 
+
+**Note**: Some algorithms may combine various methods. 
 
 ## Similarity and Dissimilarity Measures
 
@@ -39,6 +40,6 @@ Similarity and Dissimilarity measures are referred to as **measures of proximity
 
 ## Algorithms
 
-The **K-Means** and the **Hierarchical Clustering** algorithms use the concepts covered above. Visit the folders to read more about the algorithms in detail.
+The **K-Means** and the **Hierarchical Clustering** algorithms use the concepts covered above. Visit the folders to read more about the algorithms.
 
-Note: Some algorithms provide **convex clusters**. In a convex cluster, the line segment between any two points is completely contained in the set. However, the shape of the points may not be convex. The set of the clusters is convex. Also, in order to cluster, algorithms usually need to go through an exhaustive search (cover all the data objects in a dataset). 
+**Note**: Some algorithms provide *convex clusters*. In a convex cluster, the line segment between any two points is completely contained in the set. However, the shape of the points may not be convex. The set of the clusters is convex. Also, in order to cluster, algorithms usually need to go through an *exhaustive search* (cover all the data objects in a dataset). 
