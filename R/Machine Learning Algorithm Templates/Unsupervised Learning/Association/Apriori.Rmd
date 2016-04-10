@@ -54,7 +54,7 @@ playlist[1:2]
 ```
 ![playlist](./data/images/playlist.png)
 
-The code below coreces the dataset to a transcation. Once the data has been coerced to transactions the data is ready for mining itemsets or rules. Association Rule Learning uses the transaction data files available in R. The transaction class is a direct extension of the ```itemMatrix``` class.
+The code below coreces the dataset to a **transcation**. Once the data has been coerced to transactions it is ready for mining itemsets or rules. Association Rule Learning uses the transaction data files available in R. The transaction class is a direct extension of the ```itemMatrix``` class.
 ```{r, eval=TRUE, include=TRUE}
 playlist = as(playlist,"transactions")
 ```
@@ -70,7 +70,7 @@ str(playlist)
 ```
 ![str_transaction](./data/images/str_transaction.png)
 
-The plot below shows item frequencies greater than 80% support. The ```itemFrequencyPlot()``` function creates an item frequency bar plot for inspecting the distribution of the objects in the transaction. This function is a part of the ```arules``` package.
+The plot below shows item frequencies > **80% support**. The ```itemFrequencyPlot()``` function creates an item frequency bar plot for inspecting the distribution of the objects in the transaction. This function is a part of the ```arules``` package.
 ```{r, eval=TRUE, include=TRUE}
 itemFrequencyPlot(playlist,support=0.08, cex.names = 1.5)
 ```
