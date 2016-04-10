@@ -1,0 +1,88 @@
+---
+title: "Apriori"
+author: "Riddhik Rathod | @DataAstrologer"
+date: "April 10, 2016"
+output: html_document
+---
+
+# Apriori Algorithm
+
+* The code below demonstrates the use of the Apriori algorithm. 
+* Apriori is a part of unsupervised machine learning and thus there is **no training and testing data**.
+* Apriori helps forming association rules and discovering interesting relationships between variables.
+
+
+### Implementation in R
+
+The music.csv dataset is present in the data folder.
+```{r, eval=TRUE}
+music = read.csv('./data/music.csv', header = T)
+```
+
+Summary of the features of the dataset.
+```{r}
+summary(music)
+```
+![summary](./data/images/summary.png)
+
+Coverting the user variable to a factor.
+```{r}
+music$user = factor(music$user)
+```
+
+Exploratory data analysis of the variable types.
+```{r, eval=TRUE, include=TRUE}
+str(music)
+```
+![str](./data/images/str.png)
+
+The ```arules``` package is used for finding association rules.
+```{r, eval=TRUE, include=TRUE}
+install.packages("arules")
+library(arules)
+```
+
+Pre-processing the data by splitting the list of users and removing duplicate artists. 
+```{r, eval=TRUE, include=TRUE}
+playlist = split(x=music[,"artist"], f=music$user) # split into a list of users
+playlist = lapply(playlist, unique) #remove artist duplicates
+```
+
+Preview of the pre-processed data. The first 2 listeners (1 and 3) listen to the following bands:
+```{r, eval=TRUE, include=TRUE}
+playlist[1:2]
+```
+![playlist](./data/images/playlist.png)
+
+The code below coreces the dataset to a transcation. Once the data has been coerced to transactions the data is ready for mining itemsets or rules. Association Rule Learning uses the transaction data files available in R. The transaction class is a direct extension of the ```itemMatrix``` class.
+```{r, eval=TRUE, include=TRUE}
+playlist = as(playlist,"transactions")
+```
+
+Exploratory analysis of the transaction data.
+```{r, eval=TRUE, include=TRUE}
+summary(playlist)
+```
+![summary_transaction](./data/images/summary_transaction.png)
+
+```{r, eval=TRUE, include=TRUE}
+str(playlist)
+```
+![str_transaction](./data/images/str_transaction.png)
+
+The plot below shows item frequencies greater than 80% support. The ```itemFrequencyPlot()``` function creates an item frequency bar plot for inspecting the distribution of the objects in the transaction. This function is a part of the ```arules``` package.
+```{r, eval=TRUE, include=TRUE}
+itemFrequencyPlot(playlist,support=0.08, cex.names = 1.5)
+```
+![item_frequency_plot](./data/images/if_plot.png)
+
+Finally we build the association rules with a support of > 1% and a confidence of > 50%. The ```inspect()``` function is used for inspecting the rules.
+```{r, eval=TRUE, include=TRUE}
+inspect(musicrules)
+```
+![music_rules](./data/images/music_rules.png)
+
+```{r, eval=TRUE, include=TRUE}
+inspect(musicrules)
+```
+![inspect](./data/images/inspect.png)

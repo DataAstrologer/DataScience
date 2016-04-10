@@ -30,7 +30,7 @@ Association rules are usually required to satisfy a user-specified **minimum sup
 
 ![confidence](./images/confidence.png)
 
-Relationship between support and confidence:
+*Relationship between support and confidence:*
 
 ![support_confidence](./images/support_confidence.png)
 
