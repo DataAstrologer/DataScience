@@ -30,13 +30,13 @@ Association rules are usually required to satisfy a user-specified **minimum sup
 
 ![confidence](./images/confidence.png)
 
-**Relationship between support and confidence**:
+Relationship between support and confidence:
 
 ![support_confidence](./images/support_confidence.png)
 
 Association rule generation is usually split up into two separate steps:
-1. A minimum support threshold is applied to find all frequent item-sets in a database.
-2. A minimum confidence constraint is applied to these frequent item-sets in order to form rules.
+* A minimum support threshold is applied to find all frequent item-sets in a database.
+* A minimum confidence constraint is applied to these frequent item-sets in order to form rules.
 
 **Note**: 
 * Rules originating from the same itemset have identical support but can have different confidence. 
@@ -46,7 +46,7 @@ Association rule generation is usually split up into two separate steps:
 
 # Market Basket Analysis
 
-* Market Basket Analysis is an example of the application of association modeling. The **analysis of customer buying habits** is done here by finding the associations between different items that the customer places in their “shopping baskets”. 
+* Market Basket Analysis is an example of the application of association modeling. The **analysis of customer buying habits** is done here by finding the associations between different items that the customer places in their *“shopping baskets”*. 
 
 * Each item bought is represented as a Boolean variable (purchased or not purchases) and each basket is represented as a Boolean vector of values assigned to the variables. The Boolean vectors are analyzed for buying patterns. The buying patterns reflect the items that are frequently associated together and are represented in the form of association rules. 
 
