@@ -116,6 +116,15 @@ MSE
 mean((predicted_y-testing_y)^2)
 ```
 
+### Visualize the coefficients to see how far they are from zero.
+install.packages("coefplot")
+library(coefplot)
+coefplot(model1)
+
+## zoom into the estimates of the variables without the intercept
+coefplot(model, coefficients = c('Year','Lag1','Lag2','Lag3','Lag4','Lag5','Volume'))
+coefplot(model1, coefficients = c('Year','Lag1','Lag2','Volume'))
+
 Removing the non-significant variables and then try the model (not done here):
 ```{r}
 model.final = lm(medv ~ , data = training_data)
