@@ -98,9 +98,9 @@ We want to make sure that the predictor variables that are highly correlated are
 
 The VIF criteria is used for checking if one or more of the independent variables are correlated with each other in the model. VIF is given by the **formula**: 
 
-*VIF = 1/(1-RSquared)*
+VIF = 1/(1-RSquared)
 
-* The higher the VIF for a variable, the variable would be highly correlated with at least one of the other predictors in the model. A VIF value of *1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
+The higher the VIF for a variable, the variable would be highly correlated with at least one of the other predictors in the model. A VIF value of *1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
 ```{r}
 #install.packages("car")
 library(car)
