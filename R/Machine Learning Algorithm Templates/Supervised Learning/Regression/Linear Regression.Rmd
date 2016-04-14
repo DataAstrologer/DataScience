@@ -158,7 +158,7 @@ coefplot(model,
 After removing the other non-significant variables, we can get the final model which will be can be used for testing the data.
 ```{r}
 model.lm = lm(medv ~ . -tax -indus -age, data = training_data)
-summary(model.rad)
+summary(model.lm)
 ```
 ![final_model](./data/images/final_model.png)
 
