@@ -163,7 +163,7 @@ summary(model.rad)
 
 *Thus, our final equation for the linear model is:*
 
-#### medv = 36.31 - 0.131261 × crim +  0.037630 × zn + 3.326372 × chas - 21.026248 × nox + 3.814986 × rm - 1.471421 × dis + 0.155416 × rad - 0.954459 × ptratio + 0.007885 × black - 0.580303 × lstat**
+#### medv = 36.308461 - (0.131261 × crim) +  (0.037630 × zn) + (3.326372 × chas) - (21.026248 × nox) + (3.814986 × rm) - (1.471421 × dis) + (0.155416 × rad) - (0.954459 × ptratio) + (0.007885 × black) - (0.580303 × lstat)
 
 
 ### Prediction and Accuracy
@@ -277,4 +277,4 @@ that takes on a value of 1 if the location is medium, and 0 otherwise (Good or B
 
 Thus, our model looks like the following:
 
-**Sales = 12.13 − 0.058 × Price + 4.932 × ShelveLocGood + 1.9 × SelveLocMedium**
+#### Sales = 12.13 − (0.058 × Price) + (4.932 × ShelveLocGood) + (1.9 × SelveLocMedium)
