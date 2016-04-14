@@ -48,6 +48,7 @@ plot(data[,-1])
 The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 400 random samples as training data and the remaining as testing data. 
 ```{r}
 set.seed(100) # to control randomness and get similar results
+
 train = sample(1:506,400)
 test = -train
 
@@ -64,13 +65,13 @@ model
 ```
 ![model_1](./data/images/model_1.png)
 
-The ```model``` command above only gives us basic information about the regression model. For more detailed information, we use the ```summary()``` function.
+The ```model``` command above only gives us basic information about the regression model. For more detailed information, we use the ```summary()``` function. The summary gives us information about the p-values, standard errors and the R-Squared values for the linear model.
 ```{r}
 summary(model)
 ```
 ![summary_model_1](./data/images/summary_model_1.png)
 
-The summary gives us information about the p-values, standard errors and the R-Squared values for the linear model.
+
 
 Explanation of the summary:
 * Except for the *indus* and the *age*, all the other variables are statistically significant.
@@ -108,7 +109,7 @@ vif(model)
 ```
 ![vif](./data/images/vif.png)
 
-From the above output, we notice that tax has a high VIF (9.44), which means that the variance of the estimated coefficient of tax is inflated by a factor of 9.44 because tax is highly correlated with at least one of the other predictors in the model. 
+From the above output, we notice that tax has a high VIF (9.44), which means that the variance of the estimated coefficient of tax is inflated by a factor of 9.44 because tax is highly correlated with at least one of the other predictors in the model.
 
 In order to see what variables are highly correlated with tax, we can explore correlations.
 
@@ -168,9 +169,9 @@ summary(model.rad)
 
 ### Prediction and Accuracy
 
-In order to do predictions using the final model above, we use the ```predict()``` function in R. 
+In order to do predictions using the final model on the testing data, we use the ```predict()``` function in R. 
 ```{r}
-predicted_y = predict(model,testing_data)
+predicted_y = predict(model.lm,testing_data)
 ```
 
 For assessing the model on the testing data, we first save the dependent variable to a new variable *testing_y*. 
@@ -197,7 +198,7 @@ model.two
 Getting all 3-way & 2-way interaction terms (only code below, output not shown):
 ```{r}
 model.three = lm(mdev ~ (.)^3, data = training_data)
-summary(model)
+model.three
 ```
 
 ### Checking the assumptions of Linear Regression

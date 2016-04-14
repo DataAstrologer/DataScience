@@ -7,96 +7,153 @@ output: html_document
 
 # Logisitic Regression Algorithm
 
-* The code below demonstrates the logistic regression algorithm. 
-* Logisitc Regression is a part of supervised machine learning for predicting categorical variables. The dataset is split into **training and testing data**.
-* Logistic Regression is used for prediction using the **logit function**. 
-* **Dependent Variable** = **medv** 
-* Data Source: ```MASS``` library in ```R```.
-* library(nnet) used for multinominal logistic regression 
+* The code below demonstrates Logistic Regression. 
+* Logisitc Regression is a part of supervised machine learning and thus the dataset is split into **training and testing data**.
+* Logistic Regression is used for prediction using the **logit** function. 
+* The *carsales* dataset present in the data folder is used here. It contains information about the make, price, cost, etc. for cars. The **dependent variable is Sales** which is an indication of whether the car was sold or not. 
 
 ### Implementation in R
 
-The carseats.csv dataset is present in the data folder.
+The carsales dataset is present in the data folder.
 ```{r, eval=TRUE}
-carseats = read.csv(file.choose(), header = TRUE)
+carsales = read.csv("./data/carsales", header = TRUE)
 ```
 
 Exploratory data analysis of the variable types.
 ```{r, eval=TRUE, include=TRUE}
-str(carseats)
+str(carsales)
 ```
 ![str](./data/images/str.png)
 
 Converting categorical variables to factor
 ```{r, eval=TRUE, include=TRUE}
-carseats$Sales = as.factor(carseats$Sales)
-carseats$ShelveLoc = as.factor(carseats$ShelveLoc)
-carseats$Urban = as.factor(carseats$Urban)
-carseats$US = as.factor(carseats$US)
+carsales$Sales = as.factor(carseats$Sales)
+carsales$ShelveLoc = as.factor(carseats$ShelveLoc)
+carsales$Urban = as.factor(carseats$Urban)
+carsales$US = as.factor(carseats$US)
 ```
 
 Summary of the features of the dataset.
 ```{r}
-summary(carseats)
+summary(carsales)
 ```
 ![summary](./data/images/summary.png)
 
 Scatter plot matrix to visualize numeric data.
 ```{r}
-plot(carseats[,c(-1,-7,-10,-11)])
+plot(carsales[,c(-1,-7,-10,-11)])
 ```
 ![plot_1](./data/images/plot_1.png)
 
-Splitting the dataset into training and testing data. This is done by randomly selecting 400 observations for testing and the rest for training. The ```sample()``` function generates 400 random values for splitting the dataset.
+
+### Splitting the dataset
+
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 400 random samples as training data and the remaining as testing data. 
 ```{r}
-set.seed(100)
+set.seed(100) # to control randomness and get similar results
 
 train = sample(1:400, 300)
 test = -train
 
-training_data = carseats[train,]
-testing_data = carseats[test,]
+training_data = carsales[train,]
+testing_data = carsales[test,]
 ```
 
-building a logistic regression model using all predictors the dependent variable is sales 
+### Logistic Model
 
-Creating a linear model on the *training data* using the ```lm()``` function in R and checking the model summary. 
+The ```glm()``` function is used for performing logistic regression in R. The logit model is *fitted* on the training data. The ```family``` parameter in ```glm()``` is used for specifying the ```logit``` function.
 ```{r}
-model = glm(Sales ~.,data = training_data, family =binomial(link="logit"))
+model = glm(Sales ~.,data = training_data, family = binomial(link = "logit"))
 model
 ```
+![model_1](./data/images/model_1.png)
+
+The ```model``` command above only gives us basic information about the regression model. For more detailed information, we use the ```summary()``` function. The summary gives us information about the p-values, null deviance, AIC and Fisher Scoring iterations for the the logistic model.
 ```{r}
 summary(model)
 ```
 
-The varaiables that are significant at the 0.05 alpha level are:
-1. CompPrice
-2. Income
-3. Advertising
-4. Price
-5. ShelveLoc1
-6. Age
+We can use the ```names()``` function to see what other pieces of information are stored in our linear model. 
+```{r}
+names(model)
+```
+![names](./data/images/names.png)
 
-## Fitting a logistic model using only significant predictors found above.
-model_2 <- glm(Sales ~ CompPrice + Income + Advertising + Price + ShelveLoc + Age, data = training_data, family = "binomial")
-model_2
-summary(model_2)
+To obtain the confidence interval for the coefficients of the model (model), we can use the ```confint()``` function.
+```{r}
+confint(model, level = 0.95)
+```
+![ci](./data/images/ci.png)
 
+### Checking for collinearity
 
+We want to make sure that the predictor variables that are highly correlated are not in the same model together. The checking for collinearity is done in 2 ways - *VIF* and *Correlation*.
 
-## Based on the model, it can be agreed that the sales are high when money is invested in advertising.
-## This is because the coefficient of the Advertising variable is positive and highly significant. Also, 
-## a unit increase on the amount spent in advertising increases the sales by 0.163208 units.
-## Also, according to the model, since the Price of the carseat has a negative coefficient, 
-## for a sales actually decreases by 0.104214 for a unit increase in the price. Thus, based on the model
-## I agree with the boss. 
+**Variance Inflation Factor (VIF)**
 
-## Predicting the sales on the testing dataset. 
-## A threshold value of 50% is used to predict whether the sales 
-## are going to be high or low on the testing data.
+The VIF criteria is used for checking if one or more of the independent variables are correlated with each other in the model. VIF is given by the **formula**: 
 
-logistic_probs = predict(model_2, testing_data, type = "response")
+VIF = 1/(1-RSquared)
 
+R-Squard is a measure of how much variation in data is captured by the independent variables. The higher the VIF for a variable, the variable would be highly correlated with at least one of the other predictors in the model. A VIF value of *1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
+```{r}
+#install.packages("car")
+library(car)
+vif(model)
+```
+![vif](./data/images/vif.png)
+
+From the above output, we notice that there is **no** variable which have a significantly high VIF (> 5). We can also check the correlation between variables to confirm this observation.
+
+**Correlation**
+
+The ```cor()``` function in R computes the correlation matrix.
+```{r}
+corr_matrix = round(cor(training_data[,c(-1,-7,-10,-11)]), 2)
+corr_matrix
+```
+![cor](./data/images/cor.png)
+
+In order to visualize the correlations between the variables, the ```corrplot()``` function from the ```corrplot``` R package is used. The first argument for the ```corrplot()``` function is the *correlation matrix*, and the second argument is the *ordering method* of the variables. In this case we used the **hierarchical clustering** technique to order them.
+```{r}
+#install.packages("corrplot")
+library(corrplot)
+corrplot(corr_matrix, order = "hclust")
+```
+![corr_plot](./data/images/corr_plot.png)
+
+The above plot confirms that none of the variables are highly correlated.
+
+Visualizing the other coefficients to see how far they are from zero. This is done by using the ```coeflot()``` function which is a part of the ```coefplot``` library. 
+```{r}
+#install.packages("coefplot")
+library(coefplot)
+coefplot(model)
+```
+![coef_plot](./data/images/coef_plot.png)
+
+After removing the other non-significant variables, we can get the final model which will be can be used for testing the data.
+```{r}
+model.log = glm(Sales ~ CompPrice + Income + Advertising + Price + ShelveLoc + Age, 
+                data = training_data, 
+                family = binomial(link = "logit"))
+summary(model.log)
+```
+![final_model](./data/images/final_model.png)
+
+Thus, our final equation for the logistic regression model is:
+
+#### log(odds = Sales/(1-Sales)) = -2.15131 + (0.10513 x CompPrice) + (0.01804 x Income) + (0.14640 x Advertising) - (0.10831 x Price) + (2.07546 x ShelveLoc1) - (0.05278 x Age)
+
+### Prediction and Accuracy
+
+In order to do predictions using the final model on the testing data, we use the ```predict()``` function in R. 
+```{r}
+logistic_probs = predict(model.log, testing_data, type = "response")
+```
+
+A threshold of 50% is used for predicting whether the sales are going to be made or not on the testing data. The for loop below converts all the probabilities above 50% to 1 (indicating sales) or 0 otherwise (indicating no sales).
+```{r}
 for(i in 1:100){
   if (logistic_probs[i] >= 0.500){
     logistic_probs[i] = 1
@@ -105,119 +162,117 @@ for(i in 1:100){
     logistic_probs[i] = 0
   }
 }
+```
 
-## Using the caret library for confusion matrix
+A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false postivies, true negatives and false negatives and hence the missclassification rate. 
+```{r}
+#install.packages("caret")
 library(caret)
 confusionMatrix(testing_data$Sales, logistic_probs)
+```
+![confusion_matrix](./data/images/cfm.png)
 
-## Misclassification error rate = (7+4)/100 = 0.11
+The misscalssification rate of the model is given by:
 ```{r}
-testing_y = testing_data$medv
-predicted_y = predict(model,testing_data)
+(7+4)/(54+4+7+35)
+```
+The misscalssification rate is 11%.
+![mcr](./data/images/mcr.png)
+
+
+The accuracy of the model is calculated below.
+```{r}
+mean(testing_data$Sales == logistic_probs)
+```
+![accuracy](./data/images/accuracy.png)
+
+
+### Dealing with Interaction Terms
+
+Getting all 2-way interaction terms (possibility of over-fitting):
+```{r}
+model.two = glm(Sales ~ (.)^2, data = training_data, family = binomial(link = "logit"))
+model.two
+```
+![interaction_2](./data/images/interaction_2.png)
+
+Getting all 3-way & 2-way interaction terms (only code below, output not shown):
+```{r}
+model.three = glm(Sales ~ (.)^2, data = training_data, family = binomial(link = "logit"))
+model.three
 ```
 
-Assessing the model on testing data. Confusion matrix
-```{r}
-install.packages("e1071")
-library(e1071)
-confusionMatrix(testing_y,predicted_y)
-```
-
-MSE
-```{r}
-mean((predicted_y-testing_y)^2)
-```
-
-Removing the non-significant variables and then try the model (not done here):
-```{r}
-model.final = lm(medv ~ , data = training_data)
-summary(model)
-```
-
-Dealing with interaction terms
-```{r}
-model = lm(mdev ~ log(lstat) + rm, data = training_data)
-summary(model)
-```
-```{r}
-model = lm(mdev ~ log(lstat)*rm, data = training_data)
-summary(model)
-```
-get all two-way interaction terms (possibility of over-fitting)
-```{r}
-model = lm(mdev ~ (.)^2, data = training_data)
-summary(model)
-```
-
-get all three-way & two-way interaction terms (possibility of over-fitting)
-```{r}
-model = lm(mdev ~ (.)^3, data = training_data)
-summary(model)
-logistic_probs = predict(model, testing_data, type = "response")
-head(logistic_probs)
-```
-
-# log(odds = p-admitted/(1-p-admitted)) = -25.161 + 0.2Exam1 + 0.2Exam2
-
-# Some other plots between the predictor significant and dependent variables
-library(popbio)
-logi.hist.plot(curlen, sexcode, boxp = F, type = "count", col = "gray",
-               xlabel = "size")
-               
-### Visualize the coefficients to see how far they are from zero.
-install.packages("coefplot")
-library(coefplot)
-coefplot(model1)
-
-## zoom into the estimates of the variables without the intercept
-coefplot(model, coefficients = c('Year','Lag1','Lag2','Lag3','Lag4','Lag5','Volume'))
-coefplot(model1, coefficients = c('Year','Lag1','Lag2','Volume'))
-
-
-## Assess model1
-
-predict_y = predict(model1, testing_data,type = "response")
-head(predict_y)
-
-# create the categorical varible using the predicted probabilities 
-
-predicted_y_cat = rep("Down",252)
-predicted_y_cat[predict_y > 0.5] = "Up"
-
-testing_y = testing_data$Direction
-
-# Create the confusion matrix 
-
-table(testing_y,predicted_y_cat)
-
-# accuracy
-mean(testing_y == predicted_y_cat)
 
 # Multinomial Logistic Regression:
 
+* The loan_approval dataset from the data folder is used here for demonstrating Multinominal Logistic Regression.
+* The dependent variable, Loan approval, contains 3 categories - Yes, No and Widhstand.
+* The ```nnet``` library is required in R to perform Multinominal Logistic Regression.
+
+```{r}
+#install.packages("nnet")
 library(nnet)
+```
 
-# Read the data from CSV
-data <- read.csv(file.choose(),header = T)
+The loan_approval dataset is present in the data folder.
+```{r, eval=TRUE}
+data = read.csv("./data/loan_approval.csv", header = TRUE)
+```
 
-#Predictor Variables
-Age <- data$Age
+Exploratory data analysis of the variable types.
+```{r, eval=TRUE, include=TRUE}
+str(data)
+```
+![str_2](./data/images/str_2.png)
 
-# REsponse Variable
-choice <- data$Choice
+Summary of the features of the dataset.
+```{r}
+summary(data)
+```
+![summary_2](./data/images/summary_2.png)
 
-#Regression Model
-model_1 <- multinom(choice ~ Age, data = data)
+Scatter plot matrix to visualize numeric data.
+```{r}
+plot(data[,-3])
+```
+![plot_2](./data/images/plot_2.png)
 
-summary(model_1)
+### Splitting the dataset
 
-# Logistic REgression Example 2
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 15 random samples as training data and the remaining as testing data. 
+```{r}
+set.seed(100) # to control randomness and get similar results
 
-# Read the data from CSV
-data2 <- read.csv(file.choose(),header = T)
-str(data2)
+train = sample(1:23, 15)
+test = -train
 
-#Regression Model
-model_2 <- multinom(data2$Loan.approval ~ Age+Salary, data = data2)
+training_data = data[train,]
+testing_data = data[test,]
+```
 
+### Logistic Model
+
+The ```multinom()``` function from the ```nnet``` package is used for performing multinominal logistic regression in R. The logit model is *fitted* on the training data. The ```summary``` function is then used for getting detailed information about the p-values, residual deviance and AIC the logistic model.
+
+```{r}
+model_2 = multinom(Loan.approval ~ Age+Salary, data = testing_data)
 summary(model_2)
+```
+![model_2](./data/images/summary_3.png)
+
+### Prediction and Accuracy
+
+In order to do predictions using the final model on the testing data, we use the ```predict()``` function in R. 
+```{r}
+logistic_probs = predict(model_2, testing_data)
+logistic_probs
+```
+![predict_2](./data/images/predict_2.png)
+
+A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false postivies, true negatives and false negatives and hence the missclassification rate. 
+```{r}
+#install.packages("caret")
+library(caret)
+confusionMatrix(testing_data$Loan.approval, logistic_probs)
+```
+![confusion_matrix](./data/images/cfm_2.png)
