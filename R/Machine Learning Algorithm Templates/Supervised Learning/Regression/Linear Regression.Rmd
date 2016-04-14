@@ -10,13 +10,17 @@ output: html_document
 * The code below demonstrates the linear regression algorithm. 
 * Linear Regression is a part of supervised machine learning and thus the dataset is split into **training and testing data**.
 * Linear Regression is used for prediction using the **line of best fit**. 
-* **Dependent Variable** = **medv** (median value of owner-occupied homes in \$1000s.)
-* Data Source: ```MASS``` library in ```R```.
+* The ```Boston``` dataset which is a part of the ```MASS``` package in ```R``` is used here. It contains records of the median value of houses for 506 neighborhoods around Boston. The task is to **predict the median house value (medv)**. 
+```{r, eval=TRUE}
+library(MASS)
+?Boston
+```
+![Boston](./data/images/Boston.png)
 
 
-### Implementation in R
+## Implementation in R
 
-The Boston.csv dataset is present in the data folder.
+The Boston.csv dataset is present in the data folder (or the ```MASS``` package).
 ```{r, eval=TRUE}
 data = read.csv('./data/boston.csv', header = T)
 ```
@@ -39,144 +43,231 @@ plot(data)
 ```
 ![plot_1](./data/images/plot_1.png)
 
-Splitting the dataset into training and testing data. This is done by randomly selecting 400 observations for testing and the rest for training. The ```sample()``` function generates 400 random values for splitting the dataset.
+### Splitting the dataset
+
+Now, the dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 400 random samples as training data and the remaining as testing data. 
 ```{r}
-set.seed(100)
+set.seed(100) #to control randomess and get simlar results
 train = sample(1:506,400)
 test = -train
 
-training_data = Boston[train,]
-testing_data = Boston[test,]
+training_data = data[train,]
+testing_data = data[test,]
 ```
 
-Creating a linear model on the *training data* using the ```lm()``` function in R and checking the model summary. 
+### Linear Modelling
+
+The ```lm()``` function is used for performing linear regression in R. The linear model is *fitted* on the training data.
 ```{r}
 model = lm(medv ~ log(lstat) + rm, data = training_data)
+model
+```
+![model_1](./data/images/model_1.png)
+
+The ```model``` command above only gives us basic information about the regression model. For more detailed information, we use the ```summary()``` function.
+```{r}
 summary(model)
 ```
+![summary_model_1](./data/images/summary_model_1.png)
 
-checking for collinearity - we want to make sure that the predictor variables that are highly correlated are not in the same model together
+The summary gives us information about the p-values, standard errors for all the coefficients and the R-Squared value. 
 
-Ways of checking collieanrity :
-1. correlation matrix
-2. look at the correlation plot
-3. look at the VIF
+The summary gives us information about the p-values, standard errors and the R-Squared values for the linear model.
 
-1. Correlation Matrix
+Explanation of the summary:
+* Except for the *indus* and the *age*, all the other variables are statistically significant.
+* The *adjusted R-squared* value is 71.77%. This means 71.77% of the variation in the data is explained by the independent variables. 
+* The *F-statistic* is 79.02. The higher the F-statistic, the better the model. 
+* The Residual Standard Error is the standard deviation of the errors (predicted value using the regression line subtracted by the actual value)
+
+We can use the ```names()``` function to see what other peices of information are stored in our linear model. 
+```{r}
+names(model)
+```
+![names](./data/images/names.png)
+
+To obtain the confidence intervel for the coefficents of the model (model), we can use the ```confint()``` function.
+```{r}
+confint(model, level = 0.95)
+```
+![ci](./data/images/ci.png)
+
+### Checking for collinearity
+
+We want to make sure that the predictor variables that are highly correlated are not in the same model together. The checking for collinearity is done in 2 ways - *VIF* and *Correlation*.
+
+**Variance Inflation Factor (VIF)**
+The VIF criteria is used for checking if one or more of the independent variables are correlated with each other in the model. VIF is given by the formula: 
+
+*VIF = 1/(1-RSquared)*
+
+The higher the VIF for a variable gets, then the variable would be highly correlated with at least one of the other predictors in the model. A value of *VIF = 1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
+```{r}
+#install.packages("car")
+library(car)
+vif(model)
+```
+![vif](./data/images/vif.png)
+
+From the above output, we notice that tax has a high VIF (9.44), which means that the variance of the estimated coefficient of tax is inflated by a factor of 9.44 because tax is highly correlated with at least one of the other predictors in the model. 
+
+In order to see what variables are highly correlated with tax, we can explore correlations.
+
+**Correlation**
+The ```cor()``` function in R computes the correlation matrix.
 ```{r}
 corr_matrix = round(cor(training_data),2)
+corr_matrix
 ```
+![cor](./data/images/cor.png)
 
-2. visualize these correlation
+Since there are 14 variables in the dataset, it can become difficult to compare the correlation numbers. Thus, in order to visualize the correlations between the varaibles, the ```corrplot()``` function from the ```corrplot``` R package is used in R. The first argument for the ```corrplot()``` function is the correlation matrix, and the second argument is the ordering method of the variables. In this case we used the *hierarchical clustering* technique to order them.
 ```{r}
-install.packages("corrplot")
+#install.packages("corrplot")
 library(corrplot)
 corrplot(corr_matrix, order = "hclust")
 ```
+![corr_plot](./data/images/corr_plot.png)
 
-3. VIF - Variance 
-according to the VIF output, we can see that tax and rad are affecting the collinearity
-in the model, this is because they have a high VIF (larger than 5)
-A value of VIF = 1 is the best!
-VIF = 1/(1-RSquared)
-```{r}
-install.packages("car")
-library(car)
-vif(model.lstat)
-```
+It seems that *tax* and *rad* are highly correlated (0.91). The VIF output is high for both the variables as well. Thus, in order to remove either tax or rad from the model, we can check the adjusted R-Squared value for both the cases.
 
-we need to get rid of either rad or tax from our model
 ```{r}
-model.tax <- lm(medv ~ . + log(lstat) - lstat - rad, data = training_data)
+model.tax = lm(medv ~ . -rad, data = training_data)
 summary(model.tax)
 ```
+![model_tax](./data/images/model_tax.png)
+
 ```{r}
-model.rad <- lm(medv ~ . + log(lstat) - lstat - tax, data = training_data)
+model.rad = lm(medv ~ . -tax, data = training_data)
 summary(model.rad)
 ```
+![model_rad](./data/images/model_rad.png)
 
-with the above evaluation, we get rid of rad, and the R-Squared was lowered compared to 
-when we got rid of tax. So we should leave tax out.
- 
-Assess the model using the testing data. In order to do this, saving the dependent variable to a new variable
+Since the R-squared value for *model.rad* is greater than *model.tax*, we can get rid of the **rad** variable.
+
+Visualizing the other coefficients to see how far they are from zero. This is done by using the ```coeflot()``` function which is a part of the ```coefplot``` library. 
 ```{r}
-testing_y = testing_data$medv
+#install.packages("coefplot")
+library(coefplot)
+coefplot(model, 
+         coefficients = c('crim','zn','indus','chas','nox','rm','age','dis','rad','tax','ptratio','black','lstat'))
+```
+![coef_plot](./data/images/coef_plot.png)
+
+Thus, after removing the other non-significant variables, we can get the final model which will be can be used for testing the data.
+```{r}
+model.lm = lm(medv ~ . -tax -indus -age, data = training_data)
+summary(model.rad)
+```
+![final_model](./data/images/final_model.png)
+
+Thus, our final model is the equation:
+
+**medv = 36.31 - 0.131261 × crim +  0.037630 × zn + 3.326372 × chas - 21.026248 × nox + 3.814986 × rm - 1.471421 × dis + 0.155416 × rad - 0.954459 × ptratio + 0.007885 × black - 0.580303 × lstat**
+
+
+### Prediction and Accuracy
+
+In order to do predictions using the final model, we use the ```predict()``` function in R. 
+```{r}
 predicted_y = predict(model,testing_data)
 ```
 
-Assessing the model on testing data. Confusion matrix
+For assessing the model on the testing data, we first save the dependent variable to a new variable *testing_y*. 
 ```{r}
-install.packages("e1071")
-library(e1071)
-confusionMatrix(testing_y,predicted_y)
+testing_y = testing_data$medv
 ```
 
+First, the model is assessed by using the **Mean Square Error (MSE)**. This is the avergae of the squared differences between the actual values of *medv* in the testing data and the predicted values. A low MSE is desired. 
+```{r}
+MSE = mean((predicted_y-testing_y)^2)
 MSE
-```{r}
-mean((predicted_y-testing_y)^2)
 ```
+![MSE](./data/images/MSE.png)
 
-### Visualize the coefficients to see how far they are from zero.
-install.packages("coefplot")
-library(coefplot)
-coefplot(model1)
+### Dealing with Interaction Terms
 
-## zoom into the estimates of the variables without the intercept
-coefplot(model, coefficients = c('Year','Lag1','Lag2','Lag3','Lag4','Lag5','Volume'))
-coefplot(model1, coefficients = c('Year','Lag1','Lag2','Volume'))
-
-Removing the non-significant variables and then try the model (not done here):
+Getting all 2-way interaction terms (possibility of over-fitting):
 ```{r}
-model.final = lm(medv ~ , data = training_data)
+model.two = lm(mdev ~ (.)^2, data = training_data)
+model.two
+```
+![interaction_2](./data/images/interaction_2.png)
+
+Getting all 3-way & 2-way interaction terms (only code below, output not shown):
+```{r}
+model.three = lm(mdev ~ (.)^3, data = training_data)
 summary(model)
 ```
 
-Dealing with interaction terms
+### Checking the assumptions of Linear Regression
+The assumptions of Linear Regression are checked by plotting the residual and the fitted values.
 ```{r}
-model = lm(mdev ~ log(lstat) + rm, data = training_data)
-summary(model)
-```
-```{r}
-model = lm(mdev ~ log(lstat)*rm, data = training_data)
-summary(model)
-```
-get all two-way interaction terms (possibility of over-fitting)
-```{r}
-model = lm(mdev ~ (.)^2, data = training_data)
-summary(model)
+par(mfrow = c(2, 2))
+plot(model.lm)
 ```
 
-get all three-way & two-way interaction terms (possibility of over-fitting)
-```{r}
-model = lm(mdev ~ (.)^3, data = training_data)
-summary(model)
-```
+*Residual Vs Fitted plot*: 
+    * x axis - Fitted values (values for medv generated by the model).  
+    * y axis - Residual(errors) for medv  values generating in the training data. 
+    * The red line should be fairly flat to conclude there is no pattern in the variation.
+    * The points in the plot should look like a cloud of points (not pattern).
 
-# Checking the assumptions of Linear Regression
+*Quantile-Quantile Plot*: 
+    * x axis - Ordered theoretical residuals (expected value of residuals if they are normally distributed).
+    * y axis - Standardized residual values. 
+    * If the residual terms are normally distributed then the residual points roughly follow on a diagonal line.
 
-1.
-2.
-3.
-4.
+*The 3rd and 4th plot help us identify non-linearities and non-constant variance.*
+
 
 # Dealing with categorical variables in Linear Regression
+* The ```Carseats``` dataset which is a part of the ```ISLR``` package is used here for demonstrating linear regression. 
+* Carseats is a simulated data set containing sales of child car seats at 400 different stores. The task is to **predict sales of children carseats in 400 locations based on 10 predictors**. 
+* One of the predictors variables in Carseats is *ShelveLoc*, which is a categorical variable with levels (Bad, Good and Medium) indicating the quality of the shelving location for the car seats at each site. Given a categorical variable, **R generates dummy variables automatically**.
 ```{r}
 library(ISLR)
 ?Carseats
+```
+![Carseats](./data/images/Carseats.png)
+
+Exploratory data analysis of the variable types.
+```{r, eval=TRUE, include=TRUE}
 str(Carseats)
 ```
+![str](./data/images/str2.png)
 
-## split the data
+Summary of the features of the dataset.
+```{r}
+summary(Carseats)
+```
+![summary](./data/images/summary2.png)
+
+### Splitting the data
+```{r}
 set.seed(1)
 train = sample(1:400,300)
 test = -train
 
 training_data = Carseats[train,]
 testing_data = Carseats[test,]
+```
 
-## Training the model 
+### Training the model 
+```{r}
 model = lm(Sales ~ Price +  ShelveLoc, data = training_data)
 summary(model)
+```
+![model_cat](./data/images/model_cat.png)
 
-# When we have a categorical variable, R creates a dummy variable
+### Dummy variable
 contrasts(Carseats$ShelveLoc)
+![contrasts](./data/images/contrasts.png)
+
+R has created a dummy variable called ShelveLocGood that takes on a value of 1 if the location is good,
+and 0 otherwise (Bad or Medium). It has also created has created a dummy variable called ShelveLocMeduim
+that takes on a value of 1 if the location is medium, and 0 otherwise (Good or Bad).
+
+Thus, our model looks like the following:
+
+**Sales = 12.13 − 0.058 × Price + 4.932 × ShelveLocGood + 1.9 × SelveLocMedium**
