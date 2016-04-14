@@ -7,7 +7,7 @@ output: html_document
 
 # Linear Regression Algorithm
 
-* The code below demonstrates the linear regression algorithm. 
+* The code below demonstrates Linear Regression. 
 * Linear Regression is a part of supervised machine learning and thus the dataset is split into **training and testing data**.
 * Linear Regression is used for prediction using the **line of best fit**. 
 * The ```Boston``` dataset which is a part of the ```MASS``` package in ```R``` is used here. It contains records of the median value of houses for 506 neighborhoods around Boston. The task is to **predict the median house value (medv)**. 
@@ -39,15 +39,15 @@ summary(data)
 
 Scatter plot matrix to visualize data.
 ```{r}
-plot(data)
+plot(data[,-1])
 ```
 ![plot_1](./data/images/plot_1.png)
 
 ### Splitting the dataset
 
-Now, the dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 400 random samples as training data and the remaining as testing data. 
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 400 random samples as training data and the remaining as testing data. 
 ```{r}
-set.seed(100) #to control randomess and get simlar results
+set.seed(100) # to control randomness and get similar results
 train = sample(1:506,400)
 test = -train
 
@@ -55,11 +55,11 @@ training_data = data[train,]
 testing_data = data[test,]
 ```
 
-### Linear Modelling
+### Linear Model
 
 The ```lm()``` function is used for performing linear regression in R. The linear model is *fitted* on the training data.
 ```{r}
-model = lm(medv ~ log(lstat) + rm, data = training_data)
+model = lm(medv ~ ., data = training_data)
 model
 ```
 ![model_1](./data/images/model_1.png)
@@ -70,23 +70,21 @@ summary(model)
 ```
 ![summary_model_1](./data/images/summary_model_1.png)
 
-The summary gives us information about the p-values, standard errors for all the coefficients and the R-Squared value. 
-
 The summary gives us information about the p-values, standard errors and the R-Squared values for the linear model.
 
 Explanation of the summary:
 * Except for the *indus* and the *age*, all the other variables are statistically significant.
 * The *adjusted R-squared* value is 71.77%. This means 71.77% of the variation in the data is explained by the independent variables. 
 * The *F-statistic* is 79.02. The higher the F-statistic, the better the model. 
-* The Residual Standard Error is the standard deviation of the errors (predicted value using the regression line subtracted by the actual value)
+* The Residual Standard Error is the standard deviation of the errors (i.e., predicted values using the regression line subtracted by the actual value).
 
-We can use the ```names()``` function to see what other peices of information are stored in our linear model. 
+We can use the ```names()``` function to see what other pieces of information are stored in our linear model. 
 ```{r}
 names(model)
 ```
 ![names](./data/images/names.png)
 
-To obtain the confidence intervel for the coefficents of the model (model), we can use the ```confint()``` function.
+To obtain the confidence interval for the coefficients of the model (model), we can use the ```confint()``` function.
 ```{r}
 confint(model, level = 0.95)
 ```
@@ -97,11 +95,12 @@ confint(model, level = 0.95)
 We want to make sure that the predictor variables that are highly correlated are not in the same model together. The checking for collinearity is done in 2 ways - *VIF* and *Correlation*.
 
 **Variance Inflation Factor (VIF)**
-The VIF criteria is used for checking if one or more of the independent variables are correlated with each other in the model. VIF is given by the formula: 
+
+The VIF criteria is used for checking if one or more of the independent variables are correlated with each other in the model. VIF is given by the **formula**: 
 
 *VIF = 1/(1-RSquared)*
 
-The higher the VIF for a variable gets, then the variable would be highly correlated with at least one of the other predictors in the model. A value of *VIF = 1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
+* The higher the VIF for a variable, the variable would be highly correlated with at least one of the other predictors in the model. A VIF value of *1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
 ```{r}
 #install.packages("car")
 library(car)
@@ -114,6 +113,7 @@ From the above output, we notice that tax has a high VIF (9.44), which means tha
 In order to see what variables are highly correlated with tax, we can explore correlations.
 
 **Correlation**
+
 The ```cor()``` function in R computes the correlation matrix.
 ```{r}
 corr_matrix = round(cor(training_data),2)
@@ -121,7 +121,7 @@ corr_matrix
 ```
 ![cor](./data/images/cor.png)
 
-Since there are 14 variables in the dataset, it can become difficult to compare the correlation numbers. Thus, in order to visualize the correlations between the varaibles, the ```corrplot()``` function from the ```corrplot``` R package is used in R. The first argument for the ```corrplot()``` function is the correlation matrix, and the second argument is the ordering method of the variables. In this case we used the *hierarchical clustering* technique to order them.
+Since there are 14 variables in the dataset, it can become difficult to compare the correlation numbers. Thus, in order to visualize the correlations between the variables, the ```corrplot()``` function from the ```corrplot``` R package is used. The first argument for the ```corrplot()``` function is the *correlation matrix*, and the second argument is the *ordering method* of the variables. In this case we used the **hierarchical clustering** technique to order them.
 ```{r}
 #install.packages("corrplot")
 library(corrplot)
@@ -154,21 +154,21 @@ coefplot(model,
 ```
 ![coef_plot](./data/images/coef_plot.png)
 
-Thus, after removing the other non-significant variables, we can get the final model which will be can be used for testing the data.
+After removing the other non-significant variables, we can get the final model which will be can be used for testing the data.
 ```{r}
 model.lm = lm(medv ~ . -tax -indus -age, data = training_data)
 summary(model.rad)
 ```
 ![final_model](./data/images/final_model.png)
 
-Thus, our final model is the equation:
+*Thus, our final equation for the linear model is:*
 
-**medv = 36.31 - 0.131261 × crim +  0.037630 × zn + 3.326372 × chas - 21.026248 × nox + 3.814986 × rm - 1.471421 × dis + 0.155416 × rad - 0.954459 × ptratio + 0.007885 × black - 0.580303 × lstat**
+#### medv = 36.31 - 0.131261 × crim +  0.037630 × zn + 3.326372 × chas - 21.026248 × nox + 3.814986 × rm - 1.471421 × dis + 0.155416 × rad - 0.954459 × ptratio + 0.007885 × black - 0.580303 × lstat**
 
 
 ### Prediction and Accuracy
 
-In order to do predictions using the final model, we use the ```predict()``` function in R. 
+In order to do predictions using the final model above, we use the ```predict()``` function in R. 
 ```{r}
 predicted_y = predict(model,testing_data)
 ```
@@ -178,7 +178,7 @@ For assessing the model on the testing data, we first save the dependent variabl
 testing_y = testing_data$medv
 ```
 
-First, the model is assessed by using the **Mean Square Error (MSE)**. This is the avergae of the squared differences between the actual values of *medv* in the testing data and the predicted values. A low MSE is desired. 
+The model is assessed by using the **Mean Square Error (MSE)**. This is the average of the squared differences between the actual values of *medv* in the testing data and the predicted values. *A low MSE is desired.*
 ```{r}
 MSE = mean((predicted_y-testing_y)^2)
 MSE
@@ -201,19 +201,23 @@ summary(model)
 ```
 
 ### Checking the assumptions of Linear Regression
+
 The assumptions of Linear Regression are checked by plotting the residual and the fitted values.
 ```{r}
 par(mfrow = c(2, 2))
 plot(model.lm)
 ```
+![assump](./data/images/assump.png)
 
 *Residual Vs Fitted plot*: 
+
     * x axis - Fitted values (values for medv generated by the model).  
-    * y axis - Residual(errors) for medv  values generating in the training data. 
+    * y axis - Residual(errors) for medv values generating in the training data. 
     * The red line should be fairly flat to conclude there is no pattern in the variation.
     * The points in the plot should look like a cloud of points (not pattern).
 
 *Quantile-Quantile Plot*: 
+
     * x axis - Ordered theoretical residuals (expected value of residuals if they are normally distributed).
     * y axis - Standardized residual values. 
     * If the residual terms are normally distributed then the residual points roughly follow on a diagonal line.
@@ -223,7 +227,7 @@ plot(model.lm)
 
 # Dealing with categorical variables in Linear Regression
 * The ```Carseats``` dataset which is a part of the ```ISLR``` package is used here for demonstrating linear regression. 
-* Carseats is a simulated data set containing sales of child car seats at 400 different stores. The task is to **predict sales of children carseats in 400 locations based on 10 predictors**. 
+* Carseats is a simulated data set containing sales of child car seats at 400 different stores. The task is to **predict sales of children carseats in 400 locations**. 
 * One of the predictors variables in Carseats is *ShelveLoc*, which is a categorical variable with levels (Bad, Good and Medium) indicating the quality of the shelving location for the car seats at each site. Given a categorical variable, **R generates dummy variables automatically**.
 ```{r}
 library(ISLR)
@@ -261,8 +265,11 @@ summary(model)
 ![model_cat](./data/images/model_cat.png)
 
 ### Dummy variable
+```{r}
 contrasts(Carseats$ShelveLoc)
+```
 ![contrasts](./data/images/contrasts.png)
+
 
 R has created a dummy variable called ShelveLocGood that takes on a value of 1 if the location is good,
 and 0 otherwise (Bad or Medium). It has also created has created a dummy variable called ShelveLocMeduim
