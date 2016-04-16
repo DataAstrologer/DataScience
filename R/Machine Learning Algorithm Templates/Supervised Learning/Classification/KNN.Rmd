@@ -9,8 +9,8 @@ output: html_document
 
 * The code below demonstrates the K-Nearest Neighbors algorithm (KNN). 
 * KNN is a part of supervised machine learning and thus the dataset is split into **training and testing**.
-* The KNN algorithm below is used for prediction using the **euclidean distance**. 
-* The ```Forensic Glass Fragments``` dataset which is a part of the ```MASS``` package in ```R``` is used here. The dataset classifies glass fragements into 7 types. 
+* The KNN algorithm below is used for prediction using the **Euclidean Distance**. 
+* The ```Forensic Glass Fragments``` dataset which is a part of the ```MASS``` package in ```R``` is used here. The dataset classifies glass fragments into 7 types. 
 ```{r, eval=TRUE}
 library(MASS)
 ?fgl
@@ -54,14 +54,14 @@ plot(Fe ~ type, data = fgl, col = c(grey(.2),2:6))
 Because the KNN classifier predicts the class of a given test observation by identifying the observations that
 are nearest to it, the scale of the variables matters. Any variables that are on a large scale will have a much
 larger effect on the distance between the observations, and hence on the KNN classifier, than variables that
-are on a small scale. Thus, we are going to standardize all the independent variables (predictor) variables except the dependent variable (type). All the independent variables have a mean of 1 and standard deviation of 0 after standardization.
+are on a small scale. Thus, we are going to standardize all the independent (predictor) variables except the dependent variable (type). All the independent variables have a mean of 1 and standard deviation of 0 after standardization.
 ```{r}
 std_fgl = scale(fgl[,-10])
 ```
 
 ### Splitting the dataset
 
-The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 300 random samples as training data and the remaining as testing data. 
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 150 random samples as training data and the remaining as testing data. 
 ```{r}
 set.seed(1)
 
@@ -79,7 +79,7 @@ training_y = type[train]
 
 ### KNN Model
 
-The ```knn()``` function, which is a part of the ```FNN``` library, is used for performing KNN in R. The first argument for the ```knn()``` function is a data frame that contains the training data set, the second argument is a data frame that contains the testing data set, the third argument is training_y variable saved above, and the fourth argument is k (the number of neighbors). The ```knn()``` function returns a vector of predicted Y’s. Let’s start with k = 1. 
+The ```knn()``` function, which is a part of the ```FNN``` library, is used for performing KNN in R. The first argument for the ```knn()``` function is a data frame that contains the training data set, the second argument is a data frame that contains the testing data set, the third argument is *training_y* variable saved above, and the fourth argument is k (the number of neighbors). The ```knn()``` function returns a vector of predicted Y’s. Let’s start with k = 1. 
 ```{r}
 library(FNN)
 
@@ -105,8 +105,9 @@ ME
 ```
 ![ME](./data/images/ME.png)
 
-Now, we can iterate for different values of k and decide k on the basis of value giving the lowest mean error. This process can be automated using a *for loop*. The code and the results for k value upto 7 is shown below. This can help us decide the optimal number for k. 
+The misclassification for the above model is 32.67%.
 
+We can now iterate for different values of k and decide k on the basis of the lowest misclassification. This process can be automated using a *for loop*. The code and the results for k values up to 7 is shown below.
 ```{r}
 ME = NULL
 
@@ -126,7 +127,7 @@ for(i in 1:7){
 ![itr_1](./data/images/itr_1.png)
 ![itr_2](./data/images/itr_2.png)
 
-We can now plot the all the values of k with thier respective error rates. This will help us decide the best value of k. Before that, we can find out the minimum error rate and the value of k having the minimum error rate using the code below.
+We can now plot the all the values of k with their respective error rates. This will help us decide the best value for k. Before that, we can find out the minimum error rate and the value of k having the minimum error rate using the code below.
 ```{r}
 min_error_rate = min(ME)
 K = which(ME == min_error_rate)
@@ -136,13 +137,7 @@ print (K)
 ![min_error_k](./data/images/min_error_k.png)
 
 ```{r}
-plot(x = 1:7,
-    y = ME*100,
-    xlab = "K",
-    ylab = "Error Rate",
-    type = 'l',
-    ylim = c(0, 50))
-
+plot(x = 1:7, y = ME*100, xlab = "K", ylab = "Error Rate", type = 'l', ylim = c(0, 50))
 points(x= 1, y = (min(ME)*100), col = "red", pch = 19)
 ```
 ![k_plot](./data/images/k_plot.png)
