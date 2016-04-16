@@ -73,7 +73,7 @@ The ```tree()``` function from the ```tree``` package is used for fitting the de
 #install.packages("tree")
 library(tree)
 
-model = tree(medv ~., training_data)
+model = tree(default ~., training_data)
 model
 ```
 ![model_credit](./data/images/model_credit.png)
