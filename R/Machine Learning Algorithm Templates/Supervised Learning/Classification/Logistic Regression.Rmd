@@ -5,10 +5,10 @@ date: "April 12, 2016"
 output: html_document
 ---
 
-# Logisitic Regression Algorithm
+# Logistic Regression Algorithm
 
 * The code below demonstrates Logistic Regression. 
-* Logisitc Regression is a part of supervised machine learning and thus the dataset is split into **training and testing**.
+* Logistic Regression is a part of supervised machine learning and thus the dataset is split into **training and testing**.
 * Logistic Regression is used for prediction using the **logit** function. 
 * The *carsales* dataset present in the data folder is used here. It contains information about the make, price, cost, etc. for cars. The **dependent variable is Sales** which is an indication of whether the car was sold or not. 
 
@@ -96,7 +96,7 @@ The VIF criteria is used for checking if one or more of the independent variable
 
 VIF = 1/(1-RSquared)
 
-R-Squard is a measure of how much variation in data is captured by the independent variables. The higher the VIF for a variable, the variable would be highly correlated with at least one of the other predictors in the model. A VIF value of *1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
+R-Squared is a measure of how much variation in data is captured by the independent variables. The higher the VIF for a variable, the variable would be highly correlated with at least one of the other predictors in the model. A VIF value of *1* is the best. In order to check VIF in R, we use the function ```vif()``` which is found in an R package called ```car```. 
 ```{r}
 #install.packages("car")
 library(car)
@@ -165,7 +165,7 @@ for(i in 1:100){
 }
 ```
 
-A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false postivies, true negatives and false negatives and hence the missclassification rate. 
+A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false positives, true negatives and false negatives and hence the misclassification rate. 
 ```{r}
 #install.packages("caret")
 library(caret)
@@ -173,13 +173,13 @@ confusionMatrix(testing_data$Sales, logistic_probs)
 ```
 ![confusion_matrix](./data/images/cfm.png)
 
-The misscalssification rate of the model is given by:
+The misclassification rate of the model is given by:
 ```{r}
 (7+4)/(54+4+7+35)
 ```
 ![mcr](./data/images/mcr.png)
 
-The misscalssification rate is 11%.
+The misclassification rate is 11%.
 
 The accuracy of the model is calculated below.
 ```{r}
@@ -206,9 +206,9 @@ model.three
 
 # Multinomial Logistic Regression:
 
-* The loan_approval dataset from the data folder is used here for demonstrating Multinominal Logistic Regression.
-* The dependent variable, Loan approval, contains 3 categories - Yes, No and Widhstand.
-* The ```nnet``` library is required in R to perform Multinominal Logistic Regression.
+* The loan_approval dataset from the data folder is used here for demonstrating Multinomial Logistic Regression.
+* The dependent variable, Loan approval, contains 3 categories - Yes, No and Withstand.
+* The ```nnet``` library is required in R to perform Multinomial Logistic Regression.
 
 ```{r}
 #install.packages("nnet")
@@ -253,7 +253,7 @@ testing_data = data[test,]
 
 ### Logistic Model
 
-The ```multinom()``` function from the ```nnet``` package is used for performing multinominal logistic regression in R. The logit model is *fitted* on the training data. The ```summary``` function is then used for getting detailed information about the p-values, residual deviance and AIC for the logistic model.
+The ```multinom()``` function from the ```nnet``` package is used for performing multinomial logistic regression in R. The logit model is *fitted* on the training data. The ```summary``` function is then used for getting detailed information about the p-values, residual deviance and AIC for the logistic model.
 
 ```{r}
 model_2 = multinom(Loan.approval ~ Age+Salary, data = testing_data)
@@ -270,7 +270,7 @@ logistic_probs
 ```
 ![predict_2](./data/images/predict_2.png)
 
-A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false postivies, true negatives and false negatives and hence the missclassification rate. 
+A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false positives, true negatives and false negatives and hence the misclassification rate. 
 ```{r}
 #install.packages("caret")
 library(caret)

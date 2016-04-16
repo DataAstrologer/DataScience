@@ -1,0 +1,150 @@
+---
+title: "K-Nearest Neighbor"
+author: "Riddhik Rathod | @DataAstrologer"
+date: "April 16, 2016"
+output: html_document
+---
+
+# K-Nearest Neighbors
+
+* The code below demonstrates the K-Nearest Neighbors algorithm (KNN). 
+* KNN is a part of supervised machine learning and thus the dataset is split into **training and testing**.
+* The KNN algorithm below is used for prediction using the **euclidean distance**. 
+* The ```Forensic Glass Fragments``` dataset which is a part of the ```MASS``` package in ```R``` is used here. The dataset classifies glass fragements into 7 types. 
+```{r, eval=TRUE}
+library(MASS)
+?fgl
+```
+![fgl](./data/images/fgl.png)
+
+### Implementation in R
+
+The fgl dataset is part of the ```MASS``` package.
+```{r, eval=TRUE}
+fgl = fgl
+```
+
+Exploratory data analysis of the variable types.
+```{r, eval=TRUE, include=TRUE}
+str(fgl)
+```
+![str_fgl](./data/images/str_fgl.png)
+
+Summary of the features of the dataset.
+```{r}
+summary(fgl)
+```
+![summary_fgl](./data/images/summary_fgl.png)
+
+Box plot matrix to visualize the relationship between the type of glass fragment and the other variables.
+```{r}
+par(mfrow = c(3,3), mai = c(.3,.6,.1,.1))
+plot(RI ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Na ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Mg ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Al ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Si ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(K ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Ca ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Ba ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Fe ~ type, data = fgl, col = c(grey(.2),2:6))
+```
+![box_plot_matrix](./data/images/box_plot_matrix.png)
+
+Because the KNN classifier predicts the class of a given test observation by identifying the observations that
+are nearest to it, the scale of the variables matters. Any variables that are on a large scale will have a much
+larger effect on the distance between the observations, and hence on the KNN classifier, than variables that
+are on a small scale. Thus, we are going to standardize all the independent variables (predictor) variables except the dependent variable (type). All the independent variables have a mean of 1 and standard deviation of 0 after standardization.
+```{r}
+std_fgl = scale(fgl[,-10])
+```
+
+### Splitting the dataset
+
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 300 random samples as training data and the remaining as testing data. 
+```{r}
+set.seed(1)
+
+test = sample(1:214,150)
+train = -test
+
+training_data = std_fgl[train,]
+testing_data = std_fgl[test,]
+
+type = fgl[,10] # save the type column in a seperate variable
+
+testing_y = type[test]
+training_y = type[train]
+```
+
+### KNN Model
+
+The ```knn()``` function, which is a part of the ```FNN``` library, is used for performing KNN in R. The first argument for the ```knn()``` function is a data frame that contains the training data set, the second argument is a data frame that contains the testing data set, the third argument is training_y variable saved above, and the fourth argument is k (the number of neighbors). The ```knn()``` function returns a vector of predicted Y’s. Let’s start with k = 1. 
+```{r}
+library(FNN)
+
+predicted_y = knn(training_data, testing_data, training_y, k=1)
+head(predicted_y)
+```
+![head_predicted_knn](./data/images/head_predicted_knn.png)
+
+### Evaluation of KNN
+
+A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false positives, true negatives and false negatives and hence the misclassification rate. 
+```{r}
+#install.packages("caret")
+library(caret)
+confusionMatrix(testing_y, predicted_y)
+```
+![confusion_matrix_knn](./data/images/cfm_knn.png)
+
+The KNN model can also be assessed by using the *Mean Error*.
+```{r}
+ME = mean((predicted_y != testing_y))
+ME
+```
+![ME](./data/images/ME.png)
+
+Now, we can iterate for different values of k and decide k on the basis of value giving the lowest mean error. This process can be automated using a *for loop*. The code and the results for k value upto 7 is shown below. This can help us decide the optimal number for k. 
+
+```{r}
+ME = NULL
+
+for(i in 1:7){
+  set.seed(1)
+  predicted_y = knn(training_data, testing_data, training_y, k=i)
+  
+  ME[i] = mean(predicted_y != testing_y)
+  
+  print(i)  
+  print(table(testing_y, predicted_y))
+  print (round(ME, 3))
+  ME = NULL
+  cat("\n")  
+}
+```
+![itr_1](./data/images/itr_1.png)
+![itr_2](./data/images/itr_2.png)
+
+We can now plot the all the values of k with thier respective error rates. This will help us decide the best value of k. Before that, we can find out the minimum error rate and the value of k having the minimum error rate using the code below.
+```{r}
+min_error_rate = min(ME)
+K = which(ME == min_error_rate)
+print(min_error_rate)
+print (K)
+```
+![min_error_k](./data/images/min_error_k.png)
+
+```{r}
+plot(x = 1:7,
+    y = ME*100,
+    xlab = "K",
+    ylab = "Error Rate",
+    type = 'l',
+    ylim = c(0, 50))
+
+points(x= 1, y = (min(ME)*100), col = "red", pch = 19)
+```
+![k_plot](./data/images/k_plot.png)
+
+It seems that when k = 1, we are achieving the lowest misclassification error rate. We will choose the model with k = 1 for this dataset.
