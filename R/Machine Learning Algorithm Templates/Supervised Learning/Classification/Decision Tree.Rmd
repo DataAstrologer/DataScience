@@ -1,0 +1,144 @@
+---
+title: "Decision Tree"
+author: "Riddhik Rathod | @DataAstrologer"
+date: "April 16, 2016"
+output: html_document
+---
+
+# Classification Decision Tree
+
+* The code below demonstrates Classification Decision Trees. 
+* Decision Tree is a part of supervised machine learning and thus the dataset is split into **training and testing**.
+* The Decision Tree algorithm used **Entropy** for classification.
+* The **credit.csv** dataset from the data folder is used here. The dataset contains various attributes for predicting whether a given customer would default a loan or not. The dependent variable (default) can have a value of either 1 (Non-Default) or 2 (Default).
+
+### Implementation in R
+
+The credit.csv dataset is present in the data folder.
+```{r, eval=TRUE}
+credit = read.csv("./data/credit.csv", header = T)
+```
+
+Exploratory data analysis of the variable types.
+```{r, eval=TRUE, include=TRUE}
+str(credit)
+```
+![str_credit](./data/images/str_credit.png)
+
+Converting the default variable to factor.
+```{r, eval=TRUE, include=TRUE}
+credit$default = as.factor(credit$default)
+```
+
+Summary of the features of the dataset.
+```{r}
+summary(credit)
+```
+![summary_credit](./data/images/summary_credit.png)
+
+Scatter plot matrix to visualize numeric data.
+```{r}
+plot(credit[,c(2, 5, 8, 11, 13, 16, 18)])
+```
+![plot_credit](./data/images/plot_credit.png)
+
+Exploratory analysis of some more variables.
+```{r}
+table(credit$checking_balance)
+```
+![credit_checking](./data/images/credit_checking.png)
+
+```{r}
+table(credit$savings_balance)
+```
+![credit_saving](./data/images/credit_saving.png)
+
+### Splitting the dataset
+
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 800 random samples as training data and the remaining as testing data. 
+```{r}
+set.seed(100) # to control randomness and get similar results
+
+train = sample(1:1000, 800)
+test = -train
+
+training_data = credit[train,]
+testing_data = credit[test,]
+```
+
+# Decision Tree Model
+
+The ```tree()``` function from the ```tree``` package is used for fitting the decision tree to the dataset. 
+```{r}
+#install.packages("tree")
+library(tree)
+
+model = tree(medv ~.,training_data)
+model
+```
+![model_credit](./data/images/model_credit.png)
+
+The model command above prints the actual decision tree. In order to see the decisions, we call the ```summary()``` function on the model. 
+```{r}
+summary(model)
+```
+![summary_credit_tree](./data/images/summary_credit_tree.png)
+
+Notice that the output indicates that only 6 variables have been used for constructing the tree. Also, the training MSE is 1.007. The plot of the tree is shown below.
+```{r}
+plot(model)
+text(model, pretty = 0)
+```
+![credit_tree_plot](./data/images/credit_tree_plot.png)
+
+### Prediction and Accuracy
+
+In order to do predictions using the tree model on the testing data, we use the ```predict()``` function in R. 
+```{r}
+predicted_y = predict(model,testing_data, type = "class")
+```
+
+A confusion matrix is used for checking the accuracy of the model. The ```confusionMatrix()``` function is a part of the ```caret``` package. It shows the true positives, false positives, true negatives and false negatives and hence the misclassification rate. 
+```{r}
+#install.packages("caret")
+library(caret)
+confusionMatrix(testing_data$default, predicted_y)
+```
+![confusion_matrix_credit](./data/images/cfm_credit.png)
+
+### Tree Pruning
+
+Now, we will see if the tree needs pruning. The function ```cv.tree()``` of the ```tree``` package performs cross validation in order to determine the optimal level of tree complexity. We use the argument ```FUN = prune.misclass``` in order to indicate order to indicate that we want the classification error rate to guide the cross validation and pruning process rather than the default.
+```{r}
+set.seed(1)
+cv_tree_model = cv.tree(model, FUN = prune.misclass)
+```
+
+A plot of different tree sizes and thier residual sum of squares is shown below. A tree size with the lowest residual sum of squares is desired. 
+```{r}
+plot(cv_tree_model$size, cv_tree_model$dev, type = "b", ylab = "Residual Sum Square (RSS)", xlab = "Tree Size")
+```
+![cv_tree_model_plot](./data/images/cv_tree_model_plot.png)
+
+The tree with the best size is given by the command below:
+```{r}
+cv_tree_model$size[which.min(cv_tree_model$dev)]
+```
+
+The above code returns the value **3** which is the best tree size. Thus, a pruned tree of with size 3 is constructed below. 
+```{r}
+pruned_tree = prune.tree(model, best = 3)
+
+plot(pruned_tree)
+text(pruned_tree, pretty = 0)
+```
+![prune_tree_plot](./data/images/prune_tree_plot.png)
+
+Predictions and accuracy using the pruned tree model:
+```{r}
+predicted_pruned_y = predict(pruned_tree, testing_data, type = "class")
+confusionMatrix(testing_data$default, predicted_y)
+```
+![confusion_matrix_credit_pruned](./data/images/cfm_credit_pruned.png)
+
+It can be observed that the pruned tree model gives a higher accuracy compared to the original tree model.
