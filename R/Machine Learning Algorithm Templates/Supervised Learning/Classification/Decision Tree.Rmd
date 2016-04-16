@@ -66,7 +66,7 @@ training_data = credit[train,]
 testing_data = credit[test,]
 ```
 
-# Decision Tree Model
+### Decision Tree Model
 
 The ```tree()``` function from the ```tree``` package is used for fitting the decision tree algorithm to the dataset. 
 ```{r}
@@ -141,4 +141,4 @@ confusionMatrix(testing_data$default, predicted_pruned_y)
 ```
 ![confusion_matrix_credit_pruned](./data/images/cfm_credit_pruned.png)
 
-It can be observed that the **pruned tree model gives a higher accuracy** compared to the original tree model.
+It can be observed that the *pruned tree model gives a higher accuracy* compared to the original tree model.
