@@ -1,0 +1,149 @@
+---
+title: "Random Forest"
+author: "Riddhik Rathod | @DataAstrologer"
+date: "April 16, 2016"
+output: html_document
+---
+
+# Random Forest
+
+* The code below demonstrates Random Forest.
+* Random Forest is a part of supervised machine learning and thus the dataset is split into **training and testing**.
+* The Random Forest algorithm uses **Bagging** for classification.
+* The ```Boston``` dataset which is a part of the ```MASS``` package in ```R``` is used here. It contains records of the median value of houses for 506 neighborhoods around Boston. The task is to **predict the median house value (medv)**. 
+```{r, eval=TRUE}
+library(MASS)
+?Boston
+```
+![Boston](./data/images/Boston.png)
+
+
+## Implementation in R
+
+The Boston.csv dataset is present in the data folder (or the ```MASS``` package).
+```{r, eval=TRUE}
+data = read.csv('./data/boston.csv', header = T)
+```
+
+Exploratory data analysis of the variable types.
+```{r, eval=TRUE, include=TRUE}
+str(data)
+```
+![str](./data/images/str.png)
+
+Summary of the features of the dataset.
+```{r}
+summary(data)
+```
+![summary](./data/images/summary.png)
+
+Scatter plot matrix to visualize data.
+```{r}
+plot(data[,-1])
+```
+![plot_1](./data/images/plot_1.png)
+
+### Splitting the dataset
+
+The dataset is split into two parts: *training* and *testing*. The training part is used for fitting the model and the testing part is used for assessing the model. The split is done randomly to eliminate bias. The ```sample()``` function in R is used for generating 400 random samples as training data and the remaining as testing data. 
+```{r}
+set.seed(100) # to control randomness and get similar results
+
+train = sample(1:506,400)
+test = -train
+
+training_data = data[train,]
+testing_data = data[test,]
+```
+
+### Random Forest Model
+
+The ```randomForest()``` function from the ```randomForest``` package is used for fitting the random forest algorithm to the dataset. The argument ```mtry = 6``` below indicates that 6 predictors should be considered for each split of the tree. By default, ```randomForest()``` uses p/3 variables when building a random forest regression tree (p = predictors).
+```{r}
+#install.packages("randomForest")
+library(randomForest)
+
+model = randomForest(medv ~., data = training_data, mtry = 6, importance = TRUE)
+model
+```
+![rf_model_2](./data/images/rf_model_2.png)
+
+The model command above shows that the number of trees constructed were 500. Also, the Mean Squared Error (MSE) is 10.756 and the percentage of variance explained is 87.32%. A plot of the MSE for the model is shown below.
+```{r}
+plot(model)
+```
+![rf_error_2](./data/images/rf_error_2.png)
+
+Using the ```importance()``` function, we can view the importance of each variable:
+```{r}
+imp = importance(model)[,1]
+barplot(sort(imp), col = "red", main = "Variable Importance Plot", ylab = "% Increase MSE if Variable is Removed")
+```
+![rf_imp_2](./data/images/rf_imp_2.png)
+
+Summary statistics for the first tree (k = 1).
+```{r}
+summary(getTree(model, k = 1, labelVar = TRUE))
+```
+![rf_summary_1_2](./data/images/rf_summary_1_2.png)
+
+### Prediction and Accuracy
+
+In order to do predictions using the random forest model on the testing data, we use the ```predict()``` function in R.
+```{r}
+predicted_y = predict(model, testing_data)
+```
+
+The Mean Squared Error (MSE) is the average of the squared differences between the actual and predicted values. The MSE for the model is given below.
+```{r}
+test_y = testing_data$medv
+
+MSE = mean((predicted_y - test_y)^2)
+MSE
+```
+![MSE_rf_2](./data/images/mse_rf_2.png)
+
+### Bagging Model
+
+The ```randomForest()``` function from the ```randomForest``` package is used for fitting the random forest algorithm to the dataset. The argument ```mtry = 13``` below indicates that all 13 predictors should be considered for each split of the tree. This is a special case of random forest known as **bagging** since all the predictor variables are included. 
+```{r}
+#install.packages("randomForest")
+library(randomForest)
+
+model = randomForest(medv ~., data = training_data, mtry = 13, importance = TRUE)
+model
+```
+![rf_model](./data/images/rf_model.png)
+
+The model command above shows that the number of trees constructed were 500. Also, the Mean Squared Error (MSE) is 10.969 and the percentage of variance explained is 87.07%. A plot of the MSE for the model is shown below.
+```{r}
+plot(model)
+```
+![rf_error](./data/images/rf_error.png)
+
+Using the ```importance()``` function, we can view the importance of each variable:
+```{r}
+imp = importance(model)[,1]
+barplot(sort(imp), col = "blue", main = "Variable Importance Plot", ylab = "% Increase MSE if Variable is Removed")
+```
+![rf_imp](./data/images/rf_imp.png)
+
+Summary statistics for the first tree (k = 1).
+```{r}
+summary(getTree(model, k = 1, labelVar = TRUE))
+```
+![rf_summary_1](./data/images/rf_summary_1.png)
+
+In order to do predictions using the random forest model on the testing data, we use the ```predict()``` function in R.
+```{r}
+predicted_y = predict(model, testing_data)
+```
+
+The Mean Squared Error (MSE) is the average of the squared differences between the actual and predicted values. The MSE for the model is given below.
+```{r}
+test_y = testing_data$medv
+
+MSE = mean((predicted_y - test_y)^2)
+MSE
+```
+![MSE_rf](./data/images/mse_rf.png)
