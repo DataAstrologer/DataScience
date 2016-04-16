@@ -68,7 +68,7 @@ model
 ```
 ![model_credit](./data/images/model_credit.png)
 
-The model command above prints the actual decision tree. The root node has 400 observations with a mean value of medv equal 22.68 (whic represents the mean value of medv in the whole training dataset). The tree has 8 leaf (terminal) nodes (look at the *). The tree indicates that lower values of lstat correpsond to more expensive houses.. In order to see the decisions, we call the ```summary()``` function on the model. 
+The model command above prints the actual decision tree. The root node has 400 observations with a mean value of medv equal 22.68 (whic represents the mean value of medv in the whole training dataset). The tree has 8 leaf (terminal) nodes (look at the * values). The tree indicates that lower values of lstat correpsond to more expensive houses. In order to see the decisions, we call the ```summary()``` function on the model. 
 ```{r}
 summary(model)
 ```
@@ -85,7 +85,7 @@ text(model, pretty = 0)
 
 In order to do predictions using the tree model on the testing data, we use the ```predict()``` function in R.
 ```{r}
-predicted_y = predict(model, testing_data, type = "class")
+predicted_y = predict(model, testing_data)
 ```
 
 The Mean Squared Error (MSE) is the average of the squared differences between the actual and predicted values. The MSE for the model is given below.
@@ -134,4 +134,4 @@ MSE
 ```
 ![tree_MSE_2](./data/images/mse_tree_2.png)
 
-It is observed that the pruned tree model gives the same accuracy as the original tree model.
+It is observed that the *pruned tree model gives the same accuracy* as the original tree model.
