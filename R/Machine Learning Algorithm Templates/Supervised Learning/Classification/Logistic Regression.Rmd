@@ -72,7 +72,7 @@ The ```model``` command above only gives us basic information about the regressi
 ```{r}
 summary(model)
 ```
-![model_summary](./data/images/model_summary.png)
+![model_summary](./data/images/modelsummary.png)
 
 We can use the ```names()``` function to see what other pieces of information are stored in our linear model. 
 ```{r}
