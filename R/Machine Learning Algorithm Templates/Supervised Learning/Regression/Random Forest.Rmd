@@ -146,4 +146,4 @@ test_y = testing_data$medv
 MSE = mean((predicted_y - test_y)^2)
 MSE
 ```
-![mse_rf](./data/images/mse_rf.png)
+![mserf_bagging](./data/images/mserf_bagging.png)
