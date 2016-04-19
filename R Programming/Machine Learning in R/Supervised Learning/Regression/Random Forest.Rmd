@@ -70,7 +70,7 @@ model
 
 The model command above shows that the number of trees constructed were 500. Also, the Mean Squared Error (MSE) is 11.043 and the percentage of variance explained by the model is 86.99%. 
 
-The plot below shows the misclassification rate of the model when constructing the random forest. As the forest is built on the training data, each tree is tested on the 1/3rd of the samples (36.8%) not used in building that tree. This internal error estimate, known as the Out-of-Bag error, is plotted against the number of trees. 
+The plot below shows the misclassification rate of the model when constructing the random forest. As the forest is built on the training data, each tree is tested on the 1/3rd of the samples (36.8%) not used in building that tree. This internal error estimate, known as the **Out-of-Bag error**, is plotted against the number of trees. 
 ```{r}
 plot(model, main = "Random Forest Model")
 ```
@@ -83,7 +83,7 @@ sort(imp, decreasing = TRUE)
 ```
 ![important_variables](./data/images/imp_model_2.png)
 
-Each variable is plotted according to its importance.
+Each variable is plotted according to its importance below.
 ```{r}
 barplot(sort(imp), 
         col = "red", 
@@ -129,9 +129,9 @@ model
 
 The model command above shows that the number of trees constructed were 500. Also, the Mean Squared Error (MSE) is 11.223 and the percentage of variance explained is by the model is 86.77%. 
 
-The plot below shows the misclassification rate of the model when constructing the random forest. As the forest is built on the training data, each tree is tested on the 1/3rd of the samples (36.8%) not used in building that tree. This internal error estimate, known as the Out-of-Bag error, is plotted against the number of trees. 
+The plot below shows the misclassification rate of the model when constructing the random forest. As the forest is built on the training data, each tree is tested on the 1/3rd of the samples (36.8%) not used in building that tree. This internal error estimate, known as the **Out-of-Bag error**, is plotted against the number of trees. 
 ```{r}
-plot(model)
+plot(model, main = "Bagging Model")
 ```
 ![rf_error](./data/images/rf_error.png)
 
@@ -142,7 +142,7 @@ sort(imp, decreasing = TRUE)
 ```
 ![important_variables_2](./data/images/imp_model.png)
 
-Each variable is plotted according to its importance.
+Each variable is plotted according to its importance below.
 ```{r}
 barplot(sort(imp), 
         col = "blue", 
@@ -152,7 +152,7 @@ barplot(sort(imp),
 ```
 ![rf_imp](./data/images/rf_imp.png)
 
-Summary statistics for the first tree (k = 1).
+Summary statistics for the **first tree** (k = 1) can be found by using the code below.
 ```{r}
 summary(getTree(model, k = 1, labelVar = TRUE))
 ```
