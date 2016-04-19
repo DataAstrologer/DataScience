@@ -10,6 +10,7 @@ output: html_document
 * The code below demonstrates the use of the k-means algorithm. 
 * K-Means is a part of unsupervised machine learning and thus there is **no training and testing data**.
 * K-Means helps forming clusters of the dataset and getting useful insights.
+* The **protien.csv** dataset from the data folder is used here. It contains information about the protein consumption of different food products for countries in Europe. Countries having similar protein consumption are grouped together based on the food intake. 
 
 
 ### Implementation in R
@@ -85,7 +86,7 @@ str(clusters)
 
 Details of the elements of cluster 3:
 ```{r}
-cluster_3 = subset(food, clusters$cluster==3)
+cluster_3 = subset(food, clusters$cluster == 3)
 cluster_3
 ```
 ![cluster_3](./data/images/cluster_3.png)
@@ -93,7 +94,7 @@ cluster_3
 
 Details of the elements of cluster 5:
 ```{r}
-cluster_5 = subset(food, clusters$cluster==5)
+cluster_5 = subset(food, clusters$cluster == 5)
 cluster_5
 ```
 ![cluster_5](./data/images/cluster_5.png)
@@ -101,7 +102,8 @@ cluster_5
 Ordering the countries according to clusters for better interpretation of protein consumption.
 ```{r}
 order_by_cluster = order(clusters$cluster)
-country = data.frame(food$Country[order_by_cluster],clusters$cluster[order_by_cluster])
+country = data.frame(food$Country[order_by_cluster], 
+                     clusters$cluster[order_by_cluster])
 country
 ```
 ![country](./data/images/country.png)
@@ -110,7 +112,11 @@ country
 
 Plotting the ReadMeat vs WhiteMeat protein consumption of the countries according to thier cluster. 
 ```{r}
-plot(food$RedMeat, food$WhiteMeat, type = "n", xlim = c(3,19), xlab = "Red Meat",ylab = "White Meat")
-text(x = food$RedMeat, y = food$WhiteMeat, labels = food$Country, col = rainbow(7)[clusters$cluster])
+plot(food$RedMeat, food$WhiteMeat, 
+     type = "n", xlim = c(3,19), 
+     xlab = "Red Meat", ylab = "White Meat")
+
+text(x = food$RedMeat, y = food$WhiteMeat, 
+     labels = food$Country, col = rainbow(7)[clusters$cluster])
 ```
 ![plot_2](./data/images/plot_2.png)

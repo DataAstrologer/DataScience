@@ -10,6 +10,7 @@ output: html_document
 * The code below demonstrates the use of the Hierarchical Clustering.  
 * Hierarchical Clustering is a part of unsupervised machine learning and thus there is **no training and testing data**.
 * Hierarchical Clustering helps forming clusters of the dataset and getting useful insights.
+* The **protien.csv** dataset from the data folder is used here. It contains information about the protein consumption of different food products for countries in Europe. Countries having similar protein consumption are grouped together based on the food intake. 
 
 
 ### Implementation in R
@@ -59,7 +60,7 @@ Hierarchical Clustering is a part of the cluster library. The `agnes()` function
 
 Using the **average linkage** hierarchical clustering:
 ```{r}
-avg_clust = agnes(food, diss =FALSE, metric = "euclidian")
+avg_clust = agnes(food, diss = FALSE, metric = "euclidian")
 str(avg_clust)
 ```
 ![avg_link](./data/images/avg_linkage.png)
@@ -108,7 +109,7 @@ Plot and Dendrogram for **complete linkage**:
 ```{r}
 plot(complete_clust, hang = -1, labels = food$Country)
 rect.hclust(complete_clust, 6)
-(abline(h=22))
+abline(h = 22)
 ```
 ![plot3](./data/images/Rplot_3.png)
 ![dendro3](./data/images/d_comp.png)
