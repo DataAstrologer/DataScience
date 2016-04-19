@@ -179,7 +179,7 @@ testing_y = testing_data$medv
 
 The model is assessed by using the **Mean Square Error (MSE)**. This is the average of the squared differences between the actual values of *medv* in the testing data and the predicted values. *A low MSE is desired.*
 ```{r}
-MSE = mean((predicted_y-testing_y)^2)
+MSE = mean((predicted_y - testing_y)^2)
 MSE
 ```
 ![MSE](./data/images/MSE.png)
