@@ -79,6 +79,7 @@ itemFrequencyPlot(playlist, support = 0.08, cex.names = 1.5)
 Finally, we build the association rules with a **support of > 1%** and a **confidence of > 50%**. The ```inspect()``` function is used for inspecting the rules.
 ```{r, eval=TRUE, include=TRUE}
 musicrules = apriori(playlist, parameter = list(support=0.01, confidence =.5))
+musicrules
 ```
 ![music_rules](./data/images/music_rules.png)
 
