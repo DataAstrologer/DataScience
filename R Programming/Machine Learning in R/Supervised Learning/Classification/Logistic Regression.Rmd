@@ -263,8 +263,8 @@ summary(model_2)
 
 In order to do predictions using the final model on the testing data, we use the ```predict()``` function in R. 
 ```{r}
-logistic_probs = predict(model_2, testing_data)
-logistic_probs
+logistic_pred = predict(model_2, testing_data)
+logistic_pred
 ```
 ![predict_2](./data/images/predict_2.png)
 
@@ -272,6 +272,6 @@ A confusion matrix is used for checking the accuracy of the model. The ```confus
 ```{r}
 #install.packages("caret")
 library(caret)
-confusionMatrix(testing_data$Loan.approval, logistic_probs)
+confusionMatrix(testing_data$Loan.approval, logistic_pred)
 ```
 ![confusion_matrix](./data/images/cfm_2.png)
