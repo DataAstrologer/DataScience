@@ -96,7 +96,7 @@ The ```importance()``` function shows the importance of each variables in constr
 imp = importance(model)[,1]
 sort(imp, decreasing = TRUE)
 ```
-![rf_imp_model_2](.data/images/rf_imp_model_2_2_2.png)
+![rf_imp_model_2](./data/images/rf_imp_model_2.png)
 
 Each variable is plotted according to its importance below.
 ```{r}
@@ -147,7 +147,7 @@ plot (ROC.perf, main = "True Positive vs False Positive for Random Forest Model"
 ![tpr_fpr](./data/images/tpr_fpr.png)
 
 ```{r}
-RP.perf <- performance(pred.obj, "rec","prec")
+RP.perf = performance(pred.obj, "rec", "prec")
 plot (RP.perf, main = "Precision vs Recall Curve for Random Forest Model")
 ```
 ![rec_prec](./data/images/rec_prec.png)
