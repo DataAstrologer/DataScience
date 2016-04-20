@@ -5,7 +5,7 @@ date: "April 12, 2016"
 output: html_document
 ---
 
-# Logistic Regression Algorithm
+# Logistic Regression
 
 * The code below demonstrates Logistic Regression. 
 * Logistic Regression is a part of supervised machine learning and thus the dataset is split into **training and testing**.
@@ -41,7 +41,7 @@ summary(carsales)
 
 Scatter plot matrix to visualize numeric data.
 ```{r}
-plot(carsales[,c(-1,-7,-10,-11)])
+plot(carsales[, c(-1, -7, -10, -11)])
 ```
 ![plot_1](./data/images/plot_1.png)
 
@@ -55,15 +55,15 @@ set.seed(100) # to control randomness and get similar results
 train = sample(1:400, 300)
 test = -train
 
-training_data = carsales[train,]
-testing_data = carsales[test,]
+training_data = carsales[train, ]
+testing_data = carsales[test, ]
 ```
 
 ### Logistic Model
 
 The ```glm()``` function is used for performing logistic regression in R. The logit model is *fitted* on the training data. The ```family``` parameter in ```glm()``` is used for specifying the ```logit``` function.
 ```{r}
-model = glm(Sales ~.,data = training_data, family = binomial(link = "logit"))
+model = glm(Sales ~ .,data = training_data, family = binomial(link = "logit"))
 model
 ```
 ![model_1](./data/images/model_1.png)
@@ -74,7 +74,7 @@ summary(model)
 ```
 ![model_summary](./data/images/modelsummary.png)
 
-We can use the ```names()``` function to see what other pieces of information are stored in our linear model. 
+We can use the ```names()``` function to see what other pieces of information are stored in the logistic model. 
 ```{r}
 names(model)
 ```
@@ -110,7 +110,7 @@ From the above output, we notice that there is **no** variable which has a signi
 
 The ```cor()``` function in R computes the correlation matrix.
 ```{r}
-corr_matrix = round(cor(training_data[,c(-1,-7,-10,-11)]), 2)
+corr_matrix = round(cor(training_data[, c(-1, -7, -10, -11)]), 2)
 corr_matrix
 ```
 ![cor](./data/images/cor.png)
@@ -133,11 +133,12 @@ coefplot(model)
 ```
 ![coef_plot](./data/images/coef_plot.png)
 
-Thus, after removing the non-significant variables, we can get the final model which will be can be used for testing the data.
+After removing the non-significant variables, we can get the final model which will be can be used for testing the data.
 ```{r}
 model.log = glm(Sales ~ CompPrice + Income + Advertising + Price + ShelveLoc + Age, 
                 data = training_data, 
                 family = binomial(link = "logit"))
+
 summary(model.log)
 ```
 ![final_model](./data/images/final_model.png)
@@ -179,14 +180,11 @@ The misclassification rate of the model is given by:
 ```
 ![mcr](./data/images/mcr.png)
 
-The misclassification rate is 11%.
-
-The accuracy of the model is calculated below.
+The misclassification rate is 11%. Furthermore, the accuracy of the model is calculated below.
 ```{r}
 mean(testing_data$Sales == logistic_probs)
 ```
 ![accuracy](./data/images/accuracy.png)
-
 
 ### Dealing with Interaction Terms
 
@@ -206,7 +204,7 @@ model.three
 
 # Multinomial Logistic Regression:
 
-* The loan_approval dataset from the data folder is used here for demonstrating Multinomial Logistic Regression.
+* The **loan_approval.csv** dataset from the data folder is used here for demonstrating Multinomial Logistic Regression.
 * The dependent variable, Loan approval, contains 3 categories - Yes, No and Withstand.
 * The ```nnet``` library is required in R to perform Multinomial Logistic Regression.
 
@@ -215,7 +213,7 @@ model.three
 library(nnet)
 ```
 
-The **loan_approval** dataset is present in the data folder.
+The loan_approval.csv dataset is present in the data folder.
 ```{r, eval=TRUE}
 data = read.csv("./data/loan_approval.csv", header = TRUE)
 ```
@@ -234,7 +232,7 @@ summary(data)
 
 Scatter plot matrix to visualize numeric data.
 ```{r}
-plot(data[,-3])
+plot(data[, -3])
 ```
 ![plot_2](./data/images/plot_2.png)
 
@@ -247,8 +245,8 @@ set.seed(100) # to control randomness and get similar results
 train = sample(1:23, 15)
 test = -train
 
-training_data = data[train,]
-testing_data = data[test,]
+training_data = data[train, ]
+testing_data = data[test, ]
 ```
 
 ### Logistic Model
@@ -256,7 +254,7 @@ testing_data = data[test,]
 The ```multinom()``` function from the ```nnet``` package is used for performing multinomial logistic regression in R. The logit model is *fitted* on the training data. The ```summary``` function is then used for getting detailed information about the p-values, residual deviance and AIC for the logistic model.
 
 ```{r}
-model_2 = multinom(Loan.approval ~ Age+Salary, data = testing_data)
+model_2 = multinom(Loan.approval ~ Age + Salary, data = testing_data)
 summary(model_2)
 ```
 ![model_2](./data/images/summary_3.png)
