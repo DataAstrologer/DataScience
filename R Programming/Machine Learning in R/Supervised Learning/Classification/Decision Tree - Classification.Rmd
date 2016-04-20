@@ -10,7 +10,7 @@ output: html_document
 * The code below demonstrates Classification Decision Trees. 
 * Decision Tree is a part of supervised machine learning and thus the dataset is split into **training and testing**.
 * The Decision Tree algorithm uses **Entropy** for classification.
-* The **credit.csv** dataset from the data folder is used here. The dataset contains various attributes for predicting whether a given customer would default a loan or not based on various factor such as balance, age, etc. The **dependent variable (default)** can have a value of either 1 (Non-Default) or 2 (Default).
+* The **credit.csv** dataset from the data folder is used here. This dataset represent loans obtained from a credit agency in Germany. The currency is recorded in Deutsche Marks (DM). The dataset contains various attributes for predicting whether a given customer would default a loan or not based on various factor such as balance, age, etc. The **dependent variable (default)** can have a value of either 1 (Non-Default) or 2 (Default).
 
 ### Implementation in R
 
@@ -36,13 +36,15 @@ summary(credit)
 ```
 ![summary_credit](./data/images/summary_credit.png)
 
+The default variable indicates whether the loan applicant was unable to meet the agreed payment terms and went into default. From the summary above, it can be noticed that a total of 30 percent of the loans went into default.
+
 Scatter plot matrix to visualize numeric data.
 ```{r}
 plot(credit[, c(2, 5, 8, 11, 13, 16, 18)])
 ```
 ![plot_credit](./data/images/plot_credit.png)
 
-Exploratory analysis of some more variables.
+Let's take a look at some of the ```table()``` outputs for a couple of features of loans that seem likely to predict a default. The checking_balance and savings_balance features indicate the applicant's checking and savings account balance, and are recorded as categorical variables.
 ```{r}
 table(credit$checking_balance)
 ```
@@ -62,8 +64,8 @@ set.seed(100) # to control randomness and get similar results
 train = sample(1:1000, 800)
 test = -train
 
-training_data = credit[train,]
-testing_data = credit[test,]
+training_data = credit[train, ]
+testing_data = credit[test, ]
 ```
 
 ### Decision Tree Model
@@ -73,18 +75,18 @@ The ```tree()``` function from the ```tree``` package is used for fitting the de
 #install.packages("tree")
 library(tree)
 
-model = tree(default ~., training_data)
+model = tree(default ~ ., training_data)
 model
 ```
 ![model_credit](./data/images/model_credit.png)
 
-The model command above prints the actual decision tree. A plot of the tree is shown below to make it easy to visualize. In order to see the decisions, we call the ```summary()``` function on the model. 
+The model command above prints the actual decision tree. The root node has 800 observations and the tree has 9 leaf (terminal) nodes (look at the * values). In order to see the decisions, we call the ```summary()``` function on the model. 
 ```{r}
 summary(model)
 ```
 ![summary_credit_tree](./data/images/summary_credit_tree.png)
 
-Notice that the output indicates that only 6 variables have been used for constructing the tree. Also, the training Mean Sqaured Error (MSE) is 1.007. The plot of the tree is shown below.
+Notice that the output indicates that only 6 variables have been used for constructing the tree. Also, the training Mean Squared Error (MSE) is 1.007. The plot of the tree is shown below.
 ```{r}
 plot(model)
 text(model, pretty = 0)
@@ -114,18 +116,21 @@ set.seed(1)
 cv_tree_model = cv.tree(model, FUN = prune.misclass)
 ```
 
-A plot of different tree sizes and thier residual sum of squares is shown below. 
+A plot of different tree sizes and their residual sum of squares is shown below. The plot helps decide the ideal tree size.
 ```{r}
-plot(cv_tree_model$size, cv_tree_model$dev, type = "b", ylab = "Residual Sum Square (RSS)", xlab = "Tree Size")
+plot(cv_tree_model$size, cv_tree_model$dev, 
+     type = "b", 
+     ylab = "Residual Sum Square (RSS)", 
+     xlab = "Tree Size")
 ```
 ![cv_tree_model_plot](./data/images/cv_tree_model_plot.png)
 
-A tree size with the lowest residual sum of squares is desired. The tree with the best size is:
+A tree size with the lowest residual sum of squares is desired. The tree with the best size is given by the code below.
 ```{r}
 cv_tree_model$size[which.min(cv_tree_model$dev)]
 ```
 
-The above code returns the value **3** which is the best tree size. Thus, a pruned tree of with size 3 is constructed below. 
+The above code returns the value **3** which is the best tree size (seen in the plot as well). Thus, a pruned tree of with size 3 is now fitted to the data in order to get the best model.
 ```{r}
 pruned_tree = prune.tree(model, best = 3)
 
@@ -141,4 +146,4 @@ confusionMatrix(testing_data$default, predicted_pruned_y)
 ```
 ![confusion_matrix_credit_pruned](./data/images/cfm_credit_pruned.png)
 
-It can be observed that the *pruned tree model gives a higher accuracy* compared to the original tree model.
+It can be observed that the *pruned model gives a higher accuracy* compared to the original tree model for this dataset.

@@ -137,4 +137,4 @@ MSE
 ```
 ![tree_MSE_2](./data/images/mse_tree_2.png)
 
-It is observed that the *pruned tree model gives the same tree and the same accuracy* as the original tree model for this dataset.
+It is observed that the *pruned model gives the same tree and the same accuracy* as the original tree model for this dataset.
