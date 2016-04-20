@@ -58,7 +58,7 @@ testing_data = data[test, -1]
 
 ### Random Forest Model
 
-The ```randomForest()``` function from the ```randomForest``` package is used for fitting the random forest algorithm to the dataset. The argument ```mtry = 6``` indicates that 6 predictors should be considered for each split of the tree. By default, ```randomForest()``` uses p/3 variables when building a random forest regression tree (p = predictors).
+The ```randomForest()``` function from the ```randomForest``` package is used for fitting the model to the dataset. The argument ```mtry = 6``` indicates that 6 predictors should be considered for each split of the tree. By default, ```randomForest()``` uses p/3 variables when building a random forest regression tree (p = predictors).
 ```{r}
 #install.packages("randomForest")
 library(randomForest)
