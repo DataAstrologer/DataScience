@@ -10,7 +10,7 @@ output: html_document
 * The code below demonstrates the K-Nearest Neighbors algorithm (KNN). 
 * KNN is a part of supervised machine learning and thus the dataset is split into **training and testing**.
 * The KNN algorithm below is used for prediction using the **Euclidean Distance**. 
-* The ```Forensic Glass Fragments``` dataset which is a part of the ```MASS``` package in ```R``` is used here. The dataset classifies glass fragments into 7 types based on various attributes such as refractive index, sodium content, silicon content, etc. 
+* The ```Forensic Glass Fragments``` dataset which is a part of the ```MASS``` package in ```R``` is used here. The dataset classifies glass fragments into 7 types based on various attributes such as refractive index, sodium content, etc. 
 ```{r, eval=TRUE}
 library(MASS)
 ?fgl
@@ -42,7 +42,7 @@ plot(Si ~ type, data = fgl, col = c(grey(.2), 2:6))
 plot(K ~ type, data = fgl, col = c(grey(.2), 2:6))
 plot(Ca ~ type, data = fgl, col = c(grey(.2), 2:6))
 plot(Ba ~ type, data = fgl, col = c(grey(.2), 2:6))
-plot(Fe ~ type, data = fgl, col = c(grey(.2),2:6))
+plot(Fe ~ type, data = fgl, col = c(grey(.2), 2:6))
 ```
 ![box_plot_matrix](./data/images/box_plot_matrix.png)
 
@@ -75,7 +75,7 @@ The ```knn()``` function, which is a part of the ```FNN``` library, is used for 
 ```{r}
 library(FNN)
 
-predicted_y = knn(training_data, testing_data, training_y, k=1)
+predicted_y = knn(training_data, testing_data, training_y, k = 1)
 head(predicted_y)
 ```
 ![head_predicted_knn](./data/images/head_predicted_knn.png)
