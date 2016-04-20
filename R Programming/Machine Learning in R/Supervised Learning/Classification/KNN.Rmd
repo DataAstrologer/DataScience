@@ -48,7 +48,7 @@ plot(Fe ~ type, data = fgl, col = c(grey(.2), 2:6))
 
 Because the KNN classifier predicts the class of a given test observation by identifying the observations that are nearest to it, the scale of the variables matters. Any variables that are on a large scale will have a much larger effect on the distance between the observations, and hence on the KNN classifier, than variables that are on a small scale. Thus, we are going to standardize all the independent (predictor) variables except the dependent variable (type). All the independent variables have a mean of 1 and standard deviation of 0 after standardization.
 ```{r}
-std_fgl = scale(fgl[,-10])
+std_fgl = scale(fgl[, -10])
 ```
 
 ### Splitting the dataset
@@ -57,13 +57,13 @@ The dataset is split into two parts: *training* and *testing*. The training part
 ```{r}
 set.seed(1)
 
-test = sample(1:214,150)
+test = sample(1:214, 150)
 train = -test
 
-training_data = std_fgl[train,]
-testing_data = std_fgl[test,]
+training_data = std_fgl[train, ]
+testing_data = std_fgl[test, ]
 
-type = fgl[,10] # save the type column in a seperate variable
+type = fgl[, 10] # save the type column in a seperate variable
 
 testing_y = type[test]
 training_y = type[train]
