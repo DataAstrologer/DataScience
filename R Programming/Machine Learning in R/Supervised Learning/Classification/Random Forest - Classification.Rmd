@@ -76,7 +76,7 @@ library(randomForest)
 model = randomForest(default ~ ., data = training_data, mtry = 6, importance = TRUE)
 model
 ```
-![rf_model_2](./data/images/rf_model_2_2_2.png)
+![rf_model_2](./data/images/rf_model_2.png)
 
 The model command above shows that the number of trees constructed were 500. Also, the Out-of-Bag error rate is 25.12%. 
 
@@ -96,7 +96,7 @@ The ```importance()``` function shows the importance of each variables in constr
 imp = importance(model)[,1]
 sort(imp, decreasing = TRUE)
 ```
-![imp_model_2](.data/images/imp_model_2.png)
+![rf_imp_model_2](.data/images/rf_imp_model_2_2_2.png)
 
 Each variable is plotted according to its importance below.
 ```{r}
@@ -178,15 +178,10 @@ legend("top", colnames(model$err.rate), col = 1:3, cex = 0.8, fill = 1:3)
 ```
 ![rf_error](./data/images/rf_error.png)
 
-Using the ```importance()``` function, we can view the importance of each variable:
+Using the ```importance()``` function, we can view the importance of each variable. Each variable is plotted according to its importance below.
 ```{r}
 imp = importance(model)[, 1]
 sort(imp, decreasing = TRUE)
-```
-![imp_model_1](.data/images/imp_model_1_1_1.png)
-
-Each variable is plotted according to its importance below.
-```{r}
 barplot(sort(imp), 
         col = "blue", 
         main = "Variable Importance Plot", 
