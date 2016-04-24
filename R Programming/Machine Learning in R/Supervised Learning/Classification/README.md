@@ -8,10 +8,10 @@ The **.Rmd** files above contain the respective R code. To read more about the a
 
 * **Logistic Regression**: 
 
-* **Naive Bayes**:
-
-* **Neural Networks**:
-
 * **Random Forest**:
 
-* **Support Vector Machines**:
+* **Naive Bayes**: Coming soon.
+
+* **Neural Networks**: Coming soon. 
+
+* **Support Vector Machines**: Coming soon.
