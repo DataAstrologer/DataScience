@@ -1,7 +1,9 @@
 # Python 
 
-* **Data Analysis** - This folder contains complete data analysis of a dataset from the UCI Machine Learning Repository using statistical description and machine learning techniques. The ipython notebook with the analysis is attached as **Census_Data_Analysis.ipynb**. 
+Welcome to Python. This section contains 3 folders - *Case Studies*, *Hyperparameter Optimization* and *Machine Learning in Python*. 
 
-* **Hyperparameter Optimization** - This folder contains a presentation on Hyperparameter Optimization methods - Grid Search and Random Search. The presentation is attached as the **Grid_Random_Comparison.rpres** file and the **Hyper-parameter Optimization.ipynb** notebook contains sample code to demonstrate the optimization methods. 
+* **Case Studies** - This folder contains complete data analysis of a **dataset from the UCI Machine Learning Repository** using Machine Learning in Python. Using census data, it is determined if a person makes above $50k per year based on various attributes. Visit the folder to check out my work. 
 
-* **Machine Learning Templates** - This folder contains machine learning templates for both **supervised** and **unsupervised** algorithms. Use these templates to build and implement your machine learning models. Each algorithm is demonstrated on an example dataset. 
+* **Hyperparameter Optimization** - This folder contains a presentation on Hyperparameter Optimization methods - **Grid Search** and **Random Search**. The presentation is attached as the *Grid_Random_Comparison.rpres* file and the *Hyper-parameter Optimization.ipynb* notebook contains sample code to demonstrate the optimization methods. 
+
+* **Machine Learning in Python** - This folder contains **demonstrations for using Python** to implement Supervised and Unsupervised machine learning algorithms. Use the examples in this folder to learn about different Python libraries used for data analysis and understand model building. 
