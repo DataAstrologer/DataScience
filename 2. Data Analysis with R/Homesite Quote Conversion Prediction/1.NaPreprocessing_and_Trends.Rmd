@@ -9,7 +9,7 @@ output: html_document
 
 This document contains a step-by-step analysis of the Homesite Quote Conversion dataset from kaggle. 
 
-### Importing data and libraries 
+## Importing data and libraries 
 
 ```{r, eval = True}
 library(caret)
@@ -43,7 +43,7 @@ homesite.data <- read.csv("train.csv",
                           stringsAsFactors = F)
 ```
 
-Percentage distribution of the dependent variable:
+**Percentage distribution of the dependent variable:**
 ```{r, eval = True}
 CrossTable(dependent_var, digits = 2)
 
@@ -55,7 +55,8 @@ CrossTable(dependent_var, digits = 2)
 ```
 ![percent_distribution](./images/pd.png)
 
-### Snapshot of the dataset
+
+## Snapshot of the dataset
 ```{r, eval=T}
 str(homesite.data, 
     vec.len = 2, 
@@ -67,7 +68,8 @@ gcinfo(verbose = T)
 ```
 ![snap_data](./images/data_snap.png)
 
-### Pre-processing NA values
+
+## Pre-processing NA values
 ```{r, eval=T}
 count_na <- colSums(is.na(homesite.data))
 NA_count <- sort(count_na[which(count_na != 0)], 
@@ -112,7 +114,8 @@ View(as.data.frame(cbind(NA_count,
 ```
 ![na_df](./images/na_df.png)
 
-EDA of NA columns:
+
+**EDA of NA columns:**
 ```{r, eval = T}
 CrossTable(homesite.data$PropertyField29, 
            dependent_var, 
@@ -131,6 +134,7 @@ CrossTable(homesite.data$PropertyField29,
 
 ```
 ![eda_na_1](./images/eda_na_1.png)
+
 
 ```{r, eval=T}
 CrossTable(homesite.data$PropertyField38, 
@@ -181,9 +185,10 @@ CrossTable(homesite.data$PropertyField38,
 ```
 ![eda_na_2](./images/eda_na_2.png)
 
-Dropping none of the NA columns because the distribution of the NA values w.r.t the dependent variable is skewed towards 0. If instead, the distribution was unbiased like a 50/50 proportion, the column could have been dropped. Furthermore, all factor columns are statistically significant.
+**Dropping none of the NA columns because the distribution of the NA values w.r.t the dependent variable is skewed towards 0. If instead, the distribution was unbiased like a 50/50 proportion, the column could have been dropped. Furthermore, all factor columns are statistically significant.**
 
-### Preprocessing Dates feature
+
+## Preprocessing Dates feature
 ```{r, eval = True}
 dateConversion <- function(datestring) {
       as.POSIXct(datestring, format = "%Y-%m-%d")
@@ -264,6 +269,7 @@ gg + geom_bar(stat = "identity",
 ```
 ![gg1](./images/gg1.png)
 
+
 ```{r, eval = True}
 # Check monthly seasonality
 date <- as.Date(homesite.data$Original_Quote_Date)
@@ -326,6 +332,7 @@ multiplot(ts.daily,
 ```
 ![gg2](./images/gg2.png)
 
+
 ```{r, eval = True}
 ############### Adding quarterly trend as a new feature
 Original_Quote_Quarter <- as.yearqtr(quote_dates)
@@ -342,7 +349,7 @@ drops <- "Original_Quote_Date"
 homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 ```
 
-### Feature Group Counts
+## Feature Group Counts
 ```{r, eval = True}
 fields <- select(homesite.data,
                  Field6:Field12, 
