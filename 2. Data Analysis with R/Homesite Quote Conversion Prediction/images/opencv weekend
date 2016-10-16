@@ -1,0 +1,51 @@
+A picture is worth a thousand words
+Computer Vision is the science and engineering discipline concerned with making inferences about the external world
+What is an image? - it is an array of pixels
+The goal of computer vision is to achieve something similar to human perception
+
+Computer vision pic - overalapping with other disciplines for ppt
+
+
+Opencv (Open Source Computer Vision) is a library of programming functions for real-time computer vision.
+opencv supports c, c++, python, java. c, c++ is used for optomized programming
+opencv supports win, mac, linux, andriod, ios
+basically cv2 supports numpy which was not supported by earlier cv versions (below 3)
+
+basic filters:
+cv2.blur(image,kernel) -> image
+cv2.Laplacian(image,depth) -> image
+cv2.cvtColor(image, code*) -> image
+cv2.threshold(image, threshold, maxval, type*) ->image
+cv2. dilate(image, kernel) -> image
+cv2.erode(image,kernel) -> image
+cv2.getStructuringElement(shape*,size) -> structure
+
+
+cam = cv2.VideoCaprture(0) # 0 indicates the first camera, if we have 2 cameras we can use 0 and 1
+
+height, width = image.shape
+
+
+in the rectangle.py code, the if thresh[h,w] == 0, the 0 represents the black image. furthrermore, squares stores the position of the width and height
+the start2.py is just optimized code for rectangle.py
+
+check out the tracking.py script -v imp
+https://github.com/omartrinidad/ep2012/tree/master/estrellas 
+
+
+pixel manipulation
+adding and blending images
+bgr to hsv
+image re-sizing
+image translation
+image rotation
+image transformation
+thresholding
+image filtering
+image smoothing
+image blurring
+morphological transformation
+image gradient
+edge detection
+image pyramid
+contour
