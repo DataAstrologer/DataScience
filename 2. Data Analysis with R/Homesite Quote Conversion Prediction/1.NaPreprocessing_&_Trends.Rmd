@@ -9,6 +9,7 @@ output: html_document
 
 This document contains a step-by-step analysis of the Homesite Quote Conversion dataset from kaggle. 
 
+
 ## Importing data and libraries 
 
 ```{r, eval = True}
@@ -43,7 +44,7 @@ homesite.data <- read.csv("train.csv",
                           stringsAsFactors = F)
 ```
 
-**Percentage distribution of the dependent variable:**
+Percentage distribution of the dependent variable:
 ```{r, eval = True}
 CrossTable(dependent_var, digits = 2)
 
@@ -185,7 +186,7 @@ CrossTable(homesite.data$PropertyField38,
 ```
 ![eda_na_2](./images/eda_na_2.png)
 
-**Dropping none of the NA columns because the distribution of the NA values w.r.t the dependent variable is skewed towards 0. If instead, the distribution was unbiased like a 50/50 proportion, the column could have been dropped. Furthermore, all factor columns are statistically significant.**
+Dropping none of the NA columns because the distribution of the NA values w.r.t the dependent variable is skewed towards 0. If instead, the distribution was unbiased like a 50/50 proportion, the column could have been dropped. Furthermore, all factor columns are statistically significant.
 
 
 ## Preprocessing Dates feature
