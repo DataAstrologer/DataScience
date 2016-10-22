@@ -84,36 +84,30 @@ fields <- select(homesite.data,
                  QuoteConversion_Flag)
 Fields <- length(fields) - 1
 
-
 coverageFields <- select(homesite.data, 
                          CoverageField1A:CoverageField11B,
                          QuoteConversion_Flag)
 CoverageFields <- length(coverageFields) - 1
-
 
 salesFields <- select(homesite.data, 
                       SalesField1A:SalesField15,
                       QuoteConversion_Flag)
 SalesFields <- length(salesFields) - 1
 
-
 personalFields <- select(homesite.data, 
                          PersonalField1:PersonalField84,
                          QuoteConversion_Flag)
 PersonalFields <- length(personalFields) - 1
-
 
 propertyFields <- select(homesite.data, 
                          PropertyField1A:PropertyField39B,
                          QuoteConversion_Flag)
 PropertyFields <- length(propertyFields) - 1
 
-
 geographicFields <- select(homesite.data, 
                            GeographicField1A:GeographicField64,
                            QuoteConversion_Flag)
 GeographicFields <- length(geographicFields) - 1
-
 
 Variable_Groups <- c("AnonymousFields", 
                      "CoverageFields",
@@ -125,7 +119,6 @@ Variable_Groups <- c("AnonymousFields",
                      "Date",
                      "Total")
 
-
 Group_Counts <- c(Fields, 
                   CoverageFields, 
                   SalesFields,
@@ -134,7 +127,6 @@ Group_Counts <- c(Fields,
                   GeographicFields, 
                   1, 1, 
                   298)
-
 
 Feature_Types <- data.frame(Variable_Groups, 
                             Group_Counts)
@@ -152,7 +144,6 @@ NA_percent <- round(NA_count/nrow(homesite.data) * 100, 4)
 NA_percent <- paste(NA_percent, "%")
 na_columns <- names(NA_count)
 
-
 # Only 2 NA values occur for GeographicField63
 # Thus, convert them to the most frequently 
 # occuring category of the feature
@@ -160,16 +151,13 @@ gf63 <- homesite.data$GeographicField63
 gf63_na <- which(is.na(gf63) == T)
 homesite.data$GeographicField63[gf63_na] <- 'N'
 
-
 # replace NA to -1
 homesite.data[is.na(homesite.data)] <- -1
-
 
 # Creating new feature to capture -1
 count_neg_1 <- rowSums(homesite.data == -1)
 homesite.data$count_neg_1 <- count_neg_1
 summary(homesite.data$count_neg_1)
-
 
 # Converting characters back to factors
 char_df = homesite.data[sapply(homesite.data, 
@@ -177,7 +165,6 @@ char_df = homesite.data[sapply(homesite.data,
 char_name <- names(char_df)
 homesite.data[, char_name] <- lapply(homesite.data[, char_name], 
                                      factor)
-
 
 # Distribution of NA values
 subset <- homesite.data[, na_columns]
@@ -221,36 +208,30 @@ CrossTable(homesite.data$PropertyField38,
            prop.t = F,  
            prop.chisq = F) # add in pres
 
-
 # CrossTable(homesite.data$PersonalField7, dependent_var, 
 #            digits=5, chisq = T,  dnn=c("PersonalField7",
 #                                        "QuoteConversion_Flag"),
 #            prop.r = T, prop.c = F,  prop.t = F,  prop.chisq = F)
-
  
 # CrossTable(homesite.data$PropertyField36, dependent_var, 
 #            digits=5, chisq = T,  dnn=c("PropertyField36",
 #                                        "QuoteConversion_Flag"),
 #            prop.r = T, prop.c = F,  prop.t = F,  prop.chisq = F)
-
  
 # CrossTable(homesite.data$PropertyField3, dependent_var, 
 #            digits=5, chisq = T,  dnn=c("PropertyField3",
 #                                        "QuoteConversion_Flag"),
 #            prop.r = T, prop.c = F,  prop.t = F,  prop.chisq = F)
-
  
 # CrossTable(homesite.data$PropertyField32, dependent_var, 
 #            digits=5, chisq = T,  dnn=c("PropertyField32",
 #                                        "QuoteConversion_Flag"),
 #            prop.r = T, prop.c = F,  prop.t = F,  prop.chisq = F)
-
  
 # CrossTable(homesite.data$PropertyField34, dependent_var, 
 #            digits=5, chisq = T,  dnn=c("PropertyField34",
 #                                        "QuoteConversion_Flag"),
 #            prop.r = T, prop.c = F,  prop.t = F,  prop.chisq = F)
-
  
 # CrossTable(homesite.data$PropertyField4, dependent_var, 
 #            digits=5, chisq = T,  dnn=c("PropertyField4",
@@ -268,7 +249,6 @@ dateConversion <- function(datestring) {
       as.POSIXct(datestring, format = "%Y-%m-%d")
 }
 
-
 # Add 3 new columns to the dataset with year, month and day information
 quote_dates <- dateConversion(homesite.data$Original_Quote_Date)
 Original_Quote_Year <- format(quote_dates, "%Y")
@@ -285,50 +265,40 @@ trend <- cbind(Original_Quote_Year,
              Original_Quote_Day,
              dependent_var)
 
-
 # Check yearly seasonality of the converted quotes
 y_tr <- as.data.frame(round(table(homesite.data$Original_Quote_Year, 
                  dependent_var)))
 
-
 r1 = which(y_tr$Var1 == 2013)[1]
 r2 = which(y_tr$Var1 == 2013)[2]
-
 
 p1 = round(y_tr[r1, 3]/ (y_tr[r1, 3] + 
                                y_tr[r2, 3]) * 100, 2)
 p2 = round(y_tr[r2, 3]/ (y_tr[r1,3] + 
                                y_tr[r2, 3]) * 100, 2)
 
-
 r1.1 = which(y_tr$Var1 == 2014)[1]
 r2.1 = which(y_tr$Var1 == 2014)[2]
-
 
 p1.1 = round(y_tr[r1.1, 3]/ (y_tr[r1.1, 3] +
                                    y_tr[r2.1, 3]) * 100, 2)
 p2.1 = round(y_tr[r2.1, 3]/ (y_tr[r1.1,3] + 
                                    y_tr[r2.1, 3]) * 100, 2)
 
-
 r1.2 = which(y_tr$Var1 == 2015)[1]
 r2.2 = which(y_tr$Var1 == 2015)[2]
-
 
 p1.2 = round(y_tr[r1.2, 3]/ (y_tr[r1.2,3] + 
                                    y_tr[r2.2, 3]) * 100, 2)
 p2.2 = round(y_tr[r2.2, 3]/ (y_tr[r1.2,3] + 
                                    y_tr[r2.2, 3]) * 100, 2)
 
-
 per_col <- c(p1,p1.1,p1.2,p2,p2.1,p2.2)
 y_tr <- cbind(y_tr, per_col)
-
 
 gg <- ggplot(data = y_tr, aes(x = Var1,
                               y = per_col,
                               fill = dependent_var))
-
 
 gg + geom_bar(stat = "identity", 
               position = "dodge", 
@@ -350,12 +320,10 @@ date <- as.Date(homesite.data$Original_Quote_Date)
 score <- homesite.data$QuoteConversion_Flag
 zoo <- zoo(score, date)
 
-
 daily = apply.daily(zoo, sum)
 weekly = apply.weekly(zoo, sum)
 monthly = apply.monthly(zoo, sum)
 quarterly = apply.quarterly(zoo, sum)
-
 
 ts.daily <- autoplot(daily, 
                      geom = "point") + 
@@ -367,7 +335,6 @@ ts.daily <- autoplot(daily,
       theme(legend.position = "none") + 
       ggtitle("Daily Trend")
 
-
 ts.weekly <- autoplot(weekly) +  
       xlab(NULL) + 
       ylab(NULL) +
@@ -376,7 +343,6 @@ ts.weekly <- autoplot(weekly) +
                   alpha = 0.2) + 
       theme(legend.position = "none") + 
       ggtitle("Weekly Trend")
-
 
 ts.monthly <- autoplot(monthly) + 
       xlab(NULL) + 
@@ -387,7 +353,6 @@ ts.monthly <- autoplot(monthly) +
       theme(legend.position = "none") + 
       ggtitle("Monthly Trend")
 
-
 ts.quarterly <- autoplot(quarterly) + 
       xlab(NULL) +
       ylab(NULL) +
@@ -396,7 +361,6 @@ ts.quarterly <- autoplot(quarterly) +
                   alpha = 0.2) + 
       theme(legend.position = "none") + 
       ggtitle("Quartely Trend")
-
 
 multiplot(ts.daily, 
           ts.weekly, 
@@ -412,11 +376,9 @@ multiplot(ts.daily,
 Original_Quote_Quarter <- as.yearqtr(quote_dates)
 homesite.data$Original_Quote_Quarter <- as.factor(Original_Quote_Quarter)
 
-
 # Adding weekly trend as a new feature
 Original_Quote_Week <- as.numeric(format(quote_dates, "%U"))
 homesite.data$Original_Quote_Week <- as.factor(Original_Quote_Week)
-
 
 # Drop Original_Quote_Date column
 drops <- "Original_Quote_Date"
@@ -427,24 +389,20 @@ homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 ```{r, eval = True}
 #dim(homesite.data)
 
-
 # Zero Variance, first 100 features
 homesite.100 <- homesite.data[, 1:100]
 zero.values = nearZeroVar(homesite.100, 
                           saveMetrics = TRUE)
 zero.values[zero.values[, "zeroVar"] == TRUE, ]
 
-
 # Near-zero variance, first 100 features
 zv <- zero.values[zero.values[, "zeroVar"] +
                         zero.values[, "nzv"] == TRUE, ]
 zv_df <- as.data.frame(zv)
 
-
 # save
 ratio_names <- rownames(zv_df)
 freqratio <- zv_df$freqRatio
-
 
 # Zero Variance, next 100 features
 homesite.200 <- homesite.data[, 101:200]
@@ -460,13 +418,11 @@ zv2 <- zero.values.2[zero.values.2[, "zeroVar"] +
                            zero.values.2[, "nzv"] == TRUE, ]
 zv_df2 <- as.data.frame(zv2)
 
-
 # save
 ratio_names <- c(ratio_names, 
                  rownames(zv_df2))
 freqratio <- c(freqratio, 
                zv_df2$freqRatio)
-
 
 # Zero Variance, next 102 features
 homesite.300 <- homesite.data[, 201:302]
@@ -474,31 +430,25 @@ zero.values.3 = nearZeroVar(homesite.300,
                             saveMetrics = TRUE)
 zero.values.3[zero.values.3[, "zeroVar"] == TRUE, ]
 
-
 # Near-zero variance, next 102 features
 zv3 <- zero.values.3[zero.values.3[, "zeroVar"] +
                            zero.values.3[, "nzv"] == TRUE, ]
 zv_df3 <- as.data.frame(zv3)
 
-
 # save
 ratio_names <- c(ratio_names, rownames(zv_df3))
 freqratio <- c(freqratio, zv_df3$freqRatio)
-
 
 # Plot near-zv data
 zv_ratio <- round(freqratio)
 zv_features <- ratio_names
 
-
 new_zv_df <- data.frame(zv_features, zv_ratio)
 new_zv_df <- arrange(new_zv_df, -zv_ratio)
-
 
 gg_zv <- head(new_zv_df, 25)
 gg_zv$zv_features <- factor(gg_zv$zv_features, 
                             levels = gg_zv$zv_features[order(-gg_zv$zv_ratio)])
-
 
 ggplot(data = gg_zv, aes(x = zv_features, 
                          y = zv_ratio, 
@@ -522,7 +472,6 @@ ggplot(data = gg_zv, aes(x = zv_features,
 # CrossTable(homesite.data$GeographicField10B)
 # CrossTable(homesite.data$PropertyField20)
 # CrossTable(homesite.data$PropertyField9)
-
 
 #Drop zv and near-zv columns
 drops <- c("PropertyField6", 
@@ -751,9 +700,10 @@ model_CoverageField9 <- train(dependent_var ~ CoverageField9,
                               data = factor_df,
                               method = "rf",
                               trControl = myControl)
+
+# Check execution time
 t2 = Sys.time()
 t2 - t1
-
 
 rfImp_CoverageField9 <- varImp(model_CoverageField9, scale = TRUE)
 category_CoverageField9 <- rownames(rfImp_CoverageField9$importance) 
@@ -762,7 +712,6 @@ importance_df_CoverageField9 <- data.frame(category_CoverageField9,
                                            importance_CoverageField9)
 importance_df_CoverageField9 <- arrange(importance_df_CoverageField9, 
                                         -importance_CoverageField9)
-
 
 ggplot(data = importance_df_CoverageField9, 
        aes(x = reorder(category_CoverageField9, importance_CoverageField9),
@@ -774,7 +723,6 @@ ggplot(data = importance_df_CoverageField9,
     xlab(NULL) + 
     ylab("log(importance, base = 2)") + 
     ggtitle("CoverageField9")
-
 
 # merge
 {
@@ -797,7 +745,6 @@ model_PersonalField18 <- train(dependent_var ~ PersonalField18,
 t2 = Sys.time()
 t2 - t1 
 
-
 rfImp_PersonalField18 <- varImp(model_PersonalField18, scale = TRUE)
 category_PersonalField18 <- rownames(rfImp_PersonalField18$importance) 
 importance_PersonalField18 <- rfImp_PersonalField18$importance$Overall 
@@ -805,7 +752,6 @@ importance_df_PersonalField18 <- data.frame(category_PersonalField18,
                                             importance_PersonalField18)
 importance_df_PersonalField18 <- arrange(importance_df_PersonalField18, 
                                          -importance_PersonalField18)
-
 
 ggplot(data = importance_df_PersonalField18, 
        aes(x = reorder(category_PersonalField18, importance_PersonalField18),
@@ -817,7 +763,6 @@ ggplot(data = importance_df_PersonalField18,
     xlab(NULL) + 
     ylab("log(importance, base = 2)") + 
     ggtitle("PersonalField18")
-
 
 # merge
 {
@@ -878,7 +823,6 @@ model_PropertyField7 <- train(dependent_var ~ PropertyField7,
 t2 = Sys.time()
 t2 - t1 
 
-
 rfImp_PropertyField7 <- varImp(model_PropertyField7, scale = TRUE)
 category_PropertyField7 <- rownames(rfImp_PropertyField7$importance) 
 importance_PropertyField7 <- rfImp_PropertyField7$importance$Overall 
@@ -886,7 +830,6 @@ importance_df_PropertyField7 <- data.frame(category_PropertyField7,
                                             importance_PropertyField7)
 importance_df_PropertyField7 <- arrange(importance_df_PropertyField7, 
                                          -importance_PropertyField7)
-
 
 ggplot(data = importance_df_PropertyField7, 
        aes(x = reorder(category_PropertyField7, importance_PropertyField7),
@@ -898,7 +841,6 @@ ggplot(data = importance_df_PropertyField7,
     xlab(NULL) + 
     ylab("log(importance, base = 2)") + 
     ggtitle("PropertyField7")
-
 
 # merge
 {
@@ -922,7 +864,6 @@ model_PersonalField17 <- train(dependent_var ~ PersonalField17,
 t2 = Sys.time()
 t2 - t1
 
-
 rfImp_PersonalField17 <- varImp(model_PersonalField17, scale = TRUE)
 category_PersonalField17 <- rownames(rfImp_PersonalField17$importance) 
 importance_PersonalField17 <- rfImp_PersonalField17$importance$Overall 
@@ -930,7 +871,6 @@ importance_df_PersonalField17 <- data.frame(category_PersonalField17,
                                             importance_PersonalField17)
 importance_df_PersonalField17 <- arrange(importance_df_PersonalField17, 
                                          -importance_PersonalField17)
-
 
 ggplot(data = importance_df_PersonalField17, 
        aes(x = reorder(category_PersonalField17, importance_PersonalField17),
@@ -942,7 +882,6 @@ ggplot(data = importance_df_PersonalField17,
     xlab(NULL) + 
     ylab("log(importance, base = 2)") + 
     ggtitle("PersonalField17")
-
 
 # merge
 {
@@ -1004,7 +943,6 @@ model_PersonalField19 <- train(dependent_var ~ PersonalField19,
 t2 = Sys.time()
 t2 - t1 
 
-
 rfImp_PersonalField19 <- varImp(model_PersonalField19, scale = TRUE)
 category_PersonalField19 <- rownames(rfImp_PersonalField19$importance) 
 importance_PersonalField19 <- rfImp_PersonalField19$importance$Overall 
@@ -1012,7 +950,6 @@ importance_df_PersonalField19 <- data.frame(category_PersonalField19,
                                             importance_PersonalField19)
 importance_df_PersonalField19 <- arrange(importance_df_PersonalField19, 
                                          -importance_PersonalField19)
-
 
 ggplot(data = importance_df_PersonalField19, 
        aes(x = reorder(category_PersonalField19, importance_PersonalField19),
@@ -1024,7 +961,6 @@ ggplot(data = importance_df_PersonalField19,
     xlab(NULL) + 
     ylab("log(importance, base = 2)") + 
     ggtitle("PersonalField19")
-
 
 # merge
 {
