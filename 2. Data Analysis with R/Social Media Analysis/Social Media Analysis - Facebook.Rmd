@@ -28,7 +28,7 @@ library(httpuv)
 library(Rfacebook)
 
 fb_oauth <- fbOAuth(app_id = "110222119400991", # add your app id
-                    app_secret = "f5fa820ceb6cb40aa54a59d3aa12a3ba", # add your token
+                    app_secret = "f5**c**40**5**1***a", # add your token
                     extended_permissions = TRUE)
 
 save(fb_oauth, file = "fbo_auth") # save the token
