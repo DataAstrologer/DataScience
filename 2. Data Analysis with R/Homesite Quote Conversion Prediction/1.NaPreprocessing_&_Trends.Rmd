@@ -76,9 +76,9 @@ gcinfo(verbose = T)
 ```
 ![snap_data](./images/data_snap.png)
 
-
-## Feature Group Counts
 ```{r, eval = True}
+# Feature Group Counts
+
 fields <- select(homesite.data,
                  Field6:Field12, 
                  QuoteConversion_Flag)
@@ -542,50 +542,45 @@ num_df = homesite.data[sapply(homesite.data,
 #dim(num_df)
 #colnames(num_df)
 
+# Find linear combinations and drop features which are linear combinations of other features.
+
+# Example:
+# (X)*PersonalField27 + (Y)*Personal Field77 = PersonalField82 
+# Drop PersonalField82
 
 # 1. Fields
 linear_columns_field <- num_df[, 3:6]
 linear.matrix.fields <- as.matrix(linear_columns_field)
 comboInfo.fields <- findLinearCombos(linear.matrix.fields)
-comboInfo.fields
+comboInfo.fields # output not shown since no linear combinations found
 ```
-![no-lc](./images/no-lc.png)
 
 ```{r,eval=True}
 # 2. Coverage Fields
 linear_columns_coverage <- num_df[, 7:20]
 linear.matrix.coverage <- as.matrix(linear_columns_coverage)
 comboInfo.coverage <- findLinearCombos(linear.matrix.coverage)
-comboInfo.coverage
+comboInfo.coverage # output not shown since no linear combinations found
 ```
-![no-lc](./images/no-lc.png)
-
 
 ```{r, eval=True}
 # 3. Sales Fields
 linear_columns_sales <- num_df[, 21:36]
 linear.matrix.sales <- as.matrix(linear_columns_sales)
 comboInfo.sales <- findLinearCombos(linear.matrix.sales)
-comboInfo.sales
+comboInfo.sales # output not shown since no linear combinations found
 ```
-![no-lc](./images/no-lc.png)
 
 ```{r, eval=True}
 # 4.a. Personal Fields
 linear_columns_personal <- num_df[, 37:114]
 linear.matrix.personal <- as.matrix(linear_columns_personal)
 comboInfo.personal <- findLinearCombos(linear.matrix.personal)
-comboInfo.personal
+comboInfo.personal # show linear combinatios
+
+# drop features which are linear combinations of other features
 drops <- names(linear_columns_personal[,comboInfo.personal$remove])
 homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
-
-# Example:
-# (X)*PersonalField27 + (Y)*Personal Field77 = PersonalField82 
-# Drop Z
-
-# [1] "PersonalField65" "PersonalField67"
-# [3] "PersonalField80" "PersonalField81"
-# [5] "PersonalField82"
 ```
 ![pf-lc](./images/pf-lc.png)
 
@@ -595,7 +590,9 @@ homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 linear_columns_property <- num_df[, 115:144]
 linear.matrix.property <- as.matrix(linear_columns_property)
 comboInfo.property <- findLinearCombos(linear.matrix.property)
-comboInfo.property
+comboInfo.property # show linear combinatios
+
+# drop features which are linear combinations of other features
 drops <- names(linear_columns_property[,comboInfo.property$remove])
 homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 ```
@@ -606,20 +603,21 @@ homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 linear_columns_geo <- num_df[, 145:266]
 linear.matrix.geo <- as.matrix(linear_columns_geo)
 comboInfo.geo <- findLinearCombos(linear.matrix.geo)
-comboInfo.geo
+comboInfo.geo # output not shown since no linear combinations found
 ```
-![no-lc](./images/no-lc.png)
 
 ```{r, eval=True}
-#7. All
+#7. Check linear combinations across different feature groups
 num_df = homesite.data[sapply(homesite.data, is.numeric)]
 linear.matrix <- as.matrix(num_df)
 comboInfo <- findLinearCombos(linear.matrix)
-comboInfo
+comboInfo # 
 ```
 ![all-lc](./images/all-lc.png)
 
 ```{r, eval = True}
+# drop features which are linear combinations of other features
+
 drops <- c("PersonalField65",
            "PersonalField67",
            "PersonalField80",
@@ -638,23 +636,18 @@ USAMap <- ggmap(get_googlemap(center = usa_center,
                               zoom = 4), 
                extent="normal")
 
-
 US_states <- names(table(homesite.data$GeographicField64))
-
 
 ca <- geocode(US_states[1])
 il <- geocode(US_states[2])
 nj <- geocode(US_states[3])
 tx <- geocode(US_states[4])
 
-
 locations <- homesite.data$GeographicField64
-
 
 geo_data <- as.data.frame(locations)
 geo_data$QC <- dependent_var
 geo_arrange <- arrange(geo_data, locations)
-
 
 # CA analysis
 only_ca <- which(geo_arrange$locations == "CA")
@@ -663,14 +656,12 @@ ca_df <- arrange(ca_df, QC)
 ca_0 <- length(which(ca_df$QC == 0))
 ca_1 <- dim(ca_df)[1] - ca_0
 
-
 # IL analysis
 only_il <- which(geo_arrange$locations == "IL")
 il_df <- geo_arrange[only_il, ]
 il_df <- arrange(il_df, QC)
 il_0 <- length(which(il_df$QC == 0))
 il_1 <- dim(il_df)[1] - il_0
-
 
 # NJ analysis
 only_nj <- which(geo_arrange$locations == "NJ")
@@ -679,7 +670,6 @@ nj_df <- arrange(nj_df, QC)
 nj_0 <- length(which(nj_df$QC == 0))
 nj_1 <- dim(nj_df)[1] - nj_0
 
-
 # TX analysis
 only_tx <- which(geo_arrange$locations == "TX")
 tx_df <- geo_arrange[only_tx, ]
@@ -687,12 +677,10 @@ tx_df <- arrange(tx_df, QC)
 tx_0 <- length(which(tx_df$QC == 0))
 tx_1 <- dim(tx_df)[1] - tx_0
 
-
 longs <- c(ca$lon, il$lon, nj$lon, tx$lon)
 lats <- c(ca$lat, il$lat, nj$lat, tx$lat)
 zer <- c(ca_0, il_0, nj_0, tx_0)
 one <- c(ca_1, il_1, nj_1, tx_1)
-
 
 xc <- data.frame(longs, lats, zer)
 yc <- data.frame(longs, lats, one)
@@ -713,7 +701,7 @@ names(final_xc) <- c("State","Longitude","Latitude","Zero","One",
                      "r0=Zero/(min(One))", "r1=One/(min(One))")
 View(final_xc)
 ```
-![map-table](./images/map-table.png)
+![map-table](./images/QC_map_table.png)
 
 
 ```{r}
@@ -729,7 +717,7 @@ USAMap + geom_point(data = xc,
            alpha=0.4, size = (yc$one/4121)) + 
     ggtitle("Quote Conversion Per State")
 ```
-![gg-map](./images/gg-map.png)
+![gg-map](./images/QC_map.png)
 
 
 ## Univariate Analysis of Categorical Features
