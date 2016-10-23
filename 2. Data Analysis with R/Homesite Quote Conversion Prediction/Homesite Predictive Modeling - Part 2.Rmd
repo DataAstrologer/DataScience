@@ -1,0 +1,10 @@
+---
+title: "Homesite Quote Conversion"
+author: "Riddhik Rathod"
+date: "10/16/2016"
+output: html_document
+---
+
+# Homesite Quote Conversion Prediction
+
+Differnt samples are selected from the training data and a predicitve model is first fitted on the sampled data. 

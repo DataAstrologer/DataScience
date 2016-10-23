@@ -1,7 +1,6 @@
 # Data Analysis with R
 
-The folders above contain the following analysis:
+**Homesite Quote Conversion Prediction** - Homesite Quote Conversion involves building of a **predictive model** based on anonymized database information of customer & sales activity to successfully classify customers who would purchase a quoted insurance plan. Accurately predicting the conversion rate would help Homesite Insurance to better understand the impact of proposed pricing changes & maintain an ideal portfolio of customer segments. Homesite prediction is a Kaggle competition and the dataset is available on Kaggle: https://www.kaggle.com/c/homesite-quote-conversion 
 
-**Homesite Quote Conversion Prediction** - The Homesite Quote Conversion problem is a dataset from **Kaggle** (https://www.kaggle.com/c/homesite-quote-conversion). Based on anonymized database information on customer and sales activity, the Homesite Predictive model predicts which customer will purchase a quoted insurance plan. The complete R code with several visualizations is present in the folder.   
 
-**Social Media Analysis** - The Social Media Analysis folder contains an analysis of the **Facebook page of American Express India**. Data Extraction, Trend Visualization and Sentimental Analysis of the Facebook page are performed using several R packages. Towards the end, various trends are compared between American Express India and Visa India.
+**Social Media Analysis** - Social Media Analysis is the practice of gathering data from various social media outlets and analyzing that data to make business decisions. The most common use of this concept is to mine customer sentiments in order to support marketing and customer service activities. The above folder contains a systematic analysis of the **Facebook** page of **American Express India**. Data is extracted directly from the Amex India Facebook page using R and a trend analysis is performed on the posts, likes and comments. 
