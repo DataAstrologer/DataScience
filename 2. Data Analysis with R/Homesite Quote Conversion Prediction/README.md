@@ -14,7 +14,7 @@ The Homesite quote conversion predictive modeling script contains the R code wit
 
 ## Prediction, Accuracy and Rank
 ![output](./images/output.png)
-![rank](./images/rank.png)
+			![rank](./images/rank.png)
 
 
 **Note:** The model is trained using sample data due to processing power constraints. The above rank is represented for the model trained using sample data. 
