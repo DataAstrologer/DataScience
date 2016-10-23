@@ -1,11 +1,11 @@
 # Homesite Quote Conversion Prediction
 
-The Homesite quote conversion predictive modeling script contains the R code with sample outputs/visualizations of the complete modeling process. It is structured into 3 parts:
+The Homesite quote conversion prediction modeling script contains the R code of the entire modeling process, with sample outputs/visualizations. It is structured into 3 parts:
 * Part 1 - Data preprocessing, exploratory data analysis and data preparation of the **training dataset**.
 * Part 2 - Data preprocessing and data preparation of the **testing dataset**.
 * Part 3 - Model Fitting, Predictions and Accuracy
 
-**Download the dataset**: https://www.kaggle.com/c/homesite-quote-conversion/data
+**Download** the dataset from the following link: https://www.kaggle.com/c/homesite-quote-conversion/data
 
 
 ## Project Worflow & Data
