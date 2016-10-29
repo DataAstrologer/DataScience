@@ -127,7 +127,7 @@ View(head(likes))
 ![amex_likes](./images/amex_likes.png)
 
 
-## Analysis of Likes
+## ANALYSIS OF LIKES
 
 Here, we will look at the posts having the most number of likes and the users who have liked the most number of posts. We will use a simple bar plot to show the top 10 liked posts and top 10 users who have liked the most number of posts. We will import the **likes.csv** file for the analysis.
 
@@ -171,7 +171,7 @@ gg + geom_bar(stat = "identity", alpha = 0.75, colour = "black") +
 **NOTE**: It is possible to show the user name instead of the ID but this will require text preprocessing (not shown here).
 
 
-## Analysis of Posts
+## ANALYSIS OF POSTS
 
 Lets import the **amex_posts.csv** file to do some basic analysis on the Amex Posts.
 ```{r}
@@ -230,7 +230,7 @@ gg + geom_bar(stat = "identity", alpha = 0.8, colour ="black", position = "dodge
 ```
 ![freq_month](./images/freq_month.png)
 
-## Word Cloud
+## WORD CLOUD
 
 We will now create a word cloud for the **comments.csv** file in order to find out what the users of the Amex page talk about the most. However, before we do that, we will be going through some basic steps of cleaning text data and removing the unwanted words. The following steps for text cleaning are shown in the code below:
 * Removing all non-alphanumeric characters
@@ -332,7 +332,7 @@ wordcloud(words = names(word.freq),
 ```
 ![word cloud](./images/wc.png)
 
-## Sentiment Analysis
+## SENTIMENT ANALYSIS
 
 In order to perform Sentiment Analysis, we will compare each of the words in the cleaned corpus above to the **AFINN-111 lexicon**, and give each word a score.  AFINN is a list of English words rated for valence with an integer between minus five (negative) and plus five (positive). For more information on this lexicon and to download the lexicon, please refer to the link: http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010 
 
@@ -455,10 +455,10 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
 ![sentiment plot](./images/sentiment_plot.png)
 
 
-## Topic Modeling
+## TOPIC MODELING
 
 
-## Sentiment Analysis for Topic
+## SENTIMENT ANALYSIS FOR TOPICS
 
 
-## Brand Comparison - Amex vs. Visa
+## BRAND COMPARISON - AMEX VS. VISA
