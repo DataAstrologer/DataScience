@@ -168,12 +168,12 @@ gg + geom_bar(stat = "identity", alpha = 0.75, colour = "black") +
 ```
 ![top_users](./images/top_users.png)
 
-**NOTE**: It is possible to show the name of the person instead of the ID but this will require text preprocessing (not shown here).
+**NOTE**: It is possible to show the user name instead of the ID but this will require text preprocessing (not shown here).
 
 
 ## Analysis of Posts
 
-Let???s import the **amex_posts.csv** file to do some basic analysis on the Amex Posts.
+Lets import the **amex_posts.csv** file to do some basic analysis on the Amex Posts.
 ```{r}
 post <- read.csv(file.choose(), header = T)[, -1] #amex_posts.csv file
 ```
@@ -197,7 +197,7 @@ View(max_shares_post[, c(3, 4, 5, 7, 10)])
 ```
 ![max_shares](./images/max_shares.png)
 
-Now, we can check the most recent post given a time period (say 2016-06-06). In order to do this, we would first need to preprocess the created_time feature by converting it into an R date format.  The function below formats the created_time feature to an R date format. 
+Now, we can check the most recent post given a time period (say 2016-06-06). In order to do this, we would first need to preprocess the ```created_time``` feature by converting it into an R date format.  The function below formats the created_time feature to an R date format. 
 ```{r}
 format.facebook.date <- function(datestring) {
     date <- as.POSIXct(datestring, format = "%Y-%m-%dT%H:%M:%S+0000", tz = "GMT")
@@ -251,7 +251,7 @@ comments <- read.csv(file.choose(), header = T) #amex_comments.csv file
 messages <- comments$message 
 ```
 
-The ```gsub("[^a-zA-Z0-9]","", x)``` command replaces everything that is not in the specified set of 62 characters (lower case a to z, upper case A to Z, and digits 0 to 9) by an empty string. Additionally, the space between the non-empty strings is preserved. 
+The ```gsub("[^a-zA-Z0-9]","", x)``` command below replaces everything that is not in the specified set of 62 characters (lower case a to z, upper case A to Z, and digits 0 to 9) by an empty string. Additionally, the space between the non-empty strings is preserved. 
 ```{r}
 # remove non-alphanumeric characters first
 messages <- gsub(" +"," ",gsub("^ +","",gsub("[^a-zA-Z0-9 ]","", messages)))
@@ -285,14 +285,14 @@ clean_corpus <- tm_map(clean_corpus, removeWords, stopwords())
 clean_corpus <- tm_map(clean_corpus, stripWhitespace)
 ```
 
-View the cleaned corpus as a dataframe of messages
+View the cleaned corpus as a dataframe of messages.
 ```{r}
 dataframe <- data.frame(text = unlist(sapply(clean_corpus, `[`, "content")), stringsAsFactors = F)
 View(head(dataframe, 15))
 ```
 ![clean_df](./images/clean_df.png)
 
-Remove more stop words after examining clean corpus in detail
+Remove more stop words after examining the cleaned corpus in detail.
 ```{r}
 # remove stop words and nonsensical words after examining the corpus
 # also removing obvious high-frequency words such as amex, card, american, express, etc.
@@ -308,7 +308,7 @@ Now, we can tokenize the corpus by creating a Term Document Matrix. A token is a
 tdm <- TermDocumentMatrix(clean_corpus, control = list(wordLengths = c(3, 15)))
 ```
 
-Now, we calculate the frequency of each of the words by taking a summation of the rows and plot the word cloud. In order to get the frequency, we convert the TermDocumentMatrix to a matrix.
+Now, we calculate the frequency of each of the words by taking a summation of the rows and plot the word cloud. In order to get the frequency, we convert the Term Document Matrix to a matrix.
 ```{r}
 #install.packages("RcolorBrewer")
 #install.packages("wordcloud")
@@ -344,17 +344,25 @@ names(afinn_list) <- c('word', 'score')
 afinn_list$word <- tolower(afinn_list$word)
 ```
 
-The function ```sentimentScore()``` below calculates the sentiment score for each word of the comment and then classifies the word into one of the 4 buckets ??? very negative, negative, positive, very positive. Each word is compared to the word in the lexicon. If the words does not match to the word in the lexicon, it is not considered.
+The function ```sentimentScore()``` below calculates the sentiment score for each word of the comment and then classifies the word into one of the 4 buckets: very negative, negative, positive, very positive. Each word is compared to the word in the lexicon. If the words does not match to the word in the lexicon, it is not considered.
 
 First, we create the 4 buckets of words and add known words to the lexicon which are not present in the lexicon.
 ```{r}
 vNegTerms <- afinn_list$word[afinn_list$score==-5 | afinn_list$score==-4]
 
-negTerms <- c(afinn_list$word[afinn_list$score==-3 | afinn_list$score==-2 | afinn_list$score==-1], "second-rate", "moronic", "third-rate", "flawed", "juvenile", "boring", "distasteful", "ordinary", "disgusting", "senseless", "static", "brutal", "confused", "disappointing", "bloody", "silly", "tired", "predictable", "stupid", "uninteresting", "trite", "uneven", "outdated", "dreadful", "bland")
+negTerms <- c(afinn_list$word[afinn_list$score==-3 | afinn_list$score==-2 | afinn_list$score==-1], 
+              "second-rate", "moronic", "third-rate", "flawed", "juvenile", "boring", "distasteful", 
+              "ordinary", "disgusting", "senseless", "static", "brutal", "confused", "disappointing", 
+              "bloody", "silly", "tired", "predictable", "stupid", "uninteresting", "trite", "uneven", 
+              "outdated", "dreadful", "bland")
 
-posTerms <- c(afinn_list$word[afinn_list$score==3 | afinn_list$score==2 | afinn_list$score==1], "first-rate", "insightful", "clever", "charming", "comical", "charismatic", "enjoyable", "absorbing", "sensitive", "intriguing", "powerful", "pleasant", "surprising", "thought-provoking", "imaginative", "unpretentious")
+posTerms <- c(afinn_list$word[afinn_list$score==3 | afinn_list$score==2 | afinn_list$score==1], 
+              "first-rate", "insightful", "clever", "charming", "comical", "charismatic", 
+              "enjoyable", "absorbing", "sensitive", "intriguing", "powerful", "pleasant", 
+              "surprising", "thought-provoking", "imaginative", "unpretentious")
 
-vPosTerms <- c(afinn_list$word[afinn_list$score==5 | afinn_list$score==4], "uproarious", "riveting", "fascinating", "dazzling", "legendary")   
+vPosTerms <- c(afinn_list$word[afinn_list$score==5 | afinn_list$score==4], 
+               "uproarious", "riveting", "fascinating", "dazzling", "legendary")   
 ```
 
 In order to get the sentiment scores of the words of the comments, we will drop the comments which are empty or null. 
@@ -445,3 +453,12 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
     scale_fill_manual(values = c("red","green", "red","green"))
 ```
 ![sentiment plot](./images/sentiment_plot.png)
+
+
+## Topic Modeling
+
+
+## Sentiment Analysis for Topic
+
+
+## Brand Comparison - Amex vs. Visa
