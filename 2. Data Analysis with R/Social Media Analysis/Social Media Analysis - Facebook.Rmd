@@ -496,4 +496,131 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
 
 ## BRAND COMPARISON - AMEX VS. VISA
 
-Using the same data extraction code above, the posts, likes and comments for Visa (India) Facebook page were downloaded. A trend comparison for the likes, shares and comments is shown below to compare the brand popularity.
+Using the same data extraction code above, the posts/likes/comments for the **Visa (India) Facebook page** were downloaded and saved to a csv file. 
+
+A trend comparison for the likes, shares and comments is shown below to compare the brand popularity. The function ```getTrend()``` calculates the sum of each of these metrics for Amex and Visa per month in order to make the comparison possible. 
+
+```{r}
+# install.packages("grid")
+# install.packages("gridExtra")
+library(grid)
+library(gridExtra)
+library(ggplot2)
+
+# import files
+amex_post <- read.csv(file.choose(), header = T) # amex_posts.csv
+visa_post <- read.csv(file.choose(), header = T) # visa_posts.csv
+```
+```{r}
+# convert Facebook date format to R date format
+format.facebook.date <- function(datestring) {
+    date <- as.POSIXct(datestring, format = "%Y-%m-%dT%H:%M:%S+0000", tz = "GMT")
+}
+
+# add year-month as a new feature
+visa_post$datetime <- format.facebook.date(visa_post$created_time)
+visa_post$month <- format(visa_post$datetime, "%Y-%m")
+amex_post$datetime <- format.facebook.date(amex_post$created_time)
+amex_post$month <- format(amex_post$datetime, "%Y-%m")
+```
+```{r}
+# get the total number of posts/likes/comments per month for a file name and metric
+getTrend <- function(file, metric) {
+    trend <- as.data.frame(table(file$month))
+    counter <- 0
+    total <- c()
+    strr = paste0(metric, "_count")
+    
+    for(i in 1:nrow(table(file$month))){
+        sum_comment = 0
+        for(j in 1:trend$Freq[i]){
+            sum_comment <- sum_comment + file[[strr]][nrow(file) - counter]
+            counter <- counter + 1
+        }
+        total[i] <- sum_comment
+    }
+    
+    return(total)
+}
+
+amex <- as.data.frame(table(amex_post$month))
+visa <- as.data.frame(table(visa_post$month))
+
+# get likes for amex
+amex["total_likes"] <- NA
+amex_likes_total <- getTrend(amex_post, "likes")
+amex$total_likes <- amex_likes_total
+
+# get shares for amex
+amex["total_shares"] <- NA
+amex_shares_total <- getTrend(amex_post, "shares")
+amex$total_shares <- amex_shares_total
+
+# get comments for amex
+amex["total_comments"] <- NA
+amex_total_comments <- getTrend(amex_post, "comments")
+amex$total_comments <- amex_total_comments
+
+# get likes for visa
+visa["total_likes"] <- NA
+visa_likes_total <- getTrend(visa_post, "likes")
+visa$total_likes <- visa_likes_total
+
+# get shares for visa
+visa["total_shares"] <- NA
+visa_shares_total <- getTrend(visa_post, "shares")
+visa$total_shares <- visa_shares_total
+
+# get comments for visa
+visa["total_comments"] <- NA
+visa_total_comments <- getTrend(visa_post, "comments")
+visa$total_comments <- visa_total_comments
+# dim(visa)
+# dim(amex)
+
+# dropping extra rows (months) in order to compare the same months
+visa <- visa[c(-1,-2,-3,-4), ]
+amex <- amex[-(1:31), ]
+amex <- amex[c(-37,-36,-35), ]
+visa$name <- c(rep("visa",nrow(visa)))
+amex$name <- c(rep("amex", nrow(amex)))
+compare <- rbind(amex, visa)
+# View(compare)
+```
+```{r}
+# Show plots
+gg_l <- ggplot(compare, aes(x = Var1, y = total_likes, 
+                            group = name, colour = name))
+
+gg_c <- ggplot(compare, aes(x = Var1, y = total_comments, 
+                            group = name, colour = name))
+
+gg_s <- ggplot(compare, aes(x = Var1, y = total_shares, 
+                            group = name, colour = name))
+
+likes_plot <- gg_l + geom_line(size = 0.75) + 
+    labs(title = "Comparision of Likes - Amex Vs Visa") +
+    labs(x = NULL) + 
+    theme(axis.text.x = element_text(angle = 90, face = "bold")) + 
+    scale_y_log10("likes per month", 
+                  breaks = c(10, 100, 1000, 10000, 50000))
+
+comments_plot <- gg_c + geom_line(size = 0.75) + 
+    labs(title = "Comparision of Comments - Amex Vs Visa") +
+    labs(x = NULL) + 
+    theme(axis.text.x = element_text(angle = 90, face = "bold")) + 
+    scale_y_log10("comments per month", 
+                  breaks = c(10, 100, 1000, 10000, 50000))
+
+shares_plot <- gg_s + geom_line(size = 0.75) + 
+    labs(title = "Comparision of Shares - Amex Vs Visa") +
+    labs(x = NULL) + 
+    theme(axis.text.x = element_text(angle = 90, face = "bold")) + 
+    scale_y_log10("shares per month",
+                  breaks = c(10, 100, 1000, 10000, 50000))
+
+grid.arrange(likes_plot,
+             shares_plot, 
+             comments_plot, 
+             ncol = 1)
+```
