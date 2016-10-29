@@ -624,3 +624,4 @@ grid.arrange(likes_plot,
              comments_plot, 
              ncol = 1)
 ```
+![brand analysis](./images/brand_analysis.png)
