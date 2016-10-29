@@ -262,9 +262,8 @@ messages[1:3]
 ```{r}
 # Create a corpus
 myCorpus <- Corpus(VectorSource(messages)) # create corpus
-inspect(myCorpus [1:3]) # inspect first 3 elements of the corpus
+# inspect(myCorpus [1:3]) # inspect first 3 elements of the corpus
 ```
-![corpus](./images/corpus.png)
 
 Now, we will use the ```tm_map()``` function for text cleaning.
 ```{r}
@@ -296,7 +295,15 @@ Remove more stop words after examining the cleaned corpus in detail.
 ```{r}
 # remove stop words and nonsensical words after examining the corpus
 # also removing obvious high-frequency words such as amex, card, american, express, etc.
-clean_corpus <- tm_map(clean_corpus, removeWords, c(stopwords('english'), "uue", "uuue", "uuuu", "uua", "udu", "uau","ucuuu", "uuuu", "uuu", "nnnn", "uuauub","uuauu","ueuu","can", "will", "get", "amex", "card", "american", "express", "uub", "also", "just", "didnt", "till", "eue", "ufu", "since", "now", "let", "using", "hii","make", "even", "dont", "sure", "uu", "hi", "th", "oh", "uuucu", "ne", "ive", "ur", "ki", "ko", "uuub", "uubu"))
+clean_corpus <- tm_map(clean_corpus, removeWords, c(stopwords('english'), "uue", "uuue", "uuuu", 
+                                                    "uua", "udu", "uau","ucuuu", "uuuu", "uuu", 
+                                                    "nnnn", "uuauub","uuauu","ueuu","can", "will", 
+                                                    "get", "amex", "card", "american", "express", 
+                                                    "uub", "also", "just", "didnt", "till", "eue", 
+                                                    "ufu", "since", "now", "let", "using", "hii",
+                                                    "make", "even", "dont", "sure", "uu", "hi", 
+                                                    "th", "oh", "uuucu", "ne", "ive", "ur", "ki", 
+                                                    "ko", "uuub", "uubu"))
 
 # strip the extra whitespace
 clean_corpus <- tm_map(clean_corpus, stripWhitespace)
@@ -305,7 +312,7 @@ clean_corpus <- tm_map(clean_corpus, stripWhitespace)
 Now, we can tokenize the corpus by creating a Term Document Matrix. A token is a single element in a text string, in most cases a word. The Term Document Matrix gives the frequency of each word per document/message. 
 ```{r}
 # remove words having less than 2 letters and greater than 15 letters
-tdm <- TermDocumentMatrix(clean_corpus, control = list(wordLengths = c(3, 15)))
+tdm <- TermDocumentMatrix(clean_corpus, control = list(wordLengths = c(2, 15)))
 ```
 
 Now, we calculate the frequency of each of the words by taking a summation of the rows and plot the word cloud. In order to get the frequency, we convert the Term Document Matrix to a matrix.
