@@ -133,7 +133,10 @@ Here, we will look at the posts having the most number of likes and the users wh
 
 ```{r}
 # install.packages("ggplot2")
+# install.packages("scales")
 library(ggplot2)
+library(scales)
+
 likes <- read.csv(file.choose(), header = T)[, -1] #amex_likes.csv file
 ```
 ```{r}
@@ -229,6 +232,29 @@ gg + geom_bar(stat = "identity", alpha = 0.8, colour ="black", position = "dodge
     theme(axis.text.x = element_text(angle = 90, face = "bold"))
 ```
 ![freq_month](./images/freq_month.png)
+
+Lastly, the code below illustrates how to aggregate the metrics by month in order to compute the median count of likes/comments/shares per post.
+```{r}
+# aggregate metric counts over month
+aggregate.metric <- function(metric) {
+    m <- aggregate(posts[[paste0(metric, "_count")]], list(month = posts$month), 
+                   mean)
+    m$month <- as.Date(paste0(m$month, "-15"))
+    m$metric <- metric
+    return(m)
+}
+
+# create data frame with average metric counts per month
+df.list <- lapply(c("likes", "comments", "shares"), aggregate.metric)
+df <- do.call(rbind, df.list)
+
+ggplot(df, aes(x = month, y = x, group = metric)) + geom_line(aes(color = metric)) + 
+    scale_y_log10("Average count per post", breaks = c(10, 100, 1000, 10000, 50000)) + 
+    theme_bw() + 
+    theme(axis.title.x = element_blank())
+```
+![agg_counts](./images/agg_counts.png)
+
 
 ## WORD CLOUD
 
@@ -469,3 +495,5 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
 
 
 ## BRAND COMPARISON - AMEX VS. VISA
+
+Using the same data extraction code above, the posts, likes and comments for Visa (India) Facebook page were downloaded. A trend comparison for the likes, shares and comments is shown below to compare the brand popularity.
