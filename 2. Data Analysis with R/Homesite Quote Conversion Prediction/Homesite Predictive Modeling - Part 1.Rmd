@@ -64,6 +64,7 @@ CrossTable(dependent_var, digits = 2)
 ![percent_distribution](./images/pd.png)
 
 
+
 ## Snapshot of the dataset
 ```{r, eval=T}
 str(homesite.data, 
