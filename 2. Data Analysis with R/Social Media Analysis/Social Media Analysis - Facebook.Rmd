@@ -110,13 +110,13 @@ posts <- read.csv(file.choose(), header = T) # amex_posts.csv
 comments <- read.csv(file.choose(), header = T) # amex_comments.csv
 likes <- read.csv(file.choose(), header = T) # amex_likes.csv
 
-head(posts[, c(1,2,4,5,8,9,10)], 10)
+head(posts[, c(1, 2, 4, 5, 8, 9, 10)], 10)
 ```
 ![amex_posts](./images/amex_head.png)
 
 
 ```{r}
-View(head(comments[, c(2,3,6,7)]))
+View(head(comments[, c(2, 3, 6, 7)]))
 ```
 ![amex_comments](./images/amex_comments.png)
 
@@ -147,7 +147,7 @@ n <- 10 # change number to get top n
 top_posts <- posts.df[1:n, ] # top n posts
 
 gg <- ggplot(top_posts, aes(Var1, Freq, fill  = Var1))
-gg + geom_bar(stat="identity", alpha = 0.75, colour = "black")  + 
+gg + geom_bar(stat = "identity", alpha = 0.75, colour = "black")  + 
     labs(x = "Post ID") + 
     labs(y = "Likes") +
     labs(title = "Top N most liked Posts (ID)") +
@@ -381,20 +381,20 @@ The function ```sentimentScore()``` below calculates the sentiment score for eac
 
 First, we create the 4 buckets of words and add known words to the lexicon which are not present in the lexicon.
 ```{r}
-vNegTerms <- afinn_list$word[afinn_list$score==-5 | afinn_list$score==-4]
+vNegTerms <- afinn_list$word[afinn_list$score == -5 | afinn_list$score == -4]
 
-negTerms <- c(afinn_list$word[afinn_list$score==-3 | afinn_list$score==-2 | afinn_list$score==-1], 
+negTerms <- c(afinn_list$word[afinn_list$score == -3 | afinn_list$score == -2 | afinn_list$score == -1], 
               "second-rate", "moronic", "third-rate", "flawed", "juvenile", "boring", "distasteful", 
               "ordinary", "disgusting", "senseless", "static", "brutal", "confused", "disappointing", 
               "bloody", "silly", "tired", "predictable", "stupid", "uninteresting", "trite", "uneven", 
               "outdated", "dreadful", "bland")
 
-posTerms <- c(afinn_list$word[afinn_list$score==3 | afinn_list$score==2 | afinn_list$score==1], 
+posTerms <- c(afinn_list$word[afinn_list$score == 3 | afinn_list$score == 2 | afinn_list$score == 1], 
               "first-rate", "insightful", "clever", "charming", "comical", "charismatic", 
               "enjoyable", "absorbing", "sensitive", "intriguing", "powerful", "pleasant", 
               "surprising", "thought-provoking", "imaginative", "unpretentious")
 
-vPosTerms <- c(afinn_list$word[afinn_list$score==5 | afinn_list$score==4], 
+vPosTerms <- c(afinn_list$word[afinn_list$score == 5 | afinn_list$score == 4], 
                "uproarious", "riveting", "fascinating", "dazzling", "legendary")   
 ```
 
@@ -489,6 +489,7 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
 
 
 ## TOPIC MODELING
+Add topic modeling theory. In topic modeling we will use the term document matrix.
 
 
 ## SENTIMENT ANALYSIS FOR TOPICS
