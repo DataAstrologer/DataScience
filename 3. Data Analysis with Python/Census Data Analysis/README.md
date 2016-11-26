@@ -6,7 +6,7 @@ The **Census_Data_Analysis.ipynb** file contains the Python code for the entire 
 # Project Workflow and Data Dictionary
 
 The modeling approach has been broken down into the following steps:
-![project workflow](./data/census_data_workflow.png)
+![project workflow](./Data/census_data_workflow.png)
 
 Listing of attributes/features in the dataset and their description:
 * age: continuous.
@@ -27,7 +27,7 @@ Listing of attributes/features in the dataset and their description:
 * **?: missing values**
 
 # Prediction & Accuracy
-![Prediction and Accuracy](./data/accuracy.png)
+![Prediction and Accuracy](./Data/accuracy.png)
 
 # Improvements/Future Work
 * Sophisticated feature engineering based on variable importance.
