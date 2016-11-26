@@ -509,15 +509,15 @@ Reference: https://www.quora.com/What-is-a-good-explanation-of-Latent-Dirichlet-
 
 A very basic example to show how LDA works:
 * Let the documents be as shown below:
-    Document 1 => hi my name is
-    Document 2 => my name is the best
+    * Document 1 => hi my name is
+    * Document 2 => my name is the best
 * Randomly allocate the words of the document to **2 topics**:
-    Topic 1: hi, my, name, best
-    Topic 2: is, the name, is, my
+    * Topic 1: hi, my, name, best
+    * Topic 2: is, the name, is, my
 * For the word **hi**:
-    1) p(topic t | document d) = ?? (since 3 words from document1 are currently assigned to Topic 1)
-    2) p(word w | topic t) = ?? (since hi occurs only in 1 topic)
-* Probability of hi to be assigned to a new topic = ?? * ?? = 3/8
+    * p(topic t | document d) = 3/4 (since 3 words from document1 are currently assigned to Topic 1)
+    * p(word w | topic t) = 1/2 (since hi occurs only in 1 topic)
+* Probability of hi to be assigned to a new topic = 3/4 * 1/2 = 3/8
 
 A few more points on topic modeling:
 * Topic Modeling works best of large texts
@@ -525,9 +525,52 @@ A few more points on topic modeling:
 * The corpus should be cleaned and tokenized before modeling.
 * It is helpful to be familiar with the corpus in order to spot outliers in the topics.  
 
-**Gibbs sampling** works by performing a random walk (path that consists of a succession of random steps) in such a way that reflects the characteristics of a desired distribution of the words. Because the starting point of the walk is chosen at random, it is necessary to discard the first few steps of the walk (as these do not correctly reflect the properties of distribution). This is referred to as the burn-in period. We set the burn-in parameter to 4000. Following the burn-in period, we perform 2000 iterations, taking every 500th iteration for further use. The reason we do this is to avoid correlations between samples. We use 5 different starting points (nstart=5) ??? that is, five independent runs. Each starting point requires a seed integer (this also ensures reproducibility), so I have provided 5 random integers in my seed list.
+**Gibbs sampling** works by performing a random walk (path that consists of a succession of random steps) in such a way that reflects the characteristics of a desired distribution of the words. Because the starting point of the walk is chosen at random, it is necessary to discard the first few steps of the walk (as these do not correctly reflect the properties of distribution). This is referred to as the burn-in period. We set the burn-in parameter to 4000. Following the burn-in period, we perform 2000 iterations, taking every 500th iteration for further use. The reason we do this is to avoid correlations between samples. We use 5 different starting points (nstart=5), i.e., five independent runs. Each starting point requires a seed integer (this also ensures reproducibility), so I have provided 5 random integers in my seed list.
 
-The Document Term Matrix produced above is passed as an input to the LDA algorithm. We will use the ```topicmodels``` package and specifically the ```LDA()``` function with the Gibbs sampling option to create out topic model. 
+The Document Term Matrix (or Term Document Matrix) produced above is passed as an input to the LDA algorithm. We will use the ```topicmodels``` package and specifically the ```LDA()``` function with the Gibbs sampling option to create out topic model. 
+
+```{r}
+#install.packages("topicmodels")
+library(topicmodels)
+
+# create a document term matrix for the corpus and remove empty documents
+dtm <- DocumentTermMatrix(clean_corpus, control = list(wordLengths = c(2, 15)))
+row_total <- apply(dtm, 1, sum)
+dtm.new <- dtm[row_total > 0 ,]
+```
+```{r}
+#Set parameters for Gibbs sampling
+burnin <- 4000
+iter <- 2000
+thin <- 500
+seed <-list(1, 2, 3, 500, 1000)
+nstart <- 5
+
+#Number of topics
+k <- 5
+```
+```{r}
+#Run LDA using Gibbs sampling
+ldaOut <-LDA(dtm.new, k, method = "Gibbs", 
+             control = list(nstart = nstart, 
+                            seed = seed, 
+                            burnin = burnin, 
+                            iter = iter, 
+                            thin = thin))
+
+ldaOut.topics <- as.matrix(topics(ldaOut))
+
+#probabilities associated with each topic assignment
+topicProbabilities <- as.data.frame(ldaOut@gamma)
+head(topicProbabilities)
+
+#top 5 terms in each topic
+ldaOut.terms <- as.matrix(terms(ldaOut,5))
+ldaOut.terms
+```
+![topics](./images/topics.png)
+
+Reference: https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-topic-modeling-using-r/  
 
 
 ## SENTIMENT ANALYSIS FOR TOPICS
