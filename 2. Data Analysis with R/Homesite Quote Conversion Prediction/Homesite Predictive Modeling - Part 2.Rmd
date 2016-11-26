@@ -7,4 +7,522 @@ output: html_document
 
 # Homesite Quote Conversion Prediction
 
-Differnt samples are selected from the training data and a predicitve model is first fitted on the sampled data. 
+The preprocessing techniques shown in Part 1 are applied to the testing dataset. The code structure and format is identical to that of Part 1. 
+
+```{r}
+library(caret)
+library(gmodels)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(xts)
+library(Rmisc)
+library(zoo)
+library(dplyr)
+
+rm(list = ls())
+options(stringsAsFactors = FALSE)
+
+# Import
+test <- read.csv("test.csv", 
+                 header = T,
+                 na.strings=c("", " ", "NA"),
+                 stringsAsFactors = F)
+
+
+# GeographicalField64 convert to N
+gf63 <- test$GeographicField63
+gf63_na <- which(is.na(gf63) == T)
+test$GeographicField63[gf63_na] <- 'N'
+
+
+# PropertyField5 convert to N
+table(test$PropertyField5)
+pf5 <- test$PropertyField5
+pf5_na <- which(is.na(pf5) == T)
+test$PropertyField5[pf5_na] <- 'Y'
+table(test$PropertyField5)
+
+
+# PropertyField30 convert to N
+table(test$PropertyField30)
+pf30 <- test$PropertyField30
+pf30_na <- which(is.na(pf30) == T)
+test$PropertyField30[pf30_na] <- 'N'
+table(test$PropertyField30)
+
+
+# PropertyField37 convert to N
+table(test$PropertyField37)
+pf37 <- test$PropertyField37
+pf37_na <- which(is.na(pf37) == T)
+test$PropertyField37[pf37_na] <- 'N'
+table(test$PropertyField37)
+
+
+# Replace NA to -1
+test[is.na(test)] <- -1
+
+
+# Creating new feature to capture -1
+count_neg_1 <- rowSums(test == -1)
+test$count_neg_1 <- count_neg_1
+summary(test$count_neg_1)
+
+
+# Converting characters back to factors
+char_df = test[sapply(test, is.character)]
+char_name <- names(char_df)
+test[, char_name] <- lapply(test[, char_name], factor)
+
+
+# Date Conversion
+dateConversion <- function(datestring) {
+    as.POSIXct(datestring, format = "%Y-%m-%d")
+}
+
+
+# Add 3 new columns to the dataset with year, month and day information
+quote_dates <- dateConversion(test$Original_Quote_Date)
+Original_Quote_Year <- format(quote_dates, "%Y")
+Original_Quote_Month <- format(quote_dates, "%m")
+Original_Quote_Day <- format(quote_dates, "%d")
+test$Original_Quote_Year <- as.factor(Original_Quote_Year)
+test$Original_Quote_Month <- as.factor(Original_Quote_Month)
+test$Original_Quote_Day <- as.factor(Original_Quote_Day)
+Original_Quote_Quarter <- as.yearqtr(quote_dates)
+test$Original_Quote_Quarter <- as.factor(Original_Quote_Quarter)
+Original_Quote_Week <- as.numeric(format(quote_dates, "%U"))
+test$Original_Quote_Week <- as.factor(Original_Quote_Week)
+
+
+# Drop Original_Quote_Date column
+drops <- "Original_Quote_Date"
+test = test[, !(names(test) %in% drops)]
+
+
+#Drop zv and near-zv columns
+drops <- c("PropertyField6", 
+           "GeographicField10A", 
+           "GeographicField10B",
+           "PropertyField20",
+           "PropertyField9")
+
+test = test[, !(names(test) %in% drops)]
+
+
+# Drop Linear Combinations
+drops <- c("PersonalField65",
+           "PersonalField67",
+           "PersonalField80",
+           "PersonalField81",
+           "PersonalField82")
+
+test = test[, !(names(test) %in% drops)]
+
+
+# Mergers
+factor_df <- test[sapply(test,
+                         is.factor)]
+
+{
+    levels(test$Field6)[levels(test$Field6) == "C"] <- "CD"
+    levels(test$Field6)[levels(test$Field6) == "D"] <- "CD"
+}
+
+
+{
+    levels(test$CoverageField8)[levels(test$CoverageField8) == "W"] <- "WZUV"
+    levels(test$CoverageField8)[levels(test$CoverageField8) == "Z"] <- "WZUV"
+    levels(test$CoverageField8)[levels(test$CoverageField8) == "U"] <- "WZUV"
+    levels(test$CoverageField8)[levels(test$CoverageField8) == "V"] <- "WZUV"
+}
+
+
+{
+    levels(test$CoverageField9)[levels(test$CoverageField9) == "L"] <- "LIBCH"
+    levels(test$CoverageField9)[levels(test$CoverageField9) == "I"] <- "LIBCH"
+    levels(test$CoverageField9)[levels(test$CoverageField9) == "B"] <- "LIBCH"
+    levels(test$CoverageField9)[levels(test$CoverageField9) == "C"] <- "LIBCH"
+    levels(test$CoverageField9)[levels(test$CoverageField9) == "H"] <- "LIBCH"
+}
+
+
+{
+    levels(test$SalesField7)[levels(test$SalesField7) == "T"] <- "TP"
+    levels(test$SalesField7)[levels(test$SalesField7) == "P"] <- "TP"
+}
+
+
+{
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZU"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZP"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XY"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZV"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XV"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XN"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZB"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XF"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZI"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XT"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XU"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZS"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZO"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZQ"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZL"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "XG"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "YG"] <- "ZZXX"
+    levels(test$PersonalField16)[levels(test$PersonalField16) == "ZM"] <- "ZZXX"
+}
+
+
+{
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XK"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YU"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZH"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XU"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YX"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZF"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZR"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZL"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZS"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XI"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XE"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XP"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZC"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZW"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YH"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YS"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XQ"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZO"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YK"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XX"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YM"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YT"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZD"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZG"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YE"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XC"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZU"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YI"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YQ"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZM"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XT"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZT"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YW"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YG"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XD"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XM"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YP"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZB"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XY"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XO"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XJ"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XW"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YZ"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XF"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "XZ"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "YO"] <- "XYZXYZ"
+    levels(test$PersonalField17)[levels(test$PersonalField17) == "ZJ"] <- "XYZXYZ"
+}
+
+
+{
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XW"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZL"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZQ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XU"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZM"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XZ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZK"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YL"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XK"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XP"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZE"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZJ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XH"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZV"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XT"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XQ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZR"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZH"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YJ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZA"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZN"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XY"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZC"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XO"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZD"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YK"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XL"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XI"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZS"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZO"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XJ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YO"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XN"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XM"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YR"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YQ"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "YM"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XD"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XX"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XV"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZB"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZI"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "ZG"] <- "XYZOO"
+    levels(test$PersonalField18)[levels(test$PersonalField18) == "XB"] <- "XYZOO"
+}
+
+
+{
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZU"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZE"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZH"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XT"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XV"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XW"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZB"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XQ"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "YN"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZD"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XM"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZK"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XU"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XE"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XJ"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XR"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZP"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XO"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZL"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XY"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZM"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "YL"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZG"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XS"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZR"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XK"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "YG"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZJ"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZI"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XH"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XN"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XI"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XG"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XP"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "YK"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZW"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XF"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "YI"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "YE"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZO"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XZ"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZC"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "XL"] <- "PF19"
+    levels(test$PersonalField19)[levels(test$PersonalField19) == "ZS"] <- "PF19"
+}
+
+
+{
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "E"] <- "EMPGCB"
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "M"] <- "EMPGCB"
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "P"] <- "EMPGCB"
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "G"] <- "EMPGCB"
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "C"] <- "EMPGCB"
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "B"] <- "EMPGCB"
+    levels(test$PropertyField7)[levels(test$PropertyField7) == "T"] <- "EMPGCB"
+}
+
+
+{
+    levels(test$Original_Quote_Month)[levels(test$Original_Quote_Month) == "08"] <- "0807"
+    levels(test$Original_Quote_Month)[levels(test$Original_Quote_Month) == "07"] <- "0807"
+}
+
+
+{
+    levels(test$Original_Quote_Day)[levels(test$Original_Quote_Day) == "23"] <- "day"
+    levels(test$Original_Quote_Day)[levels(test$Original_Quote_Day) == "25"] <- "day"    
+    levels(test$Original_Quote_Day)[levels(test$Original_Quote_Day) == "29"] <- "day"
+    levels(test$Original_Quote_Day)[levels(test$Original_Quote_Day) == "04"] <- "day"  
+    levels(test$Original_Quote_Day)[levels(test$Original_Quote_Day) == "26"] <- "day"
+}
+
+
+{
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2012 Q4"] <- "2012_Q4"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2013 Q1"] <- "2013_Q1"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2013 Q2"] <- "2013_Q2"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2013 Q3"] <- "2013_Q3"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2013 Q4"] <- "2013_Q4"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2014 Q1"] <- "2014_Q1"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2014 Q2"] <- "Q2Q2"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2014 Q3"] <- "2014_Q3"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2014 Q4"] <- "2014_Q4"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2015 Q1"] <- "2015_Q1"
+    levels(test$Original_Quote_Quarter)[levels(test$Original_Quote_Quarter) == "2015 Q2"] <- "Q2Q2"    
+}
+
+
+{
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "31"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "22"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "25"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "30"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "28"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "33"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "51"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "32"] <- "mWeek"
+    levels(test$Original_Quote_Week)[levels(test$Original_Quote_Week) == "43"] <- "mWeek"
+}
+
+
+# Dummy Variable
+factor_df = test[sapply(test, is.factor)]
+drops <- names(factor_df)
+
+dmy1 <- dummyVars("~Field12+
+                  PersonalField7+
+                  PropertyField3+
+                  PropertyField4+
+                  PropertyField5+
+                  PropertyField14+
+                  PropertyField28+
+                  PropertyField30+
+                  PropertyField31+
+                  PropertyField32+
+                  PropertyField33+
+                  PropertyField34+
+                  PropertyField36+
+                  PropertyField37+
+                  PropertyField38+
+                  GeographicField63+
+                  GeographicField64+
+                  Original_Quote_Year", 
+                  data = factor_df)
+
+
+trsf1 <- data.frame(predict(dmy1, 
+                            newdata = factor_df))
+
+
+trsf1 <- rename(trsf1, PersonalField7Neg1 = PersonalField7..1)
+trsf1 <- rename(trsf1, 
+                PropertyField3Neg1 = PropertyField3..1,
+                PropertyField4Neg1 = PropertyField4..1,
+                PropertyField32Neg1 = PropertyField32..1,
+                PropertyField34Neg1 = PropertyField34..1,
+                PropertyField36Neg1 = PropertyField36..1,
+                PropertyField38Neg1 = PropertyField38..1)
+
+#names(trsf1)
+
+test = cbind(test, 
+             trsf1)
+
+
+dmy2 <- dummyVars("~Field6+
+                  Field10+
+                  CoverageField8+
+                  CoverageField9+
+                  SalesField7+
+                  PersonalField16+
+                  PersonalField17+
+                  PersonalField18+
+                  PersonalField19+
+                  PropertyField7+
+                  Original_Quote_Month+
+                  Original_Quote_Day+
+                  Original_Quote_Quarter+
+                  Original_Quote_Week", 
+                  data = factor_df)
+
+trsf2 <- data.frame(predict(dmy2, 
+                            newdata = factor_df))
+
+#names(trsf2)
+
+test = cbind(test, 
+             trsf2)
+
+test = test[, !(names(test) %in% drops)]
+
+
+# linear combination drops
+drops <- c("Field6.K", "Field10.564",
+           "Field10.935","Field10.965",
+           "CoverageField9.K","PersonalField16.ZW",
+           "PersonalField17.ZA","PersonalField17.ZE",
+           "PersonalField17.ZV","PersonalField18.XG",
+           "PersonalField18.XR","PersonalField18.ZW",
+           "PersonalField19.XB","PersonalField19.XD",
+           "PersonalField19.ZV","PropertyField4.Y",
+           "PropertyField5.Y","PropertyField14.D",
+           "PropertyField28.D","PropertyField30.Y",
+           "PropertyField31.O","PropertyField32.Y",
+           "PropertyField33.H","PropertyField34Neg1",
+           "PropertyField34.Y","PropertyField36.Y",
+           "PropertyField37.Y","PropertyField38.Y",
+           "PropertyField7.S","GeographicField64.TX",
+           "PersonalField7.Y","PropertyField3.Y",
+           "PropertyField36Neg1", "GeographicField63.Y",
+           "Original_Quote_Year.2015", "Field6.J",
+           "Field10.1.165", "Field10.1.487",
+           "Field10.548" , "CoverageField8.Y" ,
+           "SalesField7.V","Original_Quote_Month.12",
+           "Original_Quote_Day.31","Original_Quote_Quarter.2015_Q1",
+           "Original_Quote_Week.52") 
+
+test = test[, !(names(test) %in% drops)]
+
+# Last step of dummy and lc
+# extract only numeric columns
+num_df = test[sapply(test, is.numeric)]
+dim(num_df)
+
+exclude = c()
+for (i in 1:ncol(num_df)) {
+    if(length(table(num_df[,i])) == 2){
+        exclude = c(exclude, i)
+    }
+}
+num_df = num_df[, -exclude]
+
+nums = c(14, 15, 16, 17, 37, 38, 43, 88, 89, 90, 110, 127, 128)
+
+to_factors <- names(num_df[, nums])
+for (n in to_factors) {
+    test[, n] <- as.factor(test[, n])
+    num_df[, n] <- as.factor(num_df[, n])
+}
+
+levels(num_df$PersonalField66)[levels(num_df$PersonalField66) == "3"] <- "0"
+levels(num_df$PropertyField29)[levels(num_df$PropertyField29) == "10"] <- "-1"
+
+# generate dummy variables
+fac_df <- num_df[sapply(num_df, 
+                        is.factor)]
+
+dumVar <- dummyVars("~.", data = fac_df)
+trsf3 <- data.frame(predict(dumVar,
+                            newdata = fac_df))
+
+trsf3 <- rename(trsf3, PropertyField29.Neg.1 = PropertyField29..1)
+names(trsf3)
+
+test = cbind(test, trsf3)
+test = test[, !(names(test) %in% to_factors)]
+
+# drop linear combinations
+drops <- c("CoverageField5A.25", "CoverageField5B.2",  "CoverageField5B.22",
+           "CoverageField5B.25","CoverageField6A.25", "CoverageField6B.1",
+           "CoverageField6B.6", "CoverageField6B.23", "CoverageField6B.25",
+           "PersonalField8.3","PersonalField9.3","PersonalField13.4",
+           "PersonalField64.2","PersonalField66.2","PersonalField68.1",
+           "PersonalField68.2",  "PersonalField68.3",  "PersonalField68.4",
+           "PropertyField13.3",  "PropertyField29.1",  "PropertyField35.2")
+
+test = test[, !(names(test) %in% drops)]
+
+write.csv(test, 'ready_for_sampling_test.csv')s
+```
