@@ -27,7 +27,7 @@ Listing of attributes/features in the dataset and their description:
 * **?: missing values**
 
 # Prediction & Accuracy
-
+![Prediction and Accuracy](./data/accuracy.png)
 
 # Improvements/Future Work
 * Sophisticated feature engineering based on variable importance.
