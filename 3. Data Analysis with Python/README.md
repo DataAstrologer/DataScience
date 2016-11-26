@@ -2,7 +2,9 @@
 
 The folders above contain the following analysis:
 
-**Census Data Analysis** - This folder contains data analysis and predictive model building for the census dataset from the **UCI Machine Learning Repository** (https://archive.ics.uci.edu/ml/datasets/Adult). Using census data, it is determined if a person makes above $50k per year based on various attributes. Visit the folder to check out my work.
+
+**Census Data Analysis** - Census Data Analysis involves building of a predictive model based on information from the Census bureau database of 1994 in order to **predict whether a person makes over $50000** a year. Various demographic attributes about the population such as the age, education, country, etc. have been provided in the data set to help model the income distribution. For more information on the dataset, please visit the link: https://archive.ics.uci.edu/ml/datasets/Census+Income 
+
 
 **Video Content Analysis** -
 
