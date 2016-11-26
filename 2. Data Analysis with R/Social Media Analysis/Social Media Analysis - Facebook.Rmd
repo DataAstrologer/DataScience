@@ -574,6 +574,179 @@ Reference: https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-
 
 
 ## SENTIMENT ANALYSIS FOR TOPICS
+Now we can choose the top 5 terms from a topic (Topic 5) and find the sentiments related to that particular topic. To determine the sentiments, this time we will use the **Opinion Lexicon** which contains which contains a list of positive and negative sentiment words (around 6800 words) in 2 separate files, without any scores attached to them . To read more about the lexicon, visit this page: https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html . You can download the opinion lexicon (English) from here: https://github.com/jeffreybreen/twitter-sentiment-analysis-tutorial-201107/tree/master/data/opinion-lexicon-English. We will extract all the rows containing the words of the topics and compare them to the Opinion Lexicon.
+
+```{r}
+library(tm)
+library(stringr)
+library(plyr)
+library(ggplot2)
+
+# import files
+posts <- read.csv(file.choose(), header = T) # amex_posts.csv
+comments <- read.csv(file.choose(), header = T) # amex_comments.csv
+positive_words <- scan(file.choose(), what = 'character', comment.char = ';')
+negative_words <-scan(file.choose(), what = 'character', comment.char = ';')
+
+# choose topic from above
+topic <- c("customer", "service", "call", "care", "called")
+
+# create a corpus for the message column of the posts
+messages <- posts$message
+messages <- gsub(" +"," ", gsub("^ +", "", gsub("[^a-zA-Z0-9 ]", "", messages)))
+myCorpus <- Corpus(VectorSource(messages)) 
+
+# clean the corpus
+clean_corpus <- tm_map(myCorpus, PlainTextDocument)
+clean_corpus <- tm_map(clean_corpus, content_transformer(tolower))
+clean_corpus <- tm_map(clean_corpus, removeNumbers)
+clean_corpus <- tm_map(clean_corpus, removePunctuation)
+clean_corpus <- tm_map(clean_corpus, removeWords, stopwords())
+clean_corpus <- tm_map(clean_corpus, stripWhitespace)
+
+# create a dataframe of the clean corpus & add the post id's
+dataframe <- data.frame(text = unlist(sapply(clean_corpus, `[`, "content")), stringsAsFactors = F)
+dataframe["post_id"] <- NA
+dataframe$post_id <- posts$id
+
+# search for the row numbers having the topic words
+counter <- 1
+row_number <- c()
+
+for(i in 1:nrow(dataframe)){
+    ind = 0
+    if(!is.na(dataframe$text[i])){
+        row_token <- scan_tokenizer(dataframe[i, ])
+        for(j in 1:length(row_token)){
+            for(k in 1:length(topic)){
+                if (row_token[j] == topic[k]){
+                    row_number[counter] = i
+                    counter = counter + 1 
+                    ind = 1
+                }
+                if(ind == 1)
+                    break 
+            }
+            if(ind == 1)
+                break   
+        }
+    }
+}
+
+# extract comments of the relevant post ids
+postid <- c()
+p <- c() 
+id <- c()
+
+postid <- dataframe$post[row_number]
+postid <- as.data.frame(postid)
+
+for(i in 1:nrow(comments)){
+    p <- which(comments$post_id == as.character(postid[i, ]))
+    id = c(id, p)
+}
+
+topic_comments <- comments[id, ]
+
+
+# create a corpus for the message column of the comments
+messages <- posts$message
+messages <- gsub(" +"," ", gsub("^ +", "", gsub("[^a-zA-Z0-9 ]", "", messages)))
+myCorpus <- Corpus(VectorSource(messages)) 
+
+
+# clean the corpus
+clean_corpus <- tm_map(myCorpus, PlainTextDocument)
+clean_corpus <- tm_map(clean_corpus, content_transformer(tolower))
+clean_corpus <- tm_map(clean_corpus, removeNumbers)
+clean_corpus <- tm_map(clean_corpus, removePunctuation)
+clean_corpus <- tm_map(clean_corpus, removeWords, stopwords())
+clean_corpus <- tm_map(clean_corpus, stripWhitespace)
+clean_corpus <- tm_map(clean_corpus, removeWords, 
+                       c(stopwords('english'), "uue", "uuue", "uuuu", 
+                         "uua", "udu", "uau","ucuuu", "uuuu", "uuu", 
+                         "nnnn", "uuauub","uuauu","ueuu","can", "will", 
+                         "get", "amex", "card", "american", "express", 
+                         "uub", "also", "just", "didnt", "till", "eue", 
+                         "ufu", "since", "now", "let", "using", "hii",
+                         "make", "even", "dont", "sure", "uu", "hi", 
+                         "th", "oh", "uuucu", "ne", "ive", "ur", "ki", 
+                         "ko", "uuub", "uubu"))
+clean_corpus <- tm_map(clean_corpus, stripWhitespace)
+
+# convert the corpus to a data frame
+dataframe <- data.frame(text = unlist(sapply(clean_corpus, `[`, "content")), stringsAsFactors=F)
+dataframe$text <- as.character(dataframe$text)
+
+# drop comments which are NA or empty
+useful_comments <- dataframe[!is.na(dataframe$text) & (dataframe$text !=""), ]
+dataframe <- as.data.frame(useful_comments, stringsAsFactors = F)
+dataframe$useful_comments <- as.character(dataframe$useful_comments)
+useful_comments <- dataframe[!is.na(dataframe$useful_comments) & (dataframe$useful_comments !=" "), ]
+
+# Now, we can start classifying the words of the comments as positive or negative. The code with the final plot is shown below.
+score.sentiment = function(sentences, pos.words, neg.words)
+{
+    scores = laply(sentences, function(sentence, pos.words, neg.words) {
+        
+        # tokenize words
+        word.list = str_split(sentence, '\\s+')
+        words = unlist(word.list)
+        
+        # compare words to the positive & negative dictionary terms
+        neg.matches = match(words, neg.words)
+        pos.matches = match(words, pos.words)
+        
+        # match() returns the position of the matched term or NA
+        # we just want a TRUE/FALSE:
+        pos.matches = !is.na(pos.matches)
+        neg.matches = !is.na(neg.matches)
+        
+        # and conveniently enough, TRUE/FALSE will be treated as 1/0 by sum():
+        score = sum(pos.matches) - sum(neg.matches)
+        return(score)
+        
+    }, pos.words, neg.words)
+    
+    scores.df = data.frame(score = scores, text = sentences)
+    return(scores.df)
+}
+
+scores = score.sentiment(useful_comments, positive_words, negative_words)
+# table(scores$score) check this
+# View(scores)
+
+# separate positive, negative & nuetral sentiments
+positive <- 0
+negative <- 0
+neutral <- 0
+
+for(i in 1:nrow(scores)){
+    if(scores$score[i] > 0)
+        positive = positive+1
+    if(scores$score[i] < 0)
+        negative = negative+1
+    if(scores$score[i] == 0)
+        neutral = neutral + 1
+}
+
+# plot positive and negative sentiments
+total <- negative + positive
+negative <- (negative/total)*100
+positive <- (positive/total)*100
+counts1 <- c(negative, positive)
+names <- c("negative", "positive")
+
+df1 <- as.data.frame(counts1, names)
+gg2 <- ggplot(df1, aes(x = names, y = counts1, fill = names))
+gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) + 
+    labs(title = "Topic:- 'customer', 'service', 'call', 'care', 'called'") + 
+    guides(fill = FALSE) +
+    labs(x = "Sentiments", y = "Percentage") + 
+    theme_bw(base_size = 15) + 
+    scale_fill_manual(values = c("red" ,"green"))
+```
+![topic_sentiment](./images/topic_sentiment.png)
 
 
 ## BRAND COMPARISON - AMEX VS. VISA
