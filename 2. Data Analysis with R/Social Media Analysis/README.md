@@ -5,6 +5,6 @@ The **Social Media Analysis - Facebook.Rmd** file above contains detailed analys
 # PROJECT WORKFLOW
 ![workflow](./Data/images/workflow.png)
 
-# IMPROVEMENTS & FUTURE WORK
+# IMPROVEMENTS/FUTURE WORK
 * Advanced text preprocessing and data cleaning
 * Predictive sentiment modeling
