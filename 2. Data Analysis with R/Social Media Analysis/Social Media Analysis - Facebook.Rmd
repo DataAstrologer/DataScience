@@ -33,14 +33,14 @@ save(fb_oauth, file = "fbo_auth") # save the token
 getwd() # to check where the token is saved
 load("fbo_auth")
 ```
-![oauth](./images/oauth.png)
+![oauth](./Data/images/oauth.png)
 
 ```{r}
 # Display my information
 me <- getUsers("me", token = fb_oauth, private_info = TRUE)
 me
 ```
-![me](./images/me.png)
+![me](./Data/images/me.png)
 
 In order to extract data from a particular Facebook page, the **Facebook page ID** is required for that page. To get the page ID, we need the **Facebook URL** of the page (**American Express India** in this case: https://www.facebook.com/AmericanExpressIndia/). We can copy the Amex URL and paste it here to get the page Id: http://www.findmyfbid.com/ . The American Express India page id is found to be: **168312979854782**.
 
@@ -51,7 +51,7 @@ page <- getPage(168312979854782, token = fb_oauth,  n = 10000)
 head(page[ ,c(1,2,4,5,8,9,10)], 10)
 write.csv(page, "amex_posts.csv") # save to csv
 ```
-![amex_head](./images/amex_head.png)
+![amex_head](./Data/images/amex_head.png)
 
 In the code above, the parameter *n = 10000* extracts the recent 10000 posts or all of the posts if posts < 10,000.  The posts are then saved in a variable called page.
 
@@ -109,19 +109,19 @@ likes <- read.csv(file.choose(), header = T) # amex_likes.csv
 
 head(posts[, c(1, 2, 4, 5, 8, 9, 10)], 10)
 ```
-![amex_posts](./images/amex_head.png)
+![amex_posts](./Data/images/amex_head.png)
 
 
 ```{r}
 View(head(comments[, c(2, 3, 6, 7)]))
 ```
-![amex_comments](./images/amex_comments.png)
+![amex_comments](./Data/images/amex_comments.png)
 
 
 ```{r}
 View(head(likes))
 ```
-![amex_likes](./images/amex_likes.png)
+![amex_likes](./Data/images/amex_likes.png)
 
 
 ## ANALYSIS OF LIKES
@@ -150,7 +150,7 @@ gg + geom_bar(stat = "identity", alpha = 0.75, colour = "black")  +
     labs(title = "Top N most liked Posts (ID)") +
     guides(fill = FALSE) + theme(axis.text = element_text(size = 4.5))
 ```
-![top_posts](./images/top_posts.png)
+![top_posts](./Data/images/top_posts.png)
 
 ```{r}
 # Top N Users liking the posts
@@ -166,7 +166,7 @@ gg + geom_bar(stat = "identity", alpha = 0.75, colour = "black") +
     labs(title = "Top Likes - User ID") +
     guides(fill = FALSE) + theme(axis.text = element_text(size = 6))
 ```
-![top_users](./images/top_users.png)
+![top_users](./Data/images/top_users.png)
 
 **NOTE**: It is possible to show the user name instead of the ID but this will require text preprocessing (not shown here).
 
@@ -183,19 +183,19 @@ post <- read.csv(file.choose(), header = T)[, -1] #amex_posts.csv file
 max_likes_post <- post[which.max(post$likes_count), ]
 View(max_likes_post[, c(3, 4, 5, 7, 8)])
 ```
-![max_likes](./images/max_likes.png)
+![max_likes](./Data/images/max_likes.png)
 
 ```{r}
 max_comments_post <- post[which.max(post$comments_count), ]
 View(max_comments_post[, c(3, 4, 5, 7, 9)])
 ```
-![max_comments](./images/max_comments.png)
+![max_comments](./Data/images/max_comments.png)
 
 ```{r}
 max_shares_post <- post[which.max(post$shares_count), ]
 View(max_shares_post[, c(3, 4, 5, 7, 10)])
 ```
-![max_shares](./images/max_shares.png)
+![max_shares](./Data/images/max_shares.png)
 
 Now, we can check the most recent post given a time period (say > 2016-06-06). In order to do this, we would first need to preprocess the ```created_time``` feature by converting it into an R date format. The ```facebook.format.date``` function below formats the ```created_time``` feature to an R date format.
 
@@ -215,7 +215,7 @@ View(head(sort_months[, c(3, 12, 5, 8, 9, 10)], 15))
 # top <- postRecent[order(-postRecent$likes), ] # sort by likes
 # View(top)
 ```
-![trend_16](./images/trend_16.png)
+![trend_16](./Data/images/trend_16.png)
 
 ```{r}
 # The graph below shows the number of posts by Amex for each month.
@@ -229,7 +229,7 @@ gg + geom_bar(stat = "identity", alpha = 0.8, colour ="black", position = "dodge
     labs(title = "Frequency of Posts Per Month - Amex")+
     theme(axis.text.x = element_text(angle = 90, face = "bold"))
 ```
-![freq_month](./images/freq_month.png)
+![freq_month](./Data/images/freq_month.png)
 
 Lastly, the code below illustrates how to aggregate the metrics by month in order to compute the median count of likes/comments/shares per post.
 ```{r}
@@ -251,7 +251,7 @@ ggplot(df, aes(x = month, y = x, group = metric)) + geom_line(aes(color = metric
     theme_bw() + 
     theme(axis.title.x = element_blank())
 ```
-![agg_counts](./images/agg_counts.png)
+![agg_counts](./Data/images/agg_counts.png)
 
 
 ## WORD CLOUD
@@ -285,7 +285,7 @@ The ```gsub("[^a-zA-Z0-9]","", x)``` command below replaces everything that is n
 messages <- gsub(" +"," ",gsub("^ +","",gsub("[^a-zA-Z0-9 ]","", messages)))
 messages[1:3]
 ```
-![clean_m](./images/clean_m.png)
+![clean_m](./Data/images/clean_m.png)
 
 ```{r}
 # Create a corpus
@@ -316,7 +316,7 @@ clean_corpus <- tm_map(clean_corpus, stripWhitespace)
 dataframe <- data.frame(text = unlist(sapply(clean_corpus, `[`, "content")), stringsAsFactors = F)
 View(head(dataframe, 15))
 ```
-![clean_df](./images/clean_df.png)
+![clean_df](./Data/images/clean_df.png)
 
 ```{r}
 # remove stop words and nonsensical words after examining the corpus
@@ -364,7 +364,7 @@ wordcloud(words = names(word.freq),
           random.order = F, 
           colors = pal)
 ```
-![word cloud](./images/wc.png)
+![word cloud](./Data/images/wc.png)
 
 ## SENTIMENT ANALYSIS
 
@@ -488,7 +488,7 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
     theme_bw(base_size = 15) + 
     scale_fill_manual(values = c("red","green", "red","green"))
 ```
-![sentiment plot](./images/sentiment_plot.png)
+![sentiment plot](./Data/images/sentiment_plot.png)
 
 
 ## TOPIC MODELING
@@ -568,7 +568,7 @@ head(topicProbabilities)
 ldaOut.terms <- as.matrix(terms(ldaOut,5))
 ldaOut.terms
 ```
-![topics](./images/topics.png)
+![topics](./Data/images/topics.png)
 
 Reference: https://eight2late.wordpress.com/2015/09/29/a-gentle-introduction-to-topic-modeling-using-r/  
 
@@ -746,7 +746,7 @@ gg2 + geom_bar(stat = "identity", color = "black", alpha = 0.8, width = 0.5 ) +
     theme_bw(base_size = 15) + 
     scale_fill_manual(values = c("red" ,"green"))
 ```
-![topic_sentiment](./images/topic_sentiment.png)
+![topic_sentiment](./Data/images/topic_sentiment.png)
 
 
 ## BRAND COMPARISON - AMEX VS. VISA
@@ -879,4 +879,4 @@ grid.arrange(likes_plot,
              comments_plot, 
              ncol = 1)
 ```
-![brand analysis](./images/brand_analysis.png)
+![brand analysis](./Data/images/brand_analysis.png)
