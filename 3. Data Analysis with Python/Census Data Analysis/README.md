@@ -1,8 +1,8 @@
-# CENSUS DATA ANALYSIS
+# Census Data Analysis
 
 The **Census_Data_Analysis.ipynb** file above contains the Python code for the entire modeling process, with observations, outputs and visualizations. The dataset is downloaded from the link: https://archive.ics.uci.edu/ml/machine-learning-databases/adult/ 
 
-# PROJECT WORKFLOW & DATA DICTIONARY
+# Project Workflow & Data Dictionary
 
 The modeling approach has been broken down into the following steps:
 ![project workflow](./Data/census_data_workflow.png)
@@ -25,14 +25,9 @@ Listing of attributes/features in the dataset and their description:
 * salary: >50K, <=50K.
 * **?: missing values**
 
-# PREDICTION & ACCURACY
+# Prediction & Accuracy
 ![Prediction and Accuracy](./Data/accuracy.png)
 
-# IMPROVEMENTS/FUTURE WORK
+# Improvements/Future Work
 * Sophisticated feature engineering based on variable importance.
 * Ensemble Modeling, Cross-Validation and Hyper-Parameter Tuning.
-
-
-
-
-
