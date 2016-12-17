@@ -1,10 +1,10 @@
-# SOCIAL MEDIA ANALYSIS - FACEBOOK
+# Social Media Analysis - Facebook
 
 The **Social Media Analysis - Facebook.Rmd** file above contains detailed analysis of the **American Express India** Facebook page. Data is extracted from Facebook using the ```rfacebook``` package and the comments, likes and posts of the page are analyzed with the help of visualizations. Additionally, sentiment analysis is performed on the user comments of the posts, and a trend comparison of the brand popularity is visualized for the American Express India and the Visa India Facebook pages.
 
-# PROJECT WORKFLOW
+# Project Workflow
 ![workflow](./Data/images/workflow.png)
 
-# IMPROVEMENTS/FUTURE WORK
+# Future Work/Improvements
 * Advanced text preprocessing and data cleaning
 * Predictive sentiment modeling
