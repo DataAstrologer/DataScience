@@ -1,11 +1,10 @@
 ---
 title: "Homesite Quote Conversion"
 author: "Riddhik Rathod"
-date: "10/16/2016"
-output: html_document
+date: "8/3/2016"
 ---
 
-# Homesite Quote Conversion Prediction
+# HOMESITE QUOTE CONVERSION PREDICTION
 
 The preprocessing techniques shown in Part 1 are applied to the testing dataset. The code structure and format is identical to that of Part 1. 
 

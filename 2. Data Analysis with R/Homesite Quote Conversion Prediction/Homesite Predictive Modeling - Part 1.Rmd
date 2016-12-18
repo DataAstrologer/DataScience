@@ -1,15 +1,14 @@
 ---
 title: "Homesite Quote Conversion"
 author: "Riddhik Rathod"
-date: "10/16/2016"
-output: html_document
+date: "8/3/2016"
 ---
 
-# Homesite Quote Conversion Prediction
+# HOMESITE QUOTE CONVERSION PREDICTION
 
 **Dataset:** https://www.kaggle.com/c/homesite-quote-conversion/data 
 
-## Importing data and libraries 
+## IMPORT DATA
 ```{r, eval = True}
 # install.packages(c("caret","gmodels", 
 #                    "ggplot2", "grid", 
@@ -51,7 +50,7 @@ homesite.data <- read.csv("train.csv",
                           stringsAsFactors = F)
 ```
 
-## Percentage distribution of the dependent variable
+## DEPENDENT VARIABLE
 ```{r, eval = True}
 CrossTable(dependent_var, digits = 2)
 
@@ -65,7 +64,7 @@ CrossTable(dependent_var, digits = 2)
 
 
 
-## Snapshot of the dataset
+## SNAPSHOT OF THE DATASET
 ```{r, eval=T}
 str(homesite.data, 
     vec.len = 2, 
@@ -135,7 +134,7 @@ View(Feature_Types)
 ```
 ![fgcounts](./images/fgcounts.png)
 
-## Preprocessing: NA values
+## PREPROCESSING: NA VALUES
 ```{r, eval=T}
 # Count the percentage of NA values per feature
 count_na <- colSums(is.na(homesite.data))
@@ -244,7 +243,7 @@ CrossTable(homesite.data$PropertyField38,
 Dropping none of the NA columns because the distribution of the NA values w.r.t the dependent variable is skewed towards 0. If instead, the distribution was unbiased like a 50/50 proportion, the column could have been dropped. Furthermore, all the columns are statistically significant according to the Chi-Square test.
 
 
-## Preprocessing: Date
+## PREPROCESSING: DATE
 ```{r, eval = True}
 dateConversion <- function(datestring) {
       as.POSIXct(datestring, format = "%Y-%m-%d")
@@ -386,7 +385,7 @@ drops <- "Original_Quote_Date"
 homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 ```
 
-## Preprocessing: Zero Variance & Near-Zero Variance
+## PREPROCESSING: ZERO AND NEAR-ZERO VARIANCE
 ```{r, eval = True}
 #dim(homesite.data)
 
@@ -484,7 +483,7 @@ drops <- c("PropertyField6",
 homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 ```
 
-## Preprocessing: Linear Combinations
+## PREPROCESSING: LINEAR COMBINATIONS
 ```{r, eval=T}
 # extract only numeric columns
 num_df = homesite.data[sapply(homesite.data, 
@@ -578,7 +577,7 @@ homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 ```
 
 
-## Visualization of Quote Conversion
+## VISUALIZATION OF QUOTE CONVERSIONS
 ```{r}
 usa_center <- as.numeric(geocode("United States"))
 USAMap <- ggmap(get_googlemap(center = usa_center, 
@@ -670,7 +669,7 @@ USAMap + geom_point(data = xc,
 ![gg-map](./images/QC_MAP.png)
 
 
-## Univariate Analysis of Categorical Features
+## PREPROCESSING: CATEGORICAL FEATURES
 
 The variable importance of each category of the feature is found with respect to the dependent variable by fitting a 3-fold cross-validated Random Forest model. Levels/Categories with a low importance are merged together. Snapshots of the important categories of a few features are shown below.
 
@@ -1331,7 +1330,7 @@ ggplot(data = importance_df_quarter,
 ```
 
 
-## One-Hot Encoding
+## PREPROCESSING: ONE-HOT ENCODING
 ```{r, eval = True}
 # create dummy variables for categorical data
 factor_df = homesite.data[sapply(homesite.data, is.factor)]
@@ -1407,7 +1406,7 @@ homesite.data$QuoteConversion_Flag <- as.factor(homesite.data$QuoteConversion_Fl
 write.csv(homesite.data, 'homesite_dummy_generated.csv')
 ```
 
-## Linear Combinations
+## PREPROCESSING: LINEAR COMBINATIONS
 Checking for linear combinations again after one-hot encoding.
 
 ```{r}
@@ -1485,7 +1484,7 @@ homesite.data = homesite.data[, !(names(homesite.data) %in% drops)]
 write.csv(homesite.data, 'ready_for_advanced_preprocessing.csv')
 ```
 
-## Final Prepocessing
+## FINAL PREPROCESSING
 ```{r}
 
 library(caret)
