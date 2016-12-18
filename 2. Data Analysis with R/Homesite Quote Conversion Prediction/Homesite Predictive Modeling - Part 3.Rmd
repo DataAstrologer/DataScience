@@ -109,7 +109,6 @@ ggplot(data = importance_df_1,
 # Arrange training set according to QuoteConversion_Flag
 train_arranged <- arrange(train, QuoteConversion_Flag)
 
-
 #### Margin of Error: 0.05%
 #### Confidence Level: 99%
 #### Population Size for Zero: 211859
@@ -120,7 +119,6 @@ train_arranged <- arrange(train, QuoteConversion_Flag)
 train_0 <- train_arranged[1:211859, ]
 sample_0 = sample(1:211859, 51000)
 sample_0 <- train_0[sample_0, ]
-
 
 #### Margin of Error: 0.5%
 #### Confidence Level: 99%
@@ -183,7 +181,6 @@ ggplot(data = importance_df_2,
 
 
 ## FINAL MODEL WITH INTERACTION TERMS
-
 ```{r}
 # add iteractions of top 3 variables
 train <- mutate(train, aplusb = PropertyField37.N+SalesField5)
@@ -200,7 +197,6 @@ train <- mutate(train, abcd = PropertyField37.N*SalesField5*PersonalField10A*Per
 ```
 ```{r}
 # train and test the model
-
 sample_train = sample(1:260753, 53000)
 random_sample_train = train[sample_train, ]
 random_sample_test = train[-sample_train, ]
@@ -223,8 +219,7 @@ confusionMatrix(random_sample_test$QuoteConversion_Flag,
 ![confusion_matrix](./images/final_cfm.png)
 
 ```{r}
-# ROC curve:
-
+# ROC curve
 result.predicted.prob <- predict(object = xgb3,
                                  random_sample_test[,-2],
                                  type = "prob")
@@ -239,7 +234,6 @@ result.coords <- coords(result.roc, "best",
 
 # print(result.coords) #to get threshold and accuracy
 
-# ROC ggplot
 x <- coords(result.roc, x = "all",
             input=c("threshold", "specificity","sensitivity"),
             ret=c("threshold", "specificity", "sensitivity"))
@@ -267,4 +261,4 @@ ggplot(data = x,
 ```
 ![ROC](./images/roc.png)
 
-The above model, trained using sample data, was used for generating predictions for the test dataset from Kaggle. The final accuracy was found to be: **0.96468**.
+The above model, trained using sample data, was used for generating predictions for the test dataset from Kaggle. The final AUC score was found to be: **0.96468**.
