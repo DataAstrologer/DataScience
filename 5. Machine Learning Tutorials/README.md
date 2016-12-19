@@ -18,8 +18,8 @@
 
 **Tutorials** for the following machine learning algorithms, with thier implementations in **R** and **Python**, are covered in the folders above:
 
-## Supervised Learning:
+## Supervised Learning
 ![Supervised Learning](./images/supervised_algos.png)
 
-## Unsupervised Learning:
+## Unsupervised Learning
 ![Unsupervised Learning](./images/unsupervised_algos.png)
