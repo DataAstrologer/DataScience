@@ -16,7 +16,10 @@
 
 # Algorithms 
 
-Tutorials for the following machine learning algorithms are covered in the folders above. Get an **overview of how the algorithm works**, and learn them to **implement in R and Python**.
+**Tutorials** for the following machine learning algorithms, with thier implementations in **R** and **Python**, are covered in the folders above:
 
+## Supervised Learning:
 ![Supervised Learning](./images/supervised_algos.png)
+
+## Unsupervised Learning:
 ![Unsupervised Learning](./images/unsupervised_algos.png)
