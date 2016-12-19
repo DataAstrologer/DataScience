@@ -13,3 +13,10 @@
 * **Unsupervised Learning** - The aim of an unsupervised machine learning algorithm is to infer a function to **describe hidden structure from unlabeled data**. No known response to the data (output) is present. To read more, visit the Unsupervised Learning folder. 
 	* *Clustering* - The process of **grouping a set of data objects** into multiple groups or clusters.
 	* *Association* - Discovering **relationships or associations** between specific values of categorical variables in large data sets. 
+
+# Algorithms 
+
+Tutorials for the following machine learning algorithms are covered in the folders above. Get an **overview of how the algorithm works**, and learn them to **implement in R and Python**.
+
+![Supervised Learning](./images/supervised_algos.png)
+![Unsupervised Learning](./images/unsupervised_algos.png)
