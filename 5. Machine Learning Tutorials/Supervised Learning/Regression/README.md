@@ -18,7 +18,7 @@ Using the above regression model, we can understand:
 
 To understand how regression models work, let’s analyze a simple scenario involving only *one* independent and dependent variable having a relationship as seen in the plot below (the plot is assumed to represent a very large population):
 
-![](.data/images/fun_1.png)
+![](./data/images/fun_1.png)
 
 Since the function *Y = f(X) + e* can deliver only *one* value of *Y* for a given *X*, the function at a value of *X* returns the **expected value (average)** of *Y* given *X = x*. As an example, for *x = 4*, the average of the points (*y*) coinciding with the vertical line are returned. Thus, in a regression model, the regression function gives the conditional expectation (or average) of *Y* given *X*, at each value of *X*. 
 
@@ -46,7 +46,7 @@ To understand the proof of the above decomposition, visit (page no. 3) of the do
 
 Conditional averaging might not always work because at any given point in our dataset, we might not have any points to average. An example plot for such a situation is shown below:
 
-![](.data/images/fun_2.png)
+![](./data/images/fun_2.png)
 
 In the plot above, the solid green point has no exact values for *x*. Thus we have to relax the idea of conditional averaging  (taking the avergae of the points coninciding with the vertical line) to the **neighborhood of points *x* **, which are the points around the target point. This is called **Local Averaging**. In the plot above, the dotted lines show the points considered when averaging (local). This is a flexible technique for fitting the function.
 
@@ -101,7 +101,7 @@ To further understand bias and variance, Bias can thought of as the error that i
 
 We can visualize the four different cases representing combinations of both bias and variance using the plot below:
 
-![](.data/images/bias_variance.png)
+![](./data/images/bias_variance.png)
 
 
 ## Notes
