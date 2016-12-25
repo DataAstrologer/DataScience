@@ -10,17 +10,17 @@
 
 * **Statistical modeling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modeling is to learn underlying phenomenon from data. With the help of statistical modeling, we can model the relationship between the **dependent variable (Y)** and **independent variable(s) (X)** by representing the systematic information that X provides about Y using the function:
 
-![model_equation](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20f%28X_i%29%20&plus;%20%5Cepsilon_i)
+					![model_equation](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20f%28X_i%29%20&plus;%20%5Cepsilon_i)
 
-Here, f is an unknown function which models the relationship between x and y. e is the term used for representing random error, with mean zero. The difficulty of estimating f will depend on the standard deviation of e.
+	Here, f is an unknown function which models the relationship between x and y. e is the term used for representing random error, with mean zero. The difficulty of estimating f will depend on the standard deviation of e.
 
 
 ## Prediction vs. Inference
 
-
 There are mainly 2 reasons for estimating the function f mentioned above:
-•	Prediction – This involves accurately predicting the response variable for the future observations. In order to achieve this, we also need to make sure that the variance of the error is not too large.
-•	Inference – This involves understanding the relationship between the response and the predictor variables. This relationship can be positive or negative, linear or non-linear, significant or not significant, etc.
+
+* Prediction – This involves accurately predicting the response variable for the future observations. In order to achieve this, we also need to make sure that the variance of the error is not too large.
+* Inference – This involves understanding the relationship between the response and the predictor variables. This relationship can be positive or negative, linear or non-linear, significant or not significant, etc.
 
 
 ## Parametric vs. Non-Parametric Methods
