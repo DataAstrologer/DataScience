@@ -10,9 +10,9 @@
 
 * **Statistical modeling** is a subfield of mathematics which deals with finding relationship between variables to predict an outcome. The common objective behind machine learning and statistical modeling is to learn underlying phenomenon from data. With the help of statistical modeling, we can model the relationship between the **dependent variable (Y)** and **independent variable(s) (X)** by representing the systematic information that X provides about Y using the function:
 
-![model_equation](https://latex.codecogs.com/gif.latex?Y_i%20%3D%20f%28X_i%29%20&plus;%20%5Cepsilon_i)
+![model_equation](./images/model_eq.png)
 
-	Here, f is an unknown function which models the relationship between x and y. e is the term used for representing random error, with mean zero. The difficulty of estimating f will depend on the standard deviation of e.
+* Here, f is an unknown function which models the relationship between x and y. e is the term used for representing random error, with mean zero. The difficulty of estimating f will depend on the standard deviation of e.
 
 
 ## Prediction vs. Inference
