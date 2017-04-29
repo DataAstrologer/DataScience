@@ -5,7 +5,7 @@ The **Census_Income_Analysis.ipynb** file above contains the Python code for the
 # Project Workflow & Data Dictionary
 
 The modeling approach has been broken down into the following steps:
-![project workflow](./Data/census_data_workflow.png)
+![project workflow](./Data/census_data_workflow.JPG)
 
 Listing of attributes/features in the dataset and their description:
 * age: continuous.
@@ -16,8 +16,8 @@ Listing of attributes/features in the dataset and their description:
 * marital-status: Married-civ-spouse, Divorced, Never-married, Separated, Widowed, Married-spouse-absent, Married-AF-spouse.
 * occupation: Tech-support, Craft-repair, Other-service, Sales, Exec-managerial, Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing, Transport-moving, Priv-house-serv, Protective-serv, Armed-Forces.
 * relationship: Wife, Own-child, Husband, Not-in-family, Other-relative, Unmarried.
-* race:??White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black.
-* sex:??Female, Male.
+* race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black.
+* sex: Female, Male.
 * capital-gain: continuous.
 * capital-loss: continuous.
 * hours-per-week: continuous.
@@ -26,8 +26,11 @@ Listing of attributes/features in the dataset and their description:
 * **?: missing values**
 
 # Prediction & Accuracy
-![Prediction and Accuracy](./Data/accuracy.png)
+![Prediction and Accuracy](./Data/accuracy.JPG)
 
 # Improvements/Future Work
-* Sophisticated feature engineering based on variable importance.
-* Ensemble Modeling, Cross-Validation and Hyper-Parameter Tuning.
+* Feature selection & importance testing using statistical techniques (such as chi-sq or correlation based feature selection).
+* Fitting different classification models (SVM, Decision Tree, KNN, etc.) and comparing accuracy.
+* Examining more feature interactions (such as education vs. education_num) to eliminate un-wanted variables.
+* Ensemble modeling & handling of class imbalance (over-sampling or under-sampling).
+* Hyper-parameter tuning based on different score criterions & model stability evaluation.
