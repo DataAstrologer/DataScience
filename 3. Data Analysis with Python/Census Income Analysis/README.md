@@ -1,6 +1,6 @@
-# Census Data Analysis
+# Census Income Analysis
 
-The **Census_Data_Analysis.ipynb** file above contains the Python code for the entire modeling process, with observations, outputs and visualizations. The dataset is downloaded from the link: https://archive.ics.uci.edu/ml/machine-learning-databases/adult/ 
+The **Census_Income_Analysis.ipynb** file above contains the Python code for the entire modeling process, with observations, outputs and visualizations. The dataset is downloaded from the link: https://archive.ics.uci.edu/ml/machine-learning-databases/adult/ 
 
 # Project Workflow & Data Dictionary
 
