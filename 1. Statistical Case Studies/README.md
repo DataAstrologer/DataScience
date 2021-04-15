@@ -1,6 +1,6 @@
 # Statistical Case Studies 
 
-This folder contains a total of 7 case studies covering different statistical concepts. All the case studies are solved using **Microsoft Excel**. Except for the first two cases, all the other business situations are real life events. 
+This folder contains a total of 7 case studies covering different statistical concepts. All the case studies are solved using **Microsoft Excel**. Except for the first two cases, all the other are related to real life events. 
 
 Below is a summary of the case study problem descriptions. To understand them in detail and view the solution, visit their respective folders:
 
