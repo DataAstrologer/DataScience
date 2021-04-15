@@ -1,8 +1,8 @@
 # Statistical Case Studies 
 
-The folder contains a total of 7 case studies covering different statistical concepts. The *Problem Description* and the *Analysis Report* are included in the folders above. All the case studies are solved using **Microsoft Excel**. Except for the first two cases, all the other business situations are real life events. 
+This folder contains a total of 7 case studies covering different statistical concepts. All the case studies are solved using **Microsoft Excel**. Except for the first two cases, all the other business situations are real life events. 
 
-Below is a summary of the case study problem descriptions. To understand them in detail, visit the folders above:
+Below is a summary of the case study problem descriptions. To understand them in detail and view the solution, visit their respective folders:
 
 1. **CTC Maximization** - The data collected is from an MBA Institute in India and has the 3 tables: Student Master (information on age, course, gender, past academics, admission year & work-ex), Performance Master (semester & student marks) & Placement Master (historical information on placements & CTC offered). The goal of the institute is to get students placed with higher CTCs. **Concepts covered: Analysis, Trends & Actionable Insights**
 
