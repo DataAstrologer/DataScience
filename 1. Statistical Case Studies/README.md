@@ -1,6 +1,6 @@
-#Statistical Case Studies 
+# Statistical Case Studies 
 
-The folder contains a total of 6 case studies covering different statistical concepts. The *Problem Description* is attached as a pdf file and my *Analysis Report* is included in the folders above. All the case studies are solved using **Microsoft Excel**. Except for the first case, all the other business situations are real life events. 
+The folder contains a total of 7 case studies covering different statistical concepts. The *Problem Description* is attached as a pdf file and my *Analysis Report* is included in the folders above. All the case studies are solved using **Microsoft Excel**. Except for the first and the last case, all the other business situations are real life events. 
 
 Below is a summary of the case study problem descriptions. To understand them in detail, visit the folders above:
 
